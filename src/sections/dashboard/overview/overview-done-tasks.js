@@ -10,9 +10,12 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
+import { useAuth } from "../../../hooks/use-auth";
 
 export const OverviewDoneTasks = (props) => {
   const { amount } = props;
+  const { getTenant } = useAuth();
+  const gt = getTenant();
 
   return (
     <Card>
@@ -44,6 +47,7 @@ export const OverviewDoneTasks = (props) => {
       <CardActions>
         <Button
           color="inherit"
+          href={`/${gt}/clientes`}
           endIcon={
             <SvgIcon>
               <ArrowRightIcon />
