@@ -2,7 +2,7 @@
     "buildCommand": "next build",
     "crons": [
         {
-            "path": "/api/cron",
+            "path": "/api/cron/route",
             "schedule": "5 * * * *"
         }
     ]
