@@ -1,3 +1,3 @@
-export default function handler(response) {
-  response.status(200).json({ success: true });
+export default function handler(req, res) {
+  res.status(200).json({ success: true });
 }
