@@ -118,7 +118,7 @@ const Page = () => {
             <Grid xs={12} md={7}>
               <OverviewBanner />
             </Grid>
-            <Grid xs={5}>
+            <Grid xs={12} md={5}>
               <OverviewHelp />
             </Grid>
           </Grid>
