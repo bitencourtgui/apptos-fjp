@@ -71,7 +71,7 @@ export const CardProcess = ({
     ? exectdo
     : exectdo.includes(customerName)
     ? exeqte
-    : "";
+    : exectdo;
 
   return (
     <Card key={number} sx={{ margin: "16px 0" }}>

@@ -22,6 +22,7 @@ import { Scrollbar } from "../../../components/scrollbar";
 import { SeverityPill } from "../../../components/severity-pill";
 import { useAuth } from "../../../hooks/use-auth";
 import { useRouter } from "next/router";
+import { maskProcess } from "../../../utils/masks/mask-process";
 
 export const ProcessListTable = (props) => {
   const {
@@ -128,7 +129,7 @@ export const ProcessListTable = (props) => {
                         {statusLabel}
                       </SeverityPill>
                     </TableCell>
-                    <TableCell>{process.number}</TableCell>
+                    <TableCell>{maskProcess(process.number)}</TableCell>
                     <TableCell>
                       <Box
                         sx={{

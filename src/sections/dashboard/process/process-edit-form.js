@@ -120,9 +120,6 @@ export const ProcessEditForm = (props) => {
                 onChange={maskProcess(formik.handleChange)}
                 required
                 value={formik.values.number}
-                inputProps={{
-                  maxLength: 20,
-                }}
               />
             </Grid>
             <Grid xs={12} md={3}>
