@@ -154,7 +154,7 @@ const ListaProcessos = () => {
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 {/*@TODO: criar pagina de criar processos*/}
-                <Button
+                {/* <Button
                   component={NextLink}
                   href={paths.dashboard.products.create}
                   startIcon={
@@ -165,7 +165,7 @@ const ListaProcessos = () => {
                   variant="contained"
                 >
                   Novo processo
-                </Button>
+                </Button> */}
               </Stack>
             </Stack>
             <Card>
