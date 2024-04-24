@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+, "src/api/customers/index.js", "src/pages/trabalhista/clientes/adicionar.js", "src/pages/trabalhista/clientes/adicionar.js", "src/sections/dashboard/financial/financial-modal.js", "src/sections/dashboard/contacts/power-of-attorney-modal.js", "src/components/FileManager/FileManager.js"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

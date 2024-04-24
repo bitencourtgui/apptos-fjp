@@ -1,0 +1,39 @@
+@page {
+  size: a4;
+  margin: 2cm 1.75cm .5in 1.75cm;
+}
+
+@media print {
+  table.paging thead td, table.paging tfoot td {
+      height: .4in;
+  }
+}
+
+header, footer {
+  width: 100%; height: .5in;
+}
+
+footer {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+header {
+  position: absolute;
+  top: 0;
+}
+
+@media print {
+  header, footer {
+      position: fixed;
+  }
+  
+  footer {
+      bottom: 0;
+  }
+
+  .printHeaderFee img {
+    width: 200px
+  }
+}
