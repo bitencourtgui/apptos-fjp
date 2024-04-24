@@ -1,9 +1,14 @@
+
 {
-    "buildCommand": "next build",
+    "version": 2,
+    "rewrites": [{
+      "source": "/(.*)",
+      "destination": "/api"
+    }],
     "crons": [
         {
             "path": "/api/cron/route",
             "schedule": "5 * * * *"
         }
     ]
-}
+  }
