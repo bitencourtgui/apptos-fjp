@@ -10,7 +10,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>FA Advocacia</title>
+        <title>FJP Consultoria</title>
       </Head>
       <main>
         <LoginFirebase />

@@ -116,7 +116,7 @@ const ListaProcessos = () => {
   return (
     <>
       <Head>
-        <title>Processos | FA</title>
+        <title>Processos | FJP</title>
       </Head>
       <Box
         component="main"

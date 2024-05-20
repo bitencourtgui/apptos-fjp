@@ -37,7 +37,7 @@ const useParams = () => {
 const initialValues = {
   email: "",
   password: "",
-  tenant: "trabalhista",
+  tenant: "tributario",
   submit: null,
 };
 
@@ -90,7 +90,7 @@ const LoginFirebase = () => {
   return (
     <>
       <Head>
-        <title>Login | FA</title>
+        <title>Login | FJP</title>
       </Head>
       <div>
         <Box
@@ -100,7 +100,7 @@ const LoginFirebase = () => {
             alignItems: "center",
           }}
         >
-          <img src="/assets/logos/logo-fa-full.png" />
+          <img src="/assets/logos/logo-fjp.png" />
         </Box>
         <Card elevation={16} sx={{ mt: 5 }}>
           <CardHeader sx={{ pb: 0 }} title="Entrar" />
@@ -141,23 +141,7 @@ const LoginFirebase = () => {
                   type="password"
                   value={formik.values.password}
                 />
-                <FormControl fullWidth>
-                  <InputLabel id="tenant">Área</InputLabel>
-                  <Select
-                    labelId="tenant"
-                    id="tenant"
-                    name="tenant"
-                    value={formik.values.tenant}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    error={!!(formik.touched.tenant && formik.errors.tenant)}
-                    helperText={formik.touched.tenant && formik.errors.tenant}
-                  >
-                    <MenuItem value="civil">Civil</MenuItem>
-                    <MenuItem value="familia">Familia</MenuItem>
-                    <MenuItem value="trabalhista">Trabalhista</MenuItem>
-                  </Select>
-                </FormControl>
+          
               </Stack>
               {formik.errors.submit && (
                 <FormHelperText error sx={{ mt: 3 }}>

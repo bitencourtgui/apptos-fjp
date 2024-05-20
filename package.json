@@ -2,10 +2,10 @@
   "name": "@apptos/fa",
   "version": "1.0.0",
   "author": "Guilherme",
-  "homepage": "https://devias.io",
+  "homepage": "https://apptos.com.br",
   "private": true,
   "scripts": {
-    "dev": "next -p 7777",
+    "dev": "next -p 5555",
     "build": "next build",
     "start": "next start",
     "export": "next export",

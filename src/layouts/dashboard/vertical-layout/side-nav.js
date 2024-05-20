@@ -195,7 +195,7 @@ export const SideNav = (props) => {
                 width: 40
               }}
             >
-              <Logo />
+              <Logo color="gold" />
             </Box>
             <TenantSwitch sx={{ flexGrow: 1 }} />
           </Stack>

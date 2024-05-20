@@ -81,7 +81,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Família | FA</title>
+        <title>Família | FJP</title>
       </Head>
       <Box
         component="main"

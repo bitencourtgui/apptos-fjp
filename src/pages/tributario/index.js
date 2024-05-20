@@ -81,7 +81,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>trabalhista | FA</title>
+        <title>tributario | FJP</title>
       </Head>
       <Box
         component="main"

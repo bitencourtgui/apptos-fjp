@@ -19,6 +19,8 @@ export const CustomerBasicDetails = ({ customer }) => {
       ? `${customer?.businessComplement}, `
       : "";
 
+
+
   const address = `${customer?.street}, ${customer?.number} ${hasComplement} ${customer?.neighborhood}, ${customer?.state} - ${customer?.postalCode}`;
   const bussinessAddress = `${customer?.businessStreet}, ${customer?.businessNumber} ${hasBusinessComplement}, ${customer?.businessNeighborhood}, ${customer?.businessState} - ${customer?.businessPostalCode}`;
 
@@ -34,6 +36,10 @@ export const CustomerBasicDetails = ({ customer }) => {
     window.open(`/contracts/hyposufficiency/${id}`, "_blank");
   };
 
+
+  console.log('customer', customer)
+
+
   return (
     <>
       <Card>
@@ -45,30 +51,21 @@ export const CustomerBasicDetails = ({ customer }) => {
               <ListItem divider>
                 <ListItemText
                   primary="Empresa"
-                  secondary={data?.corporateName}
+                  secondary={customer?.corporateName}
                 />
               </ListItem>
               <ListItem divider>
                 <ListItemText
                   primary="CNPJ"
-                  secondary={maskDocument(data?.cnpj)}
+                  secondary={maskDocument(customer?.cnpj)}
                 />
-                <ListItemText primary="CNAE" secondary={data?.cnae} />
+                <ListItemText primary="CNAE" secondary={customer?.cnae} />
               </ListItem>
               <ListItem divider>
                 <ListItemText primary="Endereço" secondary={bussinessAddress} />
               </ListItem>
             </PropertyList>
-            {/* <Stack
-              sx={{
-                padding: "16px 0 0 16px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="subtitle1">Responsável</Typography>
-            </Stack> */}
+         
           </>
         )}
         <PropertyList>
@@ -92,7 +89,7 @@ export const CustomerBasicDetails = ({ customer }) => {
           <ListItem divider>
             <ListItemText primary="Endereço" secondary={address} />
           </ListItem>
-          <ListItem divider sx={{ flexDirection: "column", gap: 1, mt: 1 }}>
+          {/*<ListItem divider sx={{ flexDirection: "column", gap: 1, mt: 1 }}>
             <Button
               fullWidth
               variant="outlined"
@@ -114,7 +111,7 @@ export const CustomerBasicDetails = ({ customer }) => {
             >
               Declaração de Hipossuficiencia
             </Button>
-          </ListItem>
+        </ListItem>*/}
         </PropertyList>
       </Card>
       <FeeContractModal

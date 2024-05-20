@@ -74,8 +74,8 @@ export const CustomerListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
     useSelectionModel(customers);
-    const { getTenant } = useAuth();
-    const gt = getTenant();
+  const { getTenant } = useAuth();
+  const gt = getTenant();
   const handleToggleAll = useCallback(
     (event) => {
       const { checked } = event.target;
@@ -151,13 +151,16 @@ export const CustomerListTable = (props) => {
               const phone = customer.phone1
                 ? phoneMask(customer.phone1)
                 : phoneMask(customer.phone2);
-              const hasDevTeste = customer.name.includes("DEV");
+
+              const customerName = customer.name || customer.businessName;
+
+              const hasDevTeste = customerName.includes("DEV");
               const chip = hasDevTeste ? (
                 <Chip color="info" size="small" label="DEV" />
               ) : null;
               const clearName = hasDevTeste
-                ? customer.name.replace("TESTE DEV -", "")
-                : customer.name;
+                ? customerName.replace("TESTE DEV -", "")
+                : customerName;
 
               return (
                 <TableRow hover key={customer.id} selected={isSelected}>

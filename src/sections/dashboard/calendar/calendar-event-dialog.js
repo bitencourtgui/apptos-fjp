@@ -27,7 +27,7 @@ const useInitialValues = (event, range) => {
   return useMemo(() => {
     if (event) {
       return {
-        allDay: event.allDay || false,
+        allDay: event.allDay || FJPlse,
         color: event.color || '',
         description: event.description || '',
         end: event.end ? new Date(event.end) : addMinutes(new Date(), 30),

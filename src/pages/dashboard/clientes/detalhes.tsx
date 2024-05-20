@@ -95,7 +95,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
   return (
     <>
       <Head>
-        <title>{customer?.name} | FA</title>
+        <title>{customer?.name} | FJP</title>
       </Head>
       <Box
         component="main"

@@ -10,20 +10,21 @@ import {
 } from "@mui/material";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { ProcessAddForm } from "../../../sections/dashboard/process/process-add-form";
 import { BreadcrumbsSeparator } from "../../../components/breadcrumbs-separator";
+import { useRouter } from "next/router";
+import { ProcessEditForm } from "../../../sections/dashboard/process/process-edit-form";
 import { useAuth } from "../../../hooks/use-auth";
 import { capitalize } from "../../../utils/capitalize";
 
-const AdicionarProcessos = ({ userId }) => {
+const EditarProcessoDash = ({ userId }) => {
+  usePageView();
   const { getTenant } = useAuth();
   const gt = getTenant();
-  usePageView();
 
   return (
     <>
       <Head>
-        <title>Adicionar Processo | FA</title>
+        <title>Editar Processo | FJP</title>
       </Head>
       <Box
         component="main"
@@ -53,11 +54,11 @@ const AdicionarProcessos = ({ userId }) => {
                   Processos
                 </Link>
                 <Typography color="text.secondary" variant="subtitle2">
-                  Adicionar processo
+                  Novo processo
                 </Typography>
               </Breadcrumbs>
             </Stack>
-            <ProcessAddForm customerId={userId} />
+            <ProcessEditForm customerId={userId} />
           </Stack>
         </Container>
       </Box>
@@ -65,8 +66,6 @@ const AdicionarProcessos = ({ userId }) => {
   );
 };
 
-AdicionarProcessos.getLayout = (page) => (
-  <DashboardLayout>{page}</DashboardLayout>
-);
+EditarProcessoDash.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default AdicionarProcessos;
+export default EditarProcessoDash;

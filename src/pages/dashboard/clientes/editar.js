@@ -63,7 +63,7 @@ const EditarClienteDash = ({ userId }) => {
   return (
     <>
       <Head>
-        <title>Editar Cliente | FA</title>
+        <title>Editar Cliente | FJP</title>
       </Head>
       <Box
         component="main"

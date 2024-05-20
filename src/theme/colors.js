@@ -42,12 +42,14 @@ export const green = withAlphas({
   contrastText: '#FFFFFF'
 });
 
+// #CFA950
+
 export const indigo = withAlphas({
-  lightest: '#FFFAEB',
-  light: '#FEF0C7',
-  main: '#F79009',
-  dark: '#B54708',
-  darkest: '#7A2E0E',
+  lightest: '#808080',
+  light: '#404040',
+  main: '#000000',
+  dark: '#000000',
+  darkest: '#000000',
   contrastText: '#FFFFFF'
 });
 

@@ -9,7 +9,7 @@ import { capitalize } from "../../../utils/capitalize";
 import { cleanText } from "../../../utils/clear-text";
 import { useRouter } from 'next/router'
 
-const tenants = ["Cívil", "Familia", "Trabalhista"];
+const tenants = ["Tributário"];
 
 export const TenantSwitch = (props) => {
   const anchorRef = useRef(null);
@@ -40,7 +40,7 @@ export const TenantSwitch = (props) => {
       <Stack alignItems="center" direction="row" spacing={2} {...props}>
         <Box sx={{ flexGrow: 1 }}>
           <Typography color="inherit" variant="h6">
-            FA Advocacia
+            FJP Consultoria
           </Typography>
           <Typography color="neutral.400" variant="body2">
             {capitalize(tenant)}

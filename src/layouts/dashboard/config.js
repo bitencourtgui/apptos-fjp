@@ -14,7 +14,7 @@ export const getSections = (t, gt) => [
         path: `/${gt}`,
         icon: (
           <SvgIcon fontSize="small">
-            <HomeSmileIcon />
+            <HomeSmileIcon color="#CFA950" />
           </SvgIcon>
         ),
       },
@@ -27,7 +27,7 @@ export const getSections = (t, gt) => [
         path: `/${gt}/clientes`,
         icon: (
           <SvgIcon fontSize="small">
-            <Users03Icon />
+            <Users03Icon color="#CFA950"/>
           </SvgIcon>
         ),
       },
@@ -36,7 +36,7 @@ export const getSections = (t, gt) => [
         path: `/${gt}/processos`,
         icon: (
           <SvgIcon fontSize="small">
-            <Bank />
+            <Bank color="#CFA950"/>
           </SvgIcon>
         ),
       },
@@ -44,7 +44,7 @@ export const getSections = (t, gt) => [
         title: "Sites",
         icon: (
           <SvgIcon fontSize="small">
-            <Server05 />
+            <Server05 color="#CFA950"/>
           </SvgIcon>
         ),
         path: paths.dashboard.orders.index,

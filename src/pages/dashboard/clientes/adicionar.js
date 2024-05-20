@@ -22,7 +22,7 @@ const AdicionarClienteDash = () => {
   return (
     <>
       <Head>
-        <title>Novo Cliente | FA</title>
+        <title>Novo Cliente | FJP</title>
       </Head>
       <Box
         component="main"

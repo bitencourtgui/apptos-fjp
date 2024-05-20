@@ -414,7 +414,7 @@ export const CustomerAddForm = (props) => {
                 >
                   <MenuItem value="civil">Civil</MenuItem>
                   <MenuItem value="familia">Familia</MenuItem>
-                  <MenuItem value="trabalhista">Trabalhista</MenuItem>
+                  <MenuItem value="tributario">Tributário</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

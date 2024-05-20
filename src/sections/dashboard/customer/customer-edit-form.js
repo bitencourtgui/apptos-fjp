@@ -232,7 +232,6 @@ export const CustomerEditForm = (props) => {
                     name="businessComplement"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    required
                     value={formik.values.businessComplement}
                   />
                 </Grid>
@@ -426,9 +425,7 @@ export const CustomerEditForm = (props) => {
                   label="Área"
                   onChange={formik.handleChange}
                 >
-                  <MenuItem value="civil">Civil</MenuItem>
-                  <MenuItem value="familia">Familia</MenuItem>
-                  <MenuItem value="trabalhista">Trabalhista</MenuItem>
+                  <MenuItem value="tributario">Tributário</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
