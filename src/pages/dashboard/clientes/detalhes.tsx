@@ -92,21 +92,24 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
     }
   };
 
+  const customerName = customer?.business?.corporateName
+    ? customer.business.corporateName
+    : customer?.name;
+
   return (
     <>
       <Head>
-        <title>{customer?.name} | FJP</title>
+        <title>{customerName} | FJP</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
         }}
       >
         <Container maxWidth="xl">
-          <Stack spacing={4}>
-            <Stack spacing={4}>
+          <Stack spacing={3}>
+            <Stack spacing={3}>
               <div>
                 <Link
                   color="text.primary"
@@ -135,7 +138,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{customer?.business.corporateName}</Typography>
+                    <Typography variant="h4">{customerName}</Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">id:</Typography>
                       <Chip label={customer?.id} size="small" />
@@ -173,7 +176,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                   indicatorColor="primary"
                   onChange={handleTabsChange}
                   scrollButtons="auto"
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 1 }}
                   textColor="primary"
                   value={currentTab}
                   variant="scrollable"
