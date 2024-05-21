@@ -32,15 +32,6 @@ export const getSections = (t, gt) => [
         ),
       },
       {
-        title: "Processos",
-        path: `/${gt}/processos`,
-        icon: (
-          <SvgIcon fontSize="small">
-            <Bank color="#CFA950"/>
-          </SvgIcon>
-        ),
-      },
-      {
         title: "Sites",
         icon: (
           <SvgIcon fontSize="small">
