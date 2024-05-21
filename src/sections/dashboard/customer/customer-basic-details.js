@@ -1,10 +1,14 @@
 import { useState } from "react";
 import {
+  Box,
   Button,
   Card,
   CardHeader,
+  Divider,
   ListItem,
   ListItemText,
+  Stack,
+  Typography,
 } from "@mui/material";
 import { PropertyList } from "../../../components/property-list";
 import { maskDocument } from "../../../utils/masks/maskDocument";
@@ -12,17 +16,20 @@ import FeeContractModal from "../contacts/fee-contract-modal";
 import PowerOfAttorneyModal from "../contacts/power-of-attorney-modal";
 
 export const CustomerBasicDetails = ({ customer }) => {
-  const hasComplement =
-    customer?.complement?.length >= 1 ? `${customer?.complement}, ` : "";
+  const hasComplement = customer.address.complement
+    ? `, ${customer.address.complement}`
+    : "";
+
   const hasBusinessComplement =
     customer?.businessComplement?.length >= 1
       ? `${customer?.businessComplement}, `
       : "";
 
+  const business = customer.business;
 
+  const businessAddress = `${business.address.street}, ${business.address.number}${hasComplement}, ${business.address.neighborhood}, ${business.address.city}, ${business.address.state} - ${business.address.postalCode}`;
 
-  const address = `${customer?.street}, ${customer?.number} ${hasComplement} ${customer?.neighborhood}, ${customer?.state} - ${customer?.postalCode}`;
-  const bussinessAddress = `${customer?.businessStreet}, ${customer?.businessNumber} ${hasBusinessComplement}, ${customer?.businessNeighborhood}, ${customer?.businessState} - ${customer?.businessPostalCode}`;
+  const address = `${customer.address.street}, ${customer.address.number} ${hasComplement} ${customer.address.neighborhood}, ${customer.address.state} - ${customer.address.postalCode}`;
 
   // const hasPaymentMode = financialData && financialData.payments;
   const hasCnpj = customer?.document?.length === 14;
@@ -36,22 +43,23 @@ export const CustomerBasicDetails = ({ customer }) => {
     window.open(`/contracts/hyposufficiency/${id}`, "_blank");
   };
 
-
-  console.log('customer', customer)
-
+  console.log("customer", customer);
 
   return (
     <>
       <Card>
-        <CardHeader title="Detalhes Básicos" />
-
         {hasCnpj && (
           <>
+           <Box px={2} pt={4} pb={2}>
+          <Typography variant="h6">Dados da empresa</Typography>
+        </Box>
+        <Divider />
+
             <PropertyList>
               <ListItem divider>
                 <ListItemText
-                  primary="Empresa"
-                  secondary={customer?.corporateName}
+                  primary="Razão social"
+                  secondary={business?.corporateName}
                 />
               </ListItem>
               <ListItem divider>
@@ -59,15 +67,18 @@ export const CustomerBasicDetails = ({ customer }) => {
                   primary="CNPJ"
                   secondary={maskDocument(customer?.cnpj)}
                 />
-                <ListItemText primary="CNAE" secondary={customer?.cnae} />
+                <ListItemText primary="CNAE" secondary={business?.cnae} />
               </ListItem>
-              <ListItem divider>
-                <ListItemText primary="Endereço" secondary={bussinessAddress} />
+              <ListItem>
+                <ListItemText primary="Endereço" secondary={businessAddress} />
               </ListItem>
             </PropertyList>
-         
           </>
         )}
+        <Box px={2} pt={4} pb={2}>
+          <Typography variant="h6">{hasCnpj ? "Dados do Responsável" : "Detalhes Básicos"}</Typography>
+        </Box>
+        <Divider />
         <PropertyList>
           <ListItem divider>
             <ListItemText

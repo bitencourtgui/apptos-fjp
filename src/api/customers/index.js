@@ -126,6 +126,21 @@ class CustomersApi {
     }
   }
 
+  static async getAddressByCep(cep) {
+    const formatted = cep.replace(/[^\d]/g, "");
+  
+    try {
+      const response = await fetch(
+        `https://brasilapi.com.br/api/cep/v2/${formatted}`
+      );
+      const data = await response.json();
+      return Promise.resolve(data);
+    } catch (error) {
+      console.error("Error ao buscar CEP:", error);
+      throw error;
+    }
+  }
+
   static async setCustomer(customerId, values) {
     try {
       await setDoc(doc(db, processCollection, customerId), values);
