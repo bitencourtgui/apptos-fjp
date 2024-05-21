@@ -31,7 +31,6 @@ export const CustomerBasicDetails = ({ customer }) => {
 
   const address = `${customer.address.street}, ${customer.address.number} ${hasComplement} ${customer.address.neighborhood}, ${customer.address.state} - ${customer.address.postalCode}`;
 
-  // const hasPaymentMode = financialData && financialData.payments;
   const hasCnpj = customer?.document?.length === 14;
 
   const [openContract, setOpenContract] = useState(false);

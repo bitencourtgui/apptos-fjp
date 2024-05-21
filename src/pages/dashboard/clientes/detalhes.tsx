@@ -135,7 +135,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{customer?.name}</Typography>
+                    <Typography variant="h4">{customer?.business.corporateName}</Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">id:</Typography>
                       <Chip label={customer?.id} size="small" />
