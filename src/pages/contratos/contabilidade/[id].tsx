@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useMounted } from "../../../hooks/use-mounted";
 import CustomersApi from "../../../api/customers";
-import FinancialApi from "../../../api/financial";
 import { numberInWords } from "../../../utils/number-in-words";
 import { formatCurrency } from "../../../utils/masks/currencyMask";
 import { maskDocument } from "../../../utils/masks/maskDocument";
@@ -38,29 +37,6 @@ const useCustomer = (userId: string) => {
   return customer;
 };
 
-const useFinancial = (id: string) => {
-  const isMounted = useMounted();
-  const [financial, setFinancial] = useState(null);
-
-  const getFinancial = useCallback(async () => {
-    try {
-      const response = await FinancialApi.getInvoices(id);
-
-      if (isMounted()) {
-        setFinancial(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(() => {
-    getFinancial();
-  }, []);
-
-  return financial;
-};
-
 const FeeContract = () => {
   let customerId: string;
   let url: string;
@@ -81,51 +57,12 @@ const FeeContract = () => {
       console.info("ID não encontrado na URL");
     }
   }
-  const [queryParams, setQueryParams] = useState<string>();
 
   const customer = useCustomer(customerId);
 
-  console.log("customer", customer);
-
-  const financial = useFinancial(customerId);
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const frequencyParam = urlParams.get("frequency");
-
-    if (frequencyParam) {
-      setQueryParams(frequencyParam);
-    } else {
-      console.error("Frequency parameter não encontrado na URL");
-    }
-  }, []); // Este efeito será executado apenas uma vez após a montagem do componente
-
-  const textPayment =
-    ", a ser depositada no PIX: 47.956.830/0001-50, Banco: 0260 - Nu Pagamentos S.A. - Instituição de Pagamento, Agência: 0001 e Conta Corrente: 13814965-0";
-
-  function generateFrequencyText(paymentData) {
-    let questionText = "";
-
-    paymentData?.payments?.forEach((payment, index) => {
-      const installmentsNumber = payment.installments.length - 1;
-      const userData = payment.installments[installmentsNumber];
-      const typeCorrect = userData.frequency === queryParams;
-
-      if (userData.frequency === "indetermined" && typeCorrect) {
-        questionText = `<p><strong>Cláusula Segunda</strong> - O presente contrato vigerá por tempo indeterminado, até que se cumpra o quanto determinado na Cláusula Primeira</p>\n`;
-      } else if (userData.frequency === "monthly" && typeCorrect) {
-        questionText = `<p><strong>Cláusula Segunda</strong> - O presente contrato vigerá por tempo determinado de ${numberInWords(
-          userData.installmentNumber
-        )} meses a partir da assinatura do contrato.</p>\n`;
-      }
-    });
-
-    return questionText;
-  }
-
   useEffect(() => {
     if (customer?.name) {
-      document.title = `Contrato de honorários - ${customer?.name?.toUpperCase()}`;
+      document.title = `Contrato contábil - ${customer?.name?.toUpperCase()}`;
       handleLoad();
     }
   }, [customer]);
@@ -135,7 +72,7 @@ const FeeContract = () => {
   const handleAfterPrint = () => {
     // Lógica a ser executada após a impressão
     // Por exemplo, fechar a janela ou redirecionar para outra página
-    // router.push(`/${gt}/clientes/${customerId}`)
+    router.push(`/${gt}/clientes/${customerId}`);
   };
 
   useEffect(() => {
@@ -149,7 +86,7 @@ const FeeContract = () => {
   }, []); // Vazio como dependência para ser executado apenas uma vez durante o montagem do componente
 
   const handleLoad = () => {
-    // window.print();
+    window.print();
   };
 
   function translateMaritalStatus(maritalStatus: string, gender: string) {
@@ -971,10 +908,10 @@ const FeeContract = () => {
                 <p style={{ paddingLeft: "50pt" }}>
                   <strong>CLÁUSULA DÉCIMA SÉTIMA</strong> – O presente
                   instrumento de contrato vigerá pelo período de 1 (um) ano, com
-                  início em {customer?.contractStartDate} e será renovado automaticamente pelo
-                  mesmo período nos anos subsequentes, salvo notificação de
-                  qualquer das PARTES com, no mínimo, 30 (trinta) dias corridos
-                  de antecedência.
+                  início em {customer?.contractStartDate} e será renovado
+                  automaticamente pelo mesmo período nos anos subsequentes,
+                  salvo notificação de qualquer das PARTES com, no mínimo, 30
+                  (trinta) dias corridos de antecedência.
                 </p>
 
                 <p style={{ marginTop: "30px" }}>
