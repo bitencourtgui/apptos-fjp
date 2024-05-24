@@ -103,8 +103,6 @@ export const CustomerAddForm = (props) => {
       try {
         const response = await CustomersApi.getAddressByCep(zipCode);
 
-        console.log("response", response);
-
         formik.setFieldValue("address", {
           postalCode: response.cep,
           street: response.street,

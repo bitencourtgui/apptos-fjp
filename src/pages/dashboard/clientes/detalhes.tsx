@@ -32,6 +32,8 @@ import CustomersApi from "../../../api/customers";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
+import { ContractList } from "../../../sections/dashboard/customer/customer-contracts";
+
 const tabs = [
   { label: "Detalhes", value: "details" },
   { label: "Financeiro", value: "invoices" },
@@ -196,8 +198,9 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                   </Grid>
                   <Grid xs={12} lg={8}>
                     <Stack spacing={4}>
+                      <ContractList customer={customer} />
                       {customer && <FileManager customerId={customer.id} />}
-                      {/* <CustomerEmailsSummary /> */}
+                      
                       {/* <CustomerDataManagement /> */}
                     </Stack>
                   </Grid>

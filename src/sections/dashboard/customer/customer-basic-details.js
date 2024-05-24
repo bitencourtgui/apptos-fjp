@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -21,35 +22,30 @@ import ChevronUp from "@untitled-ui/icons-react/build/esm/ChevronUp";
 import { Scrollbar } from "../../../components/scrollbar";
 import CustomersApi from "../../../api/customers";
 export const CustomerBasicDetails = ({ customer }) => {
+  const hasCnpj = customer?.document?.length === 14;
+
   const hasComplement =
     customer?.address?.complement || customer?.businessComplement?.length >= 1
       ? `, ${customer?.address?.complement || customer?.businessComplement}, `
       : "";
 
   const business = customer?.business;
-
   const businessAddress = `${business?.address.street}, ${business?.address.number}${hasComplement}, ${business?.address.neighborhood}, ${business?.address.city}, ${business?.address.state} - ${business?.address.postalCode}`;
 
-  const address = `${customer?.address.street}, ${customer?.address.number} ${hasComplement} ${customer?.address.neighborhood}, ${customer?.address.state} - ${customer?.address.postalCode}`;
-
-  const hasCnpj = customer?.document?.length === 14;
+  const address = `${customer?.address?.street}, ${customer?.address?.number} ${hasComplement} ${customer?.address?.neighborhood}, ${customer?.address?.state} - ${customer?.address?.postalCode}`;
 
   const [openContract, setOpenContract] = useState(false);
   const [openPoa, setOpenPoa] = useState(false);
 
   const handleToggleFeeContract = (isOpen) => setOpenContract(isOpen);
   const handleTogglePowerOfAttorney = (isOpen) => setOpenPoa(isOpen);
-  const handleHyposufficiency = (id) => {
-    window.open(`/contracts/hyposufficiency/${id}`, "_blank");
-  };
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!hasCnpj);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
-
-  const [servicesOpen, setServicesOpen] = useState(false);
 
   const handleServicesClick = () => {
     setServicesOpen(!servicesOpen);
@@ -59,42 +55,34 @@ export const CustomerBasicDetails = ({ customer }) => {
 
   const services = [
     { label: "Abertura de Empresa", value: "1" },
-    { label: "Desencadeamento", value: "2" },
-    { label: "Contabilidade Empresarial", value: "3" },
+    { label: "Contabilidade Empresarial", value: "2" },
+    { label: "Desencadeamento", value: "3" },
     { label: "Planejamento Tributário", value: "4" },
     { label: "Isenção de IR", value: "5" },
     { label: "Defesa Administrativa", value: "6" },
   ];
 
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState(
+    customer?.services || []
+  );
 
   useEffect(() => {
-    // Log the selected services
-    console.log(selectedServices);
-
-    const customerId = customer?.id
+    const customerId = customer?.id;
     const values = { ...customer, services: selectedServices };
 
     console.log(values)
-  
-    // Define the async function inside the effect
+
     async function setCustomerData() {
       try {
-        // Perform your async operation here
         const response = await CustomersApi.setCustomer(customerId, values);
-        // Handle the response if needed
         console.log(response);
       } catch (error) {
-        // Handle errors if needed
         console.error(error);
       }
     }
-    
-    // Call the async function
-    setCustomerData();
-  }, [selectedServices]); // Dependency array
 
-  console.log(customer)
+    setCustomerData();
+  }, [selectedServices]);
 
   const handleServiceToggle = (service) => {
     setSelectedServices((prevServices) => {
@@ -197,6 +185,7 @@ export const CustomerBasicDetails = ({ customer }) => {
         </ListItem>*/}
           </PropertyList>
         </Collapse>
+
         <Box
           px={2}
           pt={4}

@@ -154,7 +154,7 @@ export const CustomerListTable = (props) => {
 
               const customerName = customer.name || customer.businessName;
 
-              const hasDevTeste = customerName.includes("DEV");
+              const hasDevTeste = customerName?.includes("DEV");
               const chip = hasDevTeste ? (
                 <Chip color="info" size="small" label="DEV" />
               ) : null;

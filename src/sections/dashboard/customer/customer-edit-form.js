@@ -80,18 +80,44 @@ export const CustomerEditForm = (props) => {
       try {
         const response = await CustomersApi.getBusinessCustomer(numericValue);
 
-        formik.setFieldValue("corporateName", response.razao_social);
-        formik.setFieldValue("cnae", response.cnae_fiscal);
-        formik.setFieldValue("businessPostalCode", response.cep);
-        formik.setFieldValue("businessStreet", response.logradouro);
-        formik.setFieldValue("businessNumber", response.numero);
-        formik.setFieldValue("businessComplement", response.complemento);
-        formik.setFieldValue("businessNeighborhood", response.bairro);
-        formik.setFieldValue("businessCity", response.municipio);
-        formik.setFieldValue("businessState", response.uf);
+        formik.setFieldValue("business", {
+          corporateName: response.razao_social,
+          cnae: response.cnae_fiscal,
+          address: {
+            postalCode: response.cep,
+            street: response.logradouro,
+            number: response.numero,
+            complement: response.complemento,
+            neighborhood: response.bairro,
+            city: response.municipio,
+            state: response.uf,
+          },
+        });
       } catch (error) {
-        // Handle errors
-        console.error("Error fetching CNPJ information:", error);
+        console.error("Falha ao buscar dados do CNPJ:", error);
+      }
+    }
+  };
+
+  const handleAddress = async (e, formik) => {
+    const value = e.target.value;
+    const zipCode = value.replace(/\D/g, "");
+
+    if (zipCode.length === 8) {
+      try {
+        const handleDocumentresponse = await CustomersApi.getAddressByCep(
+          zipCode
+        );
+
+        formik.setFieldValue("address", {
+          postalCode: response.cep,
+          street: response.street,
+          neighborhood: response.neighborhood,
+          city: response.city,
+          state: response.state,
+        });
+      } catch (error) {
+        console.error("Falha ao buscar dados do CEP:", error);
       }
     }
   };
@@ -122,179 +148,188 @@ export const CustomerEditForm = (props) => {
                   <TextField
                     error={
                       !!(
-                        formik.touched.corporateName &&
-                        formik.errors.corporateName
+                        formik.touched.business?.corporateName &&
+                        formik.errors.business?.corporateName
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.corporateName &&
-                      formik.errors.corporateName
+                      formik.touched.business?.corporateName &&
+                      formik.errors.business?.corporateName
                     }
                     label="Razão Social"
-                    name="corporateName"
+                    name="business.corporateName"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.corporateName}
-                  />
-                </Grid>
-                <Grid xs={12} md={2}>
-                  <TextField
-                    error={!!(formik.touched.cnae && formik.errors.cnae)}
-                    fullWidth
-                    helperText={formik.touched.cnae && formik.errors.cnae}
-                    label="Cnae"
-                    name="cnae"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    required
-                    value={formik.values.cnae}
+                    value={formik.values.business?.corporateName}
                   />
                 </Grid>
                 <Grid xs={12} md={2}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessPostalCode &&
-                        formik.errors.businessPostalCode
+                        formik.touched.business?.cnae &&
+                        formik.errors.business?.cnae
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessPostalCode &&
-                      formik.errors.businessPostalCode
+                      formik.touched.business?.cnae &&
+                      formik.errors.business?.cnae
+                    }
+                    label="Cnae"
+                    name="business.cnae"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    required
+                    value={formik.values.business?.cnae}
+                  />
+                </Grid>
+                <Grid xs={12} md={2}>
+                  <TextField
+                    error={
+                      !!(
+                        formik.touched.business?.address?.postalCode &&
+                        formik.errors.business?.address?.postalCode
+                      )
+                    }
+                    fullWidth
+                    helperText={
+                      formik.touched.business?.address?.postalCode &&
+                      formik.errors.business?.address?.postalCode
                     }
                     label="CEP"
-                    name="businessPostalCode"
+                    name="business.address.postalCode"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.businessPostalCode}
+                    value={formik.values.business?.address?.postalCode}
                   />
                 </Grid>
-                <Grid xs={12} md={4}>
+                <Grid xs={12} md={6}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessStreet &&
-                        formik.errors.businessStreet
+                        formik.touched.business?.address?.street &&
+                        formik.errors.business?.address?.street
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessStreet &&
-                      formik.errors.businessStreet
+                      formik.touched.business?.address?.street &&
+                      formik.errors.business?.address?.street
                     }
                     label="Rua"
-                    name="businessStreet"
+                    name="business.address.street"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.businessStreet}
+                    value={formik.values.business?.address?.street}
                   />
                 </Grid>
                 <Grid xs={12} md={2}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessNumber &&
-                        formik.errors.businessNumber
+                        formik.touched.business?.address?.number &&
+                        formik.errors.business?.address?.number
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessNumber &&
-                      formik.errors.businessNumber
+                      formik.touched.business?.address?.number &&
+                      formik.errors.business?.address?.number
                     }
                     label="Número"
-                    name="businessNumber"
+                    name="business.address.number"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.businessNumber}
+                    value={formik.values.business?.address?.number}
                   />
                 </Grid>
                 <Grid xs={12} md={2}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessComplement &&
-                        formik.errors.businessComplement
+                        formik.touched.business?.address?.complement &&
+                        formik.errors.business?.address?.complement
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessComplement &&
-                      formik.errors.businessComplement
+                      formik.touched.business?.address?.complement &&
+                      formik.errors.business?.address?.complement
                     }
                     label="Complemento"
-                    name="businessComplement"
+                    name="business.address.complement"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    value={formik.values.businessComplement}
+                    value={formik.values.business?.address?.complement}
                   />
                 </Grid>
                 <Grid xs={12} md={4}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessNeighborhood &&
-                        formik.errors.businessNeighborhood
+                        formik.touched.business?.address?.neighborhood &&
+                        formik.errors.business?.address?.neighborhood
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessNeighborhood &&
-                      formik.errors.businessNeighborhood
+                      formik.touched.business?.address?.neighborhood &&
+                      formik.errors.business?.address?.neighborhood
                     }
                     label="Bairro"
-                    name="businessNeighborhood"
+                    name="business.address.neighborhood"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.businessNeighborhood}
+                    value={formik.values.business?.address?.neighborhood}
                   />
                 </Grid>
                 <Grid xs={12} md={2}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessCity &&
-                        formik.errors.businessCity
+                        formik.touched.business?.address?.city &&
+                        formik.errors.business?.address?.city
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessCity && formik.errors.businessCity
+                      formik.touched.business?.address?.city &&
+                      formik.errors.business?.address?.city
                     }
                     label="Cidade"
-                    name="businessCity"
+                    name="business.address.city"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.businessCity}
+                    value={formik.values.business?.address?.city}
                   />
                 </Grid>
                 <Grid xs={12} md={2}>
                   <TextField
                     error={
                       !!(
-                        formik.touched.businessState &&
-                        formik.errors.businessState
+                        formik.touched.business?.address?.state &&
+                        formik.errors.business?.address?.state
                       )
                     }
                     fullWidth
                     helperText={
-                      formik.touched.businessState &&
-                      formik.errors.businessState
+                      formik.touched.business?.address?.state &&
+                      formik.errors.business?.address?.state
                     }
                     label="Estado"
-                    name="businessState"
+                    name="business.address.state"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     required
-                    value={formik.values.businessState}
+                    value={formik.values.business?.address?.state}
                   />
                 </Grid>
 
@@ -303,7 +338,7 @@ export const CustomerEditForm = (props) => {
                     Responsável
                   </Typography>
                 </Grid>
-                <Grid xs={12} md={6}>
+                <Grid xs={12} md={2}>
                   <TextField
                     error={!!(formik.touched.cpf && formik.errors.cpf)}
                     fullWidth
@@ -360,18 +395,8 @@ export const CustomerEditForm = (props) => {
                   label="Gênero"
                   onChange={formik.handleChange}
                 >
-                  <MenuItem
-                    defaultChecked={formik.values.gender === "female"}
-                    value="female"
-                  >
-                    Feminino
-                  </MenuItem>
-                  <MenuItem
-                    defaultChecked={formik.values.gender === "male"}
-                    value="male"
-                  >
-                    Masculino
-                  </MenuItem>
+                  <MenuItem value="female">Feminino</MenuItem>
+                  <MenuItem value="male">Masculino</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -384,7 +409,6 @@ export const CustomerEditForm = (props) => {
                 name="email"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required
                 value={formik.values.email}
               />
             </Grid>
@@ -416,16 +440,20 @@ export const CustomerEditForm = (props) => {
             </Grid>
             <Grid xs={12} md={3}>
               <FormControl fullWidth>
-                <InputLabel id="expertise">Área</InputLabel>
+                <InputLabel id="maritalStatus">Estado civil</InputLabel>
                 <Select
-                  labelId="expertise"
-                  id="expertise"
-                  name="expertise"
-                  value={formik.values.expertise}
-                  label="Área"
+                  labelId="maritalStatus"
+                  id="maritalStatus"
+                  name="maritalStatus"
+                  value={formik.values.maritalStatus}
+                  label="Estado civil"
                   onChange={formik.handleChange}
                 >
-                  <MenuItem value="tributario">Tributário</MenuItem>
+                  <MenuItem value="single">Solteiro</MenuItem>
+                  <MenuItem value="married">Casado</MenuItem>
+                  <MenuItem value="separated">Separado</MenuItem>
+                  <MenuItem value="divorced">Divorciado</MenuItem>
+                  <MenuItem value="widowed">Viúvo</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -435,110 +463,159 @@ export const CustomerEditForm = (props) => {
             <Grid xs={12} md={2}>
               <TextField
                 error={
-                  !!(formik.touched.postalCode && formik.errors.postalCode)
+                  !!(
+                    formik.touched.address?.postalCode &&
+                    formik.errors.address?.postalCode
+                  )
                 }
                 fullWidth
                 helperText={
-                  formik.touched.postalCode && formik.errors.postalCode
+                  formik.touched.address?.postalCode &&
+                  formik.errors.address?.postalCode
                 }
                 label="CEP"
-                name="postalCode"
-                onBlur={formik.handleBlur}
+                name="address.postalCode"
+                onBlur={(e) => handleAddress(e, formik)}
                 onChange={formik.handleChange}
-                value={formik.values.postalCode}
+                value={formik.values.address?.postalCode}
               />
             </Grid>
             <Grid xs={12} md={6}>
               <TextField
-                error={!!(formik.touched.street && formik.errors.street)}
+                error={
+                  !!(
+                    formik.touched.address?.street &&
+                    formik.errors.address?.street
+                  )
+                }
                 fullWidth
-                helperText={formik.touched.street && formik.errors.street}
+                helperText={
+                  formik.touched.address?.street &&
+                  formik.errors.address?.street
+                }
                 label="Rua"
-                name="street"
+                name="address.street"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.street}
-              />
-            </Grid>
-            <Grid xs={12} md={2}>
-              <TextField
-                error={!!(formik.touched.number && formik.errors.number)}
-                fullWidth
-                helperText={formik.touched.number && formik.errors.number}
-                label="Número"
-                name="number"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.number}
+                value={formik.values.address?.street}
               />
             </Grid>
             <Grid xs={12} md={2}>
               <TextField
                 error={
-                  !!(formik.touched.complement && formik.errors.complement)
+                  !!(
+                    formik.touched.address?.number &&
+                    formik.errors.address?.number
+                  )
                 }
                 fullWidth
                 helperText={
-                  formik.touched.complement && formik.errors.complement
+                  formik.touched.address?.number &&
+                  formik.errors.address?.number
                 }
-                label="Complemento"
-                name="complement"
+                label="Número"
+                name="address.number"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.complement}
+                value={formik.values.address?.number}
+              />
+            </Grid>
+            <Grid xs={12} md={2}>
+              <TextField
+                error={
+                  !!(
+                    formik.touched.address?.complement &&
+                    formik.errors.address?.complement
+                  )
+                }
+                fullWidth
+                helperText={
+                  formik.touched.address?.complement &&
+                  formik.errors.address?.complement
+                }
+                label="Complemento"
+                name="address.complement"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.address?.complement}
               />
             </Grid>
             <Grid xs={12} md={4}>
               <TextField
                 error={
-                  !!(formik.touched.neighborhood && formik.errors.neighborhood)
+                  !!(
+                    formik.touched.address?.neighborhood &&
+                    formik.errors.address?.neighborhood
+                  )
                 }
                 fullWidth
                 helperText={
-                  formik.touched.neighborhood && formik.errors.neighborhood
+                  formik.touched.address?.neighborhood &&
+                  formik.errors.address?.neighborhood
                 }
                 label="Bairro"
-                name="neighborhood"
+                name="address.neighborhood"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.neighborhood}
+                value={formik.values.address?.neighborhood}
               />
             </Grid>
 
             <Grid xs={12} md={4}>
               <TextField
-                error={!!(formik.touched.city && formik.errors.city)}
+                error={
+                  !!(
+                    formik.touched.address?.city && formik.errors.address?.city
+                  )
+                }
                 fullWidth
-                helperText={formik.touched.city && formik.errors.city}
+                helperText={
+                  formik.touched.address?.city && formik.errors.address?.city
+                }
                 label="Cidade"
-                name="city"
+                name="address.city"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.city}
+                value={formik.values.address?.city}
               />
             </Grid>
-            <Grid xs={12} md={1}>
+            <Grid xs={12} md={2}>
               <TextField
-                error={!!(formik.touched.state && formik.errors.state)}
+                error={
+                  !!(
+                    formik.touched.address?.state &&
+                    formik.errors.address?.state
+                  )
+                }
                 fullWidth
-                helperText={formik.touched.state && formik.errors.state}
+                helperText={
+                  formik.touched.address?.state && formik.errors.address?.state
+                }
                 label="Estado"
-                name="state"
+                name="address.state"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.state}
+                value={formik.values.address?.state}
               />
             </Grid>
-            <Grid xs={12} md={3}>
+            <Grid xs={12} md={2}>
               <TextField
-                error={!!(formik.touched.country && formik.errors.country)}
+                error={
+                  !!(
+                    formik.touched.address?.country &&
+                    formik.errors.address?.country
+                  )
+                }
                 fullWidth
-                helperText={formik.touched.country && formik.errors.country}
+                helperText={
+                  formik.touched.address?.country &&
+                  formik.errors.address?.country
+                }
                 label="País"
-                name="country"
+                name="address.country"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.country}
+                value={formik.values.address?.country}
               />
             </Grid>
           </Grid>

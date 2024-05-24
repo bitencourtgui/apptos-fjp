@@ -1,11 +1,11 @@
 @page {
   size: a4;
-  margin: 2cm 1.75cm .5in 1.75cm;
+  margin: 4cm 1.75cm 7in 1.75cm; /* Aumente a margem inferior */
 }
 
 @media print {
   table.paging thead td, table.paging tfoot td {
-      height: .4in;
+      height: 5in;
   }
 }
 
@@ -36,4 +36,8 @@ header {
   .printHeaderFee img {
     width: 200px
   }
+}
+
+.signature-section {
+  page-break-before: always;
 }

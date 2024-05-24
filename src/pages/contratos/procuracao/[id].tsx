@@ -6,6 +6,8 @@ import { maskDocument } from "../../../utils/masks/maskDocument";
 import { useMounted } from "../../../hooks/use-mounted";
 import CustomersApi from "../../../api/customers";
 import LawyersApi from "../../../api/lawyers";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../hooks/use-auth";
 
 interface Lawyer {
   name: string;
@@ -71,6 +73,10 @@ const PowerOfAttorney = () => {
   let oabValues = [];
   let url: string;
 
+  const router = useRouter();
+  const { getTenant } = useAuth();
+  const gt = getTenant();
+
   if (typeof window !== "undefined") {
     url = window.location.href;
     const regex = /\/(\w+-\w+-\w+-\w+-\w+)/;
@@ -110,12 +116,18 @@ const PowerOfAttorney = () => {
   const customer = useCustomer(customerId);
   const lawyers = useLawyers();
 
+  const loaded =
+    customer !== null &&
+    customer !== undefined &&
+    lawyers !== null &&
+    lawyers !== undefined;
+
   useEffect(() => {
-    if (customer?.name) {
+    if (customer?.name && loaded) {
       document.title = `Procuração - ${customer?.name?.toUpperCase()}`;
       handleLoad();
     }
-  }, [customer]);
+  }, [customer, loaded]);
 
   // Define state for today's date
   const [today, setToday] = useState<Date>();
@@ -132,7 +144,7 @@ const PowerOfAttorney = () => {
   const handleAfterPrint = () => {
     // Lógica a ser executada após a impressão
     // Por exemplo, fechar a janela ou redirecionar para outra página
-    window.close(); // Isso fechará a janela após a impressão
+    router.push(`/${gt}/clientes/${customerId}`);
   };
 
   useEffect(() => {
@@ -150,7 +162,7 @@ const PowerOfAttorney = () => {
   };
 
   const maleGender = customer?.gender === "male";
-  const maleMinorGender = customer?.underage.gender === "male";
+  const maleMinorGender = customer?.underage?.gender === "male";
 
   const holder = maleGender ? "portador" : "portadora";
   const residing = maleGender ? "domiciliado" : "domiciliada";
