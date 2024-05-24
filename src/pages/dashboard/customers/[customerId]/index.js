@@ -26,7 +26,6 @@ import { Layout as DashboardLayout } from "../../../../layouts/dashboard";
 import { paths } from "../../../../paths";
 import { CustomerBasicDetails } from "../../../../sections/dashboard/customer/customer-basic-details";
 import { CustomerDataManagement } from "../../../../sections/dashboard/customer/customer-data-management";
-import { CustomerEmailsSummary } from "../../../../sections/dashboard/customer/customer-emails-summary";
 import { CustomerInvoices } from "../../../../sections/dashboard/customer/customer-invoices";
 import { CustomerPayment } from "../../../../sections/dashboard/customer/customer-payment";
 import { CustomerLogs } from "../../../../sections/dashboard/customer/customer-logs";
@@ -253,7 +252,6 @@ const Page = () => {
                   <Grid xs={12} lg={8}>
                     <Stack spacing={4}>
                       <CustomerPayment />
-                      <CustomerEmailsSummary />
                       <CustomerDataManagement />
                     </Stack>
                   </Grid>
