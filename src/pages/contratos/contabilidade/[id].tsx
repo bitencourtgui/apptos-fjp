@@ -73,7 +73,7 @@ const FeeContract = () => {
   const handleAfterPrint = () => {
     // Lógica a ser executada após a impressão
     // Por exemplo, fechar a janela ou redirecionar para outra página
-    // router.push(`/${gt}/clientes/${customerId}`);
+    router.push(`/${gt}/clientes/${customerId}`);
   };
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const FeeContract = () => {
   }, []); // Vazio como dependência para ser executado apenas uma vez durante o montagem do componente
 
   const handleLoad = () => {
-    // window.print();
+    window.print();
   };
 
   function translateMaritalStatus(maritalStatus: string, gender: string) {
