@@ -7,3 +7,11 @@ export const openingServiceSchema = Yup.object().shape({
     .required("Digite o valor da taxa de abertura"),
   paymentDate: Yup.string().required("Selecione a data de pagamento"),
 });
+
+export const AccountingServiceSchema = Yup.object().shape({
+  paymentEntry: Yup.boolean(),
+  accountingPayment: Yup.number().typeError("Digite um valor válido"),
+  accountingFee: Yup.number().typeError("Digite um valor válido"),
+  accountingDate: Yup.string().required("Selecione a data de pagamento"),
+  billingRange: Yup.number().typeError("Digite um valor válido"),
+});

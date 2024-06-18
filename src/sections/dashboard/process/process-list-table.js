@@ -87,7 +87,6 @@ export const ProcessListTable = (props) => {
               {
                 process.division;
               }
-              console.log("process", process);
 
               const isCurrent = process.id === currentProduct;
 

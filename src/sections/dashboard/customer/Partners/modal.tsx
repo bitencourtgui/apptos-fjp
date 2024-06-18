@@ -51,7 +51,7 @@ const PartnersModal = ({ formik, open, handleToggle }: PartnersModalProps) => {
             fullWidth
             type="submit"
             variant="contained"
-            onClick={() => console.log(false)}
+            onClick={() => console.info(false)}
           >
             Cadastrar
           </Button>

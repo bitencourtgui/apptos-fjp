@@ -25,8 +25,11 @@ import { AccountingService } from "./forms/accountingService";
 // so para subir corrigir para o certo
 import { partnersInitial } from "../customer/Partners/partners-initial";
 import { customersSchema } from "../customer/customer-schema";
-import { openingServiceSchema } from "./services.schema";
-import { iOpeningService } from "./financial-initial";
+import {
+  AccountingServiceSchema,
+  openingServiceSchema,
+} from "./services.schema";
+import { iAccountingService, iOpeningService } from "./financial-initial";
 import CustomersApi from "@/api/customers";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
@@ -35,14 +38,14 @@ interface ServicesModalProps {
   open: boolean;
   handleToggle: () => void;
   customers: any;
-  reload: any
+  reload: any;
 }
 
 const ServicesModal = ({
   open,
   handleToggle,
   customers,
-  reload
+  reload,
 }: ServicesModalProps) => {
   dayjs.locale("pt-br");
 
@@ -61,7 +64,6 @@ const ServicesModal = ({
     const response = await CustomersApi.updateCustomer(customers.id, payload);
 
     if (response.status === 200) {
-      
       handleToggle();
       reload();
       toast.success("Serviço cadastrado");
@@ -71,10 +73,32 @@ const ServicesModal = ({
     }
   };
 
+  function getSchema(service: string) {
+    switch (service) {
+      case "0":
+        return openingServiceSchema;
+      case "1":
+        return AccountingServiceSchema;
+      default:
+        return null;
+    }
+  }
+
+  function getInitial(service: string) {
+    switch (service) {
+      case "0":
+        return iOpeningService;
+      case "1":
+        return iAccountingService;
+      default:
+        return null;
+    }
+  }
+
   // rever imports
   const formik = useFormik({
-    initialValues: iOpeningService,
-    validationSchema: openingServiceSchema,
+    initialValues: getInitial(service),
+    validationSchema: getSchema(service),
     onSubmit,
   });
 

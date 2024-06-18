@@ -22,8 +22,6 @@ import ChevronUp from "@untitled-ui/icons-react/build/esm/ChevronUp";
 import { Scrollbar } from "../../../components/scrollbar";
 import CustomersApi from "../../../api/customers";
 export const CustomerBasicDetails = ({ customer }) => {
-  console.log(customer);
-
   const hasCnpj = customer?.business?.document.length >= 1;
 
   const hasComplement =
@@ -63,12 +61,10 @@ export const CustomerBasicDetails = ({ customer }) => {
     const customerId = customer?.id;
     const values = { ...customer, services: selectedServices };
 
-    console.log(values);
-
     async function setCustomerData() {
       try {
         const response = await CustomersApi.setCustomer(customerId, values);
-        console.log(response);
+        console.info(response);
       } catch (error) {
         console.error(error);
       }

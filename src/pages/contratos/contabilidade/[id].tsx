@@ -194,12 +194,21 @@ const FeeContract = () => {
   function getContractServicesDetails(services: any) {
     const servicesMap = {
       "0": "Abertura de Empresa",
-      "1": "Desencadeamento",
-      "2": "Contabilidade Empresarial",
+      "1": "Contabilidade Empresarial",
+      "2": "Desencadeamento",
       "3": "Planejamento Tributário",
       "4": "Isenção de IR",
       "5": "Defesa Administrativa",
     };
+
+    const objectLabels = [
+      "Primeiro",
+      "Segundo",
+      "Terceiro",
+      "Quarto",
+      "Quinto",
+      "Sexto",
+    ];
 
     if (services) {
       return (
@@ -218,7 +227,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>Objeto Primeiro</p>
+                    <p>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -254,7 +263,7 @@ const FeeContract = () => {
               );
             }
 
-            if (service === "1") {
+            if (service?.serviceType === "1") {
               return (
                 <div key={index} style={{ display: "flex" }}>
                   <div
@@ -267,10 +276,13 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>Objeto Segundo</p>
+                    <p>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
-                      <strong>{servicesMap[service]}</strong>
+                      <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
+                    <p>{`Faixa de faturamento - Até ${formatBRL(
+                      service.billingRange
+                    )}`}</p>
                   </div>
                   <div
                     style={{
@@ -279,22 +291,53 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>
-                      Mensalidade inicial:{" "}
-                      {/* {formatBRL(serviceDetails?.accountingPayment)}/mês ( */}
-                      {/* {numberInWords(serviceDetails?.accountingPayment)}). */}
-                    </p>
-                    <p>
-                      Demais Mensalidades:{" "}
-                      {/* {formatBRL(serviceDetails?.accountingFee)} ( */}
-                      {/* {numberInWords(serviceDetails?.accountingFee)}). */}
-                    </p>
-                    <p>
-                      Primeiro pagamento em{" "}
-                      {/* <strong>{serviceDetails?.accountingDate}</strong> e os */}
-                      demais no mesmo dia dos meses subsequentes, durante a
-                      vigência do presente instrumento.
-                    </p>
+                    {service.paymentEntry ? (
+                      <>
+                        <p>
+                          Mensalidade inicial:{" "}
+                          {formatBRL(service?.accountingPayment)}/mês (
+                          {numberInWords(service?.accountingPayment)}). Primeiro
+                          pagamento em{" "}
+                          <strong>
+                            {dayjs(service?.accountingDate).format(
+                              "DD/MM/YYYY"
+                            )}
+                          </strong>
+                        </p>
+                        <p>
+                          Demais Mensalidades:{" "}
+                          {formatBRL(service?.accountingFee)} (
+                          {numberInWords(service?.accountingFee)}).
+                        </p>
+                        <p>
+                          Primeiro pagamento em{" "}
+                          <strong>
+                            {dayjs(service?.accountingDate)
+                              .add(1, "month")
+                              .format("DD/MM/YYYY")}
+                          </strong>{" "}
+                          e os demais no mesmo dia dos meses subsequentes,
+                          durante a vigência do presente instrumento.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p>
+                          Mensalidade: {formatBRL(service?.accountingFee)} (
+                          {numberInWords(service?.accountingFee)}).
+                        </p>
+                        <p>
+                          Primeiro pagamento em{" "}
+                          <strong>
+                            {dayjs(service?.accountingDate).format(
+                              "DD/MM/YYYY"
+                            )}
+                          </strong>{" "}
+                          e os demais no mesmo dia dos meses subsequentes,
+                          durante a vigência do presente instrumento.
+                        </p>
+                      </>
+                    )}
                   </div>
                 </div>
               );
@@ -1084,7 +1127,7 @@ const FeeContract = () => {
                   <p style={{ marginTop: "10px" }}>
                     {customer?.partners?.map((partner, index, array) => {
                       return (
-                        <>
+                        <div key={index}>
                           <strong style={{ textTransform: "uppercase" }}>
                             {partner?.name}
                           </strong>
@@ -1096,7 +1139,7 @@ const FeeContract = () => {
                           , inscrito no CPF sob o nº{" "}
                           {maskDocument(partner?.document)}
                           {index < array.length - 1 ? "," : " e"}{" "}
-                        </>
+                        </div>
                       );
                     })}
                     <strong>

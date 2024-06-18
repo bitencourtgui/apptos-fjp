@@ -84,7 +84,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
     }
   };
 
-  const servicesList = ["Abertura de Empresa"];
+  const servicesList = ["Abertura de Empresa", "Contabilidade Empresarial"];
 
   function formatCurrency(value: number): string {
     return new Intl.NumberFormat("pt-BR", {
@@ -130,18 +130,11 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
               paymentDate,
               serviceType,
               monthyFee,
+              accountingFee,
               ...others
             },
             index
           ) => {
-            console.log(
-              cashPayment,
-              openingContract,
-              paymentDate,
-              serviceType,
-              others
-            );
-
             return (
               <Card key={index} sx={{ margin: "16px 0" }}>
                 <Scrollbar>
@@ -175,7 +168,11 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                             <Typography variant="h6">
                               {cashPayment
                                 ? "Pagamento a vista"
-                                : `${monthyFee}x`}
+                                : `${
+                                    monthyFee
+                                      ? `${monthyFee}x`
+                                      : formatCurrency(accountingFee)
+                                  }`}
                             </Typography>
                           </Box>
                           <Divider orientation="vertical" />
@@ -189,7 +186,11 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                               Data de pagamento
                             </Typography>
                             <Typography variant="h6">
-                              Dia {paymentDate}
+                              {serviceType === "1"
+                                ? dayjs(others.accountingDate).format(
+                                    "DD/MM/YYYY"
+                                  )
+                                : `Dia ${paymentDate}`}
                             </Typography>
                           </Box>
                           <Divider orientation="vertical" />
@@ -201,7 +202,9 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                             <Typography variant="caption">Valor</Typography>
 
                             <Typography variant="h6">
-                              {formatCurrency(openingContract)}
+                              {serviceType === "0"
+                                ? formatCurrency(openingContract)
+                                : formatCurrency(accountingFee * 12)}
                             </Typography>
                           </Box>
                         </Grid>
@@ -220,20 +223,30 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {[...Array(monthyFee)].map((_, index) => (
+                              {[
+                                ...Array(serviceType === "0" ? monthyFee : 12),
+                              ].map((_, index) => (
                                 <TableRow hover key={index}>
                                   <TableCell>{index + 1}</TableCell>
                                   <TableCell>
-                                    {formatCurrency(
-                                      openingContract / monthyFee
-                                    )}
+                                    {serviceType === "0"
+                                      ? formatCurrency(
+                                          openingContract / monthyFee
+                                        )
+                                      : formatCurrency(accountingFee)}
                                   </TableCell>
                                   <TableCell>
-                                    {calculateDueDate(
-                                      others.createdAt,
-                                      paymentDate,
-                                      index + 1
-                                    )}
+                                    {serviceType === "0"
+                                      ? calculateDueDate(
+                                          others.createdAt,
+                                          paymentDate,
+                                          index
+                                        )
+                                      : calculateDueDate(
+                                          others.createdAt,
+                                          others.accountingDate.split("-")[2],
+                                          index
+                                        )}
                                   </TableCell>
                                   <TableCell>
                                     {others.paymentMethod === "creditcard"

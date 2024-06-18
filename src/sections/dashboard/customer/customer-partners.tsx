@@ -51,8 +51,6 @@ const ActionButton = ({ action }): JSX.Element => {
 };
 
 export const CustomerPartners = ({ customers, getCustomer }) => {
-  console.log("[props]", customers);
-
   const customerID = uuidv4();
   const router = useRouter();
   const { getTenant } = useAuth();
@@ -116,8 +114,6 @@ export const CustomerPartners = ({ customers, getCustomer }) => {
             <TableBody>
               {customers?.partners
                 ? customers.partners.map((partner, key) => {
-                    console.log(partner);
-
                     const managingPartner = partner.managingPartner
                       ? "Administrador"
                       : "";
