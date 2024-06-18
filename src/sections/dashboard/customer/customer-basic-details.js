@@ -22,7 +22,9 @@ import ChevronUp from "@untitled-ui/icons-react/build/esm/ChevronUp";
 import { Scrollbar } from "../../../components/scrollbar";
 import CustomersApi from "../../../api/customers";
 export const CustomerBasicDetails = ({ customer }) => {
-  const hasCnpj = customer?.document?.length === 14;
+  console.log(customer);
+
+  const hasCnpj = customer?.business?.document.length >= 1;
 
   const hasComplement =
     customer?.address?.complement || customer?.businessComplement?.length >= 1
@@ -51,16 +53,7 @@ export const CustomerBasicDetails = ({ customer }) => {
     setServicesOpen(!servicesOpen);
   };
 
-  const getArrowIcon = (isOpen) => (isOpen ? <ChevronDown /> : <ChevronUp />);
-
-  const services = [
-    { label: "Abertura de Empresa", value: "1" },
-    { label: "Contabilidade Empresarial", value: "2" },
-    { label: "Desencadeamento", value: "3" },
-    { label: "Planejamento Tributário", value: "4" },
-    { label: "Isenção de IR", value: "5" },
-    { label: "Defesa Administrativa", value: "6" },
-  ];
+  const getArrowIcon = (isOpen) => (isOpen ? <ChevronUp /> : <ChevronDown />);
 
   const [selectedServices, setSelectedServices] = useState(
     customer?.services || []
@@ -70,7 +63,7 @@ export const CustomerBasicDetails = ({ customer }) => {
     const customerId = customer?.id;
     const values = { ...customer, services: selectedServices };
 
-    console.log(values)
+    console.log(values);
 
     async function setCustomerData() {
       try {
@@ -114,7 +107,7 @@ export const CustomerBasicDetails = ({ customer }) => {
               <ListItem divider>
                 <ListItemText
                   primary="CNPJ"
-                  secondary={maskDocument(customer?.cnpj)}
+                  secondary={maskDocument(business.document)}
                 />
                 <ListItemText primary="CNAE" secondary={business?.cnae} />
               </ListItem>
@@ -124,69 +117,8 @@ export const CustomerBasicDetails = ({ customer }) => {
             </PropertyList>
           </>
         )}
-        <Box
-          px={2}
-          pt={4}
-          pb={2}
-          display="flex"
-          justifyContent="space-between"
-          onClick={handleClick}
-        >
-          <Typography variant="h6">
-            {hasCnpj ? "Dados do Responsável" : "Detalhes Básicos"}
-          </Typography>
-          <SvgIcon sx={{ mr: 1 }}>{getArrowIcon(open)}</SvgIcon>
-        </Box>
-        <Divider />
-        <Collapse in={open}>
-          <PropertyList>
-            <ListItem divider>
-              <ListItemText
-                primary="CPF"
-                secondary={maskDocument(customer?.cpf)}
-              />
-              <ListItemText primary="RG" secondary={customer?.rg} />
-            </ListItem>
-            {customer?.email && (
-              <ListItem divider>
-                <ListItemText primary="Email" secondary={customer?.email} />
-              </ListItem>
-            )}
-            {customer?.phone1 && (
-              <ListItem divider>
-                <ListItemText primary="Telefone" secondary={customer?.phone1} />
-              </ListItem>
-            )}
-            <ListItem divider>
-              <ListItemText primary="Endereço" secondary={address} />
-            </ListItem>
-            {/*<ListItem divider sx={{ flexDirection: "column", gap: 1, mt: 1 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleToggleFeeContract(true)}
-            >
-              Contrato de Honorários
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleTogglePowerOfAttorney(true)}
-            >
-              Procuração
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleHyposufficiency(customer?.id)}
-            >
-              Declaração de Hipossuficiencia
-            </Button>
-        </ListItem>*/}
-          </PropertyList>
-        </Collapse>
 
-        <Box
+        {/* <Box
           px={2}
           pt={4}
           pb={2}
@@ -196,8 +128,8 @@ export const CustomerBasicDetails = ({ customer }) => {
         >
           <Typography variant="h6">Serviços</Typography>
           <SvgIcon sx={{ mr: 1 }}>{getArrowIcon(servicesOpen)}</SvgIcon>
-        </Box>
-        <Divider />
+        </Box> */}
+        {/* <Divider />
         <Collapse in={servicesOpen}>
           <div>
             <Box
@@ -237,7 +169,7 @@ export const CustomerBasicDetails = ({ customer }) => {
               </Scrollbar>
             </Box>
           </div>
-        </Collapse>
+        </Collapse> */}
       </Card>
       <FeeContractModal
         open={openContract}

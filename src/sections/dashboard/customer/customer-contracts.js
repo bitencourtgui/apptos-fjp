@@ -1,20 +1,24 @@
 import { useState } from "react";
 import CustomerModal from "./customer-contract-modal";
 import { Box, Card, ListItemText } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const contracts = [
   { id: 1, name: "Contabilidade" },
   { id: 2, name: "Prestação de serviços" },
 ];
 
-export const ContractList = ({customer}) => {
+export const ContractList = ({ customer }) => {
   const [open, setOpen] = useState(false);
   const [selectedContract, setSelectedContract] = useState(null);
 
+  const router = useRouter();
   const handleToggle = (isOpen) => setOpen(isOpen);
   const handleContractClick = (contract) => {
-    setSelectedContract(contract);
-    setOpen(true);
+
+    const contractType = contract.name.toLowerCase();
+
+    router.push(`/contratos/${contractType}/${customer.id}`);
   };
 
   return (

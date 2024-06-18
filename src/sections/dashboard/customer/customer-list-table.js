@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import NextLink from "next/link";
-import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import {
@@ -140,27 +139,32 @@ export const CustomerListTable = (props) => {
               </TableCell>
               <TableCell>Nome completo</TableCell>
               <TableCell>Documento</TableCell>
-              <TableCell>RG</TableCell>
               <TableCell>Telefone</TableCell>
               <TableCell align="right">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {customers.map((customer) => {
+              const business = customer?.business;
+              const isBusiness = Boolean(business);
+
+              const name = isBusiness
+                ? business?.corporateName
+                : customer?.name;
+              const document = isBusiness
+                ? business?.document
+                : customer?.document;
+
+              const hasDevTeste = name?.includes("DEV");
+              const clearName = hasDevTeste
+                ? name.replace("TESTE DEV -", "")
+                : name;
+
               const isSelected = selected.includes(customer.id);
-              const phone = customer.phone1
-                ? phoneMask(customer.phone1)
-                : phoneMask(customer.phone2);
 
-              const customerName = customer.name || customer.businessName;
-
-              const hasDevTeste = customerName?.includes("DEV");
               const chip = hasDevTeste ? (
                 <Chip color="info" size="small" label="DEV" />
               ) : null;
-              const clearName = hasDevTeste
-                ? customerName.replace("TESTE DEV -", "")
-                : customerName;
 
               return (
                 <TableRow hover key={customer.id} selected={isSelected}>
@@ -199,11 +203,10 @@ export const CustomerListTable = (props) => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {maskDocument(customer.document)}
+                      {maskDocument(document)}
                     </Typography>
                   </TableCell>
-                  <TableCell>{customer.rg}</TableCell>
-                  <TableCell>{phone ?? "--"}</TableCell>
+                  <TableCell>{phoneMask(customer.phone) ?? "--"}</TableCell>
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
@@ -243,13 +246,4 @@ export const CustomerListTable = (props) => {
       />
     </Box>
   );
-};
-
-CustomerListTable.propTypes = {
-  customers: PropTypes.array.isRequired,
-  customersCount: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  onRowsPerPageChange: PropTypes.func,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
 };

@@ -24,7 +24,7 @@ import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerBasicDetails } from "../../../sections/dashboard/customer/customer-basic-details";
-import { FinancialList } from "../../../sections/dashboard/financial/financial-list";
+import { ServicesList } from "../../../sections/dashboard/services/services-list";
 import { ProcessList } from "../../../sections/dashboard/process/process-list";
 import { useAuth } from "../../../hooks/use-auth";
 import FileManager from "../../../components/FileManager";
@@ -33,11 +33,12 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
 import { ContractList } from "../../../sections/dashboard/customer/customer-contracts";
-
+import { CustomerPartners } from "@/sections/dashboard/customer/customer-partners";
 const tabs = [
   { label: "Detalhes", value: "details" },
-  { label: "Financeiro", value: "invoices" },
-  { label: "Processos", value: "logs" },
+  { label: "Sócios", value: "partners" },
+  { label: "Financeiro", value: "financial" },
+  { label: "Serviços", value: "services" },
 ];
 
 const useCustomer = (userId: string) => {
@@ -200,15 +201,16 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                     <Stack spacing={4}>
                       <ContractList customer={customer} />
                       {customer && <FileManager customerId={customer.id} />}
-                      
+
                       {/* <CustomerDataManagement /> */}
                     </Stack>
                   </Grid>
                 </Grid>
               </div>
             )}
-            {currentTab === "invoices" && <FinancialList id={customer.id} />}
-            {currentTab === "logs" && <ProcessList {...customer} />}
+            {currentTab === "services" && <ServicesList id={customer.id} />}
+            {currentTab === "financial" && <ProcessList {...customer} />}
+            {currentTab === "partners" && <CustomerPartners getCustomer={getCustomer} customers={customer} />}
           </Stack>
         </Container>
       </Box>

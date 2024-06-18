@@ -1,30 +1,37 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@assets/*": ["./src/assets/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/api/customers/index.js", "src/pages/tributario/clientes/adicionar.js", "src/pages/tributario/clientes/adicionar.js", "src/sections/dashboard/financial/financial-modal.js", "src/sections/dashboard/contacts/power-of-attorney-modal.js", "src/components/FileManager/FileManager.js", "src/pages/consulta-api.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "**/*.tsx",
+  ],
+  "exclude": ["node_modules"]
 }

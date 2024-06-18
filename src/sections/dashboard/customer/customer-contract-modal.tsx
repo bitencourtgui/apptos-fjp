@@ -37,6 +37,7 @@ export default function ContractModal({
   const formik = useFormik({
     initialValues: {
       openingContract: 1412,
+      billingRange:0,
       accountingFee: 0,
       accountingPayment: 0,
       cashPayment: false,
@@ -64,6 +65,7 @@ export default function ContractModal({
             cashPayment: values.cashPayment,
           },
           2: {
+            billingRange: values.billingRange,
             accountingFee: values.accountingFee,
             accountingPayment: values.accountingPayment,
             accountingDate: dayjs(values.accountingDate).format("DD/MM/YYYY"),
@@ -212,6 +214,28 @@ export default function ContractModal({
 
                   <Box display="flex" flexDirection="column" gap={1}>
                     <Typography>Contabilidade Empresarial</Typography>
+                    <NumericFormat
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      decimalScale={2}
+                      prefix={"R$ "}
+                      value={formik.values.billingRange}
+                      onValueChange={(values) => {
+                        formik.setFieldValue("billingRange", values.value);
+                      }}
+                      customInput={TextField}
+                      label="Faturamento"
+                      name="billingRange"
+                      error={
+                        formik.touched.billingRange &&
+                        Boolean(formik.errors.billingRange)
+                      }
+                      helperText={
+                        formik.touched.billingRange &&
+                        formik.errors.billingRange
+                      }
+                      fullWidth
+                    />
                     <NumericFormat
                       thousandSeparator="."
                       decimalSeparator=","

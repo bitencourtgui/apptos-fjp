@@ -9,10 +9,11 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { usePageView } from "../../../hooks/use-page-view";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { CustomerAddForm } from "../../../sections/dashboard/customer/customer-add-form";
-import { useAuth } from "../../../hooks/use-auth";
+
+import { usePageView } from "@/hooks/use-page-view";
+import { useAuth } from "@/hooks/use-auth";
+import { Layout as DashboardLayout } from "@/layouts/dashboard";
+import { CustomerAddForm } from "@/sections/dashboard/customer/customer-add-form";
 
 const AdicionarClienteDash = () => {
   const { getTenant } = useAuth();
