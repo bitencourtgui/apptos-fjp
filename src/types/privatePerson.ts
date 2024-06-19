@@ -11,4 +11,5 @@ export interface PrivatePersonProps {
     maritalStatus: string;
     address: Address;
     managingPartner?: boolean;
+    occupation?: string;
   }

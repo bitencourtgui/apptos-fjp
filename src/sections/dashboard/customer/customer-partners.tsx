@@ -108,7 +108,6 @@ export const CustomerPartners = ({ customers, getCustomer }) => {
                 <TableCell>CPF</TableCell>
                 <TableCell>Nome</TableCell>
                 <TableCell>Sócio</TableCell>
-                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -125,16 +124,7 @@ export const CustomerPartners = ({ customers, getCustomer }) => {
                         <TableCell>
                           <SeverityPill color="primary">{`Sócio ${managingPartner}`}</SeverityPill>
                         </TableCell>
-                        <TableCell align="right">
-                          <IconButton
-                            component={NextLink}
-                            href={paths.dashboard.invoices.details}
-                          >
-                            <SvgIcon>
-                              <ArrowRightIcon />
-                            </SvgIcon>
-                          </IconButton>
-                        </TableCell>
+                     
                       </TableRow>
                     );
                   })

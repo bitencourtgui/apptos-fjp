@@ -110,6 +110,15 @@ export const CustomerBasicDetails = ({ customer }) => {
               <ListItem>
                 <ListItemText primary="Endereço" secondary={businessAddress} />
               </ListItem>
+
+              <ListItem divider>
+                {business?.email && (
+                  <ListItemText primary="E-mail" secondary={business.email} />
+                )}
+                {business?.phone && (
+                  <ListItemText primary="Telefone" secondary={business.phone} />
+                )}
+              </ListItem>
             </PropertyList>
           </>
         )}

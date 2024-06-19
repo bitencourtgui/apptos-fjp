@@ -118,12 +118,6 @@ export const CustomerListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit" size="small">
-            Excluir
-          </Button>
-          <Button color="inherit" size="small">
-            Editar
-          </Button>
         </Stack>
       )}
       <Scrollbar>

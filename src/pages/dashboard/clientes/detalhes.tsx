@@ -25,10 +25,8 @@ import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerBasicDetails } from "../../../sections/dashboard/customer/customer-basic-details";
 import { ServicesList } from "../../../sections/dashboard/services/services-list";
-import { ProcessList } from "../../../sections/dashboard/process/process-list";
 import { useAuth } from "../../../hooks/use-auth";
 import FileManager from "../../../components/FileManager";
-import CustomersApi from "../../../api/customers";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
@@ -36,9 +34,8 @@ import { ContractList } from "../../../sections/dashboard/customer/customer-cont
 import { CustomerPartners } from "@/sections/dashboard/customer/customer-partners";
 const tabs = [
   { label: "Detalhes", value: "details" },
-  { label: "Sócios", value: "partners" },
-  { label: "Financeiro", value: "financial" },
   { label: "Serviços", value: "services" },
+  { label: "Sócios", value: "partners" },
 ];
 
 const useCustomer = (userId: string) => {
@@ -84,7 +81,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await CustomersApi.deleteCustomer(userId);
+      const response = await customersApi.deleteCustomer(userId);
 
       if (response.status === 200) {
         toast.success("Cliente excluido");
@@ -201,16 +198,18 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                     <Stack spacing={4}>
                       <ContractList customer={customer} />
                       {customer && <FileManager customerId={customer.id} />}
-
-                      {/* <CustomerDataManagement /> */}
                     </Stack>
                   </Grid>
                 </Grid>
               </div>
             )}
             {currentTab === "services" && <ServicesList id={customer.id} />}
-            {currentTab === "financial" && <ProcessList {...customer} />}
-            {currentTab === "partners" && <CustomerPartners getCustomer={getCustomer} customers={customer} />}
+            {currentTab === "partners" && (
+              <CustomerPartners
+                getCustomer={getCustomer}
+                customers={customer}
+              />
+            )}
           </Stack>
         </Container>
       </Box>

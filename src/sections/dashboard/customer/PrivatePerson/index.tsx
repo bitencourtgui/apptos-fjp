@@ -42,28 +42,30 @@ export const PrivatePerson = (formik: PrivatePersonWithPocket) => {
 
   return (
     <>
-      <Grid pb={3}>
-        <FormControlLabel
-          control={
-            <Switch
-              color="primary"
-              edge="start"
-              name="managingPartner"
-              checked={formik.values.managingPartner}
-              onChange={() =>
-                formik.setFieldValue(
-                  "managingPartner",
-                  !formik.values.managingPartner
-                )
-              }
-            />
-          }
-          label={`Sócio ${
-            formik.values.managingPartner ? " Administrador" : "Comum"
-          }`}
-          sx={{ pl: 2 }}
-        />
-      </Grid>
+      {formik.pocket && (
+        <Grid pb={1}>
+          <FormControlLabel
+            control={
+              <Switch
+                color="primary"
+                edge="start"
+                name="managingPartner"
+                checked={formik.values.managingPartner}
+                onChange={() =>
+                  formik.setFieldValue(
+                    "managingPartner",
+                    !formik.values.managingPartner
+                  )
+                }
+              />
+            }
+            label={`Sócio ${
+              formik.values.managingPartner ? " Administrador" : "Comum"
+            }`}
+            sx={{ pl: 2 }}
+          />
+        </Grid>
+      )}
       <Grid xs={12} md={2}>
         <TextField
           error={!!(formik.touched.document && formik.errors.document)}
@@ -130,6 +132,20 @@ export const PrivatePerson = (formik: PrivatePersonWithPocket) => {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.email}
+          />
+        </Grid>
+      )}
+      {formik.pocket && (
+        <Grid xs={12} md={3}>
+          <TextField
+            error={!!(formik.touched.occupation && formik.errors.occupation)}
+            fullWidth
+            helperText={formik.touched.occupation && formik.errors.occupation}
+            label="Profissão"
+            name="occupation"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.occupation}
           />
         </Grid>
       )}

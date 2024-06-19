@@ -6,5 +6,7 @@ export interface ILegalPerson {
       corporateName: string;
       cnae: string;
       address: Address;
+      phone: string;
+      email: string
     };
   }

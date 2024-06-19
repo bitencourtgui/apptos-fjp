@@ -110,6 +110,38 @@ export const LegalPerson = (formik: FormikProps<ILegalPerson>) => {
           value={formik.values.business?.cnae}
         />
       </Grid>
+      <Grid xs={12} md={6}>
+        <TextField
+          error={
+            !!(formik.touched.business?.email && formik.errors.business?.email)
+          }
+          fullWidth
+          helperText={
+            formik.touched.business?.email && formik.errors.business?.email
+          }
+          label="Email"
+          name="business.email"
+          onBlur={formik.handleBlur}
+          onChange={formik.handleChange}
+          value={formik.values.business?.email}
+        />
+      </Grid>
+      <Grid xs={12} md={6}>
+        <TextField
+          error={
+            !!(formik.touched.business?.phone && formik.errors.business?.phone)
+          }
+          fullWidth
+          helperText={
+            formik.touched.business?.phone && formik.errors.business?.phone
+          }
+          label="Telefone"
+          name="business.phone"
+          onBlur={formik.handleBlur}
+          onChange={formik.handleChange}
+          value={formik.values.business?.phone}
+        />
+      </Grid>
       <Grid xs={12} md={2}>
         <TextField
           error={
