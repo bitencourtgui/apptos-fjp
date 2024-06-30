@@ -84,7 +84,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
     }
   };
 
-  const servicesList = ["Abertura de Empresa", "Contabilidade Empresarial"];
+  const servicesList = ["Abertura de Empresa", "Contabilidade Empresarial", "Desenquadramento"];
 
   function formatCurrency(value: number): string {
     return new Intl.NumberFormat("pt-BR", {
@@ -202,7 +202,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                             <Typography variant="caption">Valor</Typography>
 
                             <Typography variant="h6">
-                              {serviceType === "0"
+                              {serviceType === "0" || serviceType === "2"
                                 ? formatCurrency(openingContract)
                                 : formatCurrency(accountingFee * 12)}
                             </Typography>

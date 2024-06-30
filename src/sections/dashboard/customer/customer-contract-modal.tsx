@@ -37,7 +37,7 @@ export default function ContractModal({
   const formik = useFormik({
     initialValues: {
       openingContract: 1412,
-      billingRange:0,
+      billingRange: 0,
       accountingFee: 0,
       accountingPayment: 0,
       cashPayment: false,
@@ -73,11 +73,11 @@ export default function ContractModal({
         },
       };
 
-      const response = await CustomersApi.setCustomer(customer?.id, payload);
+      // const response = await CustomersApi.setCustomer(customer?.id, payload);
 
-      if (response.status === 200) {
-        handleContract(customer?.id);
-      }
+      // if (response.status === 200) {
+      //   handleContract(customer?.id);
+      // }
     },
   });
 
@@ -137,8 +137,7 @@ export default function ContractModal({
                 </LocalizationProvider>
               </Box>
 
-
-              {customer.services.includes("1") && (
+              {customer.services.includes("0") && (
                 <>
                   <Divider />
 
@@ -208,7 +207,7 @@ export default function ContractModal({
                   </Box>
                 </>
               )}
-              {customer?.services.includes("2") && (
+              {customer?.services.includes("1") && (
                 <>
                   <Divider />
 
@@ -295,6 +294,76 @@ export default function ContractModal({
                             {...params}
                             name="accountingDate"
                             id="accountingDate"
+                          />
+                        )}
+                      />
+                    </LocalizationProvider>
+                  </Box>
+                </>
+              )}
+              {customer.services.includes("2") && (
+                <>
+                  <Divider />
+
+                  <Box display="flex" flexDirection="column" gap={1}>
+                    <Typography>Desenquadramento empresa</Typography>
+
+                    <NumericFormat
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      decimalScale={2}
+                      prefix={"R$ "}
+                      value={formik.values.openingContract}
+                      onValueChange={(values) => {
+                        formik.setFieldValue("openingContract", values.value);
+                      }}
+                      customInput={TextField}
+                      label="Valor da taxa de abertura"
+                      name="openingContract"
+                      error={
+                        formik.touched.openingContract &&
+                        Boolean(formik.errors.openingContract)
+                      }
+                      helperText={
+                        formik.touched.openingContract &&
+                        formik.errors.openingContract
+                      }
+                      fullWidth
+                    />
+
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          color="primary"
+                          edge="start"
+                          name="cashPayment"
+                          checked={formik.values.cashPayment}
+                          onChange={() =>
+                            formik.setFieldValue(
+                              "cashPayment",
+                              !formik.values.cashPayment
+                            )
+                          }
+                        />
+                      }
+                      label="Pagamento a vista?"
+                      sx={{ pl: 2 }}
+                    />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Data de pagamento"
+                        value={dayjs(formik.values.openingDate).toDate()}
+                        onChange={(newValue) =>
+                          formik.setFieldValue(
+                            "openingDate",
+                            dayjs(newValue).format("YYYY-MM-DD")
+                          )
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="openingDate"
+                            id="openingDate"
                           />
                         )}
                       />

@@ -56,6 +56,9 @@ const ServicesModal = ({
     values.createdAt = dayjs().format("DD/MM/YYYY");
     values.id = uuidv4();
 
+  console.log('service', customers)
+
+
     const payload = {
       ...customers,
       services: [...(customers.services || []), values],
@@ -106,6 +109,7 @@ const ServicesModal = ({
     setService(event.target.value);
   };
 
+
   return (
     <Drawer open={open} anchor="right" onClose={() => handleToggle()}>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -142,7 +146,7 @@ const ServicesModal = ({
             >
               <MenuItem value="0">Abertura de Empresa</MenuItem>
               <MenuItem value="1">Contabilidade Empresarial</MenuItem>
-              <MenuItem value="2">Desencadeamento</MenuItem>
+              <MenuItem value="2">Desenquadramento</MenuItem>
               <MenuItem value="3">Planejamento Tributário</MenuItem>
               <MenuItem value="4">Isenção de IR</MenuItem>
               <MenuItem value="5">Defesa Administrativa</MenuItem>
@@ -154,6 +158,7 @@ const ServicesModal = ({
           </Box>
           {service === "0" && <OpeningService {...formik} />}
           {service === "1" && <AccountingService {...formik} />}
+          {service === "2" && <OpeningService {...formik} />}
         </CardContent>
         <CardActions sx={{ justifyContent: "flex-end", px: 3 }}>
           <Button fullWidth type="submit" variant="contained">

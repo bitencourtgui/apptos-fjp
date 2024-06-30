@@ -57,21 +57,26 @@ export const CustomerBasicDetails = ({ customer }) => {
     customer?.services || []
   );
 
-  useEffect(() => {
-    const customerId = customer?.id;
-    const values = { ...customer, services: selectedServices };
+  // useEffect(() => {
+  //   const customerId = customer?.id;
+  //   const values = { ...customer };
 
-    async function setCustomerData() {
-      try {
-        const response = await CustomersApi.setCustomer(customerId, values);
-        console.info(response);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  //   console.log("selectedServices", selectedServices);
 
-    setCustomerData();
-  }, [selectedServices]);
+  //   if (selectedServices && selectedServices.length > 0) {
+  //     values.services = selectedServices;
+  //     setCustomerData();
+  //   }
+
+  //   async function setCustomerData() {
+  //     try {
+  //       const response = await CustomersApi.setCustomer(customerId, values);
+  //       console.info(response);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // }, [selectedServices]);
 
   const handleServiceToggle = (service) => {
     setSelectedServices((prevServices) => {
@@ -115,6 +120,8 @@ export const CustomerBasicDetails = ({ customer }) => {
                 {business?.email && (
                   <ListItemText primary="E-mail" secondary={business.email} />
                 )}
+              </ListItem>
+              <ListItem divider>
                 {business?.phone && (
                   <ListItemText primary="Telefone" secondary={business.phone} />
                 )}

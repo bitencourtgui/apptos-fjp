@@ -124,7 +124,6 @@ export const CustomerPartners = ({ customers, getCustomer }) => {
                         <TableCell>
                           <SeverityPill color="primary">{`Sócio ${managingPartner}`}</SeverityPill>
                         </TableCell>
-                     
                       </TableRow>
                     );
                   })

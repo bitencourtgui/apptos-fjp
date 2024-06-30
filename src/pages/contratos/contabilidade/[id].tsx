@@ -131,7 +131,7 @@ const FeeContract = () => {
     const servicesMap = {
       "0": "Abertura de Empresa",
       "1": "Contabilidade Empresarial",
-      "2": "Desencadeamento",
+      "2": "Desenquadramento",
       "3": "Planejamento Tributário",
       "4": "Isenção de IR",
       "5": "Defesa Administrativa",
@@ -195,7 +195,7 @@ const FeeContract = () => {
     const servicesMap = {
       "0": "Abertura de Empresa",
       "1": "Contabilidade Empresarial",
-      "2": "Desencadeamento",
+      "2": "Desenquadramento",
       "3": "Planejamento Tributário",
       "4": "Isenção de IR",
       "5": "Defesa Administrativa",

@@ -57,7 +57,7 @@ export const OpeningService = (
           formik.setFieldValue("openingContract", values.value);
         }}
         customInput={TextField}
-        label="Valor da taxa de abertura"
+        label="Valor da taxa de"
         name="openingContract"
         error={
           formik.touched.openingContract &&
