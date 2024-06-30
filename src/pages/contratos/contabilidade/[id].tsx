@@ -239,16 +239,26 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>
-                      Valor: {formatBRL(service?.openingContract)} parcelado em{" "}
-                      {service?.monthyFee}x de{" "}
-                      {formatBRL(service?.openingContract / service?.monthyFee)}{" "}
-                      (
-                      {numberInWords(
-                        service?.openingContract / service?.monthyFee
-                      )}
-                      )
-                    </p>
+                    {service.cashPayment ? (
+                      <p>
+                        Valor: {formatBRL(service?.openingContract)} (
+                          {numberInWords(service?.openingContract)}) à vista
+                      </p>
+                    ) : (
+                      <p>
+                        Valor: {formatBRL(service?.openingContract)} parcelado
+                        em {service?.monthyFee}x de{" "}
+                        {formatBRL(
+                          service?.openingContract / service?.monthyFee
+                        )}{" "}
+                        (
+                        {numberInWords(
+                          service?.openingContract / service?.monthyFee
+                        )}
+                        )
+                      </p>
+                    )}
+
                     <p>
                       Com pagamento previsto para dia{" "}
                       <strong>
@@ -338,6 +348,64 @@ const FeeContract = () => {
                         </p>
                       </>
                     )}
+                  </div>
+                </div>
+              );
+            }
+
+            if (service?.serviceType === "2") {
+              return (
+                <div key={index} style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      border: "solid 1px black",
+                      width: "40%",
+                      padding: "20px",
+                    }}
+                  >
+                    <p>{`Objeto ${objectLabels[index]}`}</p>
+                    <p>
+                      <strong>{servicesMap[service.serviceType]}</strong>
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      border: "solid 1px black",
+                      width: "60%",
+                      padding: "20px",
+                    }}
+                  >
+                   {service.cashPayment ? (
+                      <p>
+                        Valor: {formatBRL(service?.openingContract)} (
+                          {numberInWords(service?.openingContract)}) à vista
+                      </p>
+                    ) : (
+                      <p>
+                        Valor: {formatBRL(service?.openingContract)} parcelado
+                        em {service?.monthyFee}x de{" "}
+                        {formatBRL(
+                          service?.openingContract / service?.monthyFee
+                        )}{" "}
+                        (
+                        {numberInWords(
+                          service?.openingContract / service?.monthyFee
+                        )}
+                        )
+                      </p>
+                    )}
+                    <p>
+                      Com pagamento previsto para dia{" "}
+                      <strong>
+                        {calculatePaymentDate(
+                          service?.createdAt,
+                          parseInt(service?.paymentDate)
+                        )}
+                      </strong>
+                    </p>
                   </div>
                 </div>
               );
