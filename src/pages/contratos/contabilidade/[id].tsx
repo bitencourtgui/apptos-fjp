@@ -62,8 +62,6 @@ const FeeContract = () => {
       document.title = `Contrato contábil - ${titleName.toUpperCase()}`;
       handleLoad();
     }
-  
-    console.log("customer", customer?.name || customer?.business?.corporateName);
   }, [customer]);
 
   const today = new Date();
@@ -81,7 +79,6 @@ const FeeContract = () => {
   }, []);
 
   const handleLoad = () => {
-    console.log('teste')
     window.print();
   };
 
@@ -147,6 +144,9 @@ const FeeContract = () => {
       );
     }
   }
+
+  const documentValue = customer?.cpf || customer?.business?.document || "";
+  const firstEightDigits = documentValue.substring(0, 8);
 
   const calculatePaymentDate = (createdAt: string, paymentDate: number) => {
     const [day, month, year] = createdAt.split("/").map(Number);
@@ -454,7 +454,7 @@ const FeeContract = () => {
                   <strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong>
                 </p>
                 <p style={{ textAlign: "center", marginBottom: "30px" }}>
-                  <strong>Nº 46943616-01</strong>
+                  <strong>Nº {firstEightDigits}-001</strong>
                 </p>
                 <p style={{ textAlign: "justify", textIndent: "50pt" }}>
                   <strong>FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA</strong>
@@ -1143,7 +1143,7 @@ const FeeContract = () => {
                     <strong>TERMO DE RESPONSABILIDADE CONTÁBIL</strong>
                   </p>
                   <p style={{ textAlign: "center", fontSize: ".9em" }}>
-                    <strong>CONTRATO VINCULADO Nº46943616-01</strong>
+                    <strong>CONTRATO VINCULADO Nº{firstEightDigits}-001</strong>
                   </p>
                   <p style={{ marginTop: "30px" }}>
                     Pelo presente instrumento de Termo de Responsabilidade
