@@ -24,7 +24,6 @@ import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerBasicDetails } from "../../../sections/dashboard/customer/customer-basic-details";
-import { FinancialList } from "../../../sections/dashboard/financial/financial-list";
 import { ProcessList } from "../../../sections/dashboard/process/process-list";
 import { useAuth } from "../../../hooks/use-auth";
 import FileManager from "../../../components/FileManager";
@@ -201,7 +200,6 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                 </Grid>
               </div>
             )}
-            {currentTab === "invoices" && <FinancialList id={customer.id} />}
             {currentTab === "logs" && <ProcessList {...customer} />}
           </Stack>
         </Container>
