@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Button,
   CircularProgress,
@@ -15,91 +14,92 @@ import {
   deleteObject,
   getStorage,
 } from "firebase/storage";
-
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-
 import FileManagerModal from "./FileManager.modal";
 import CardFile from "../Card-file";
-import { convertFileSize } from "../../utils/convert-filesize";
-import { firebaseApp } from "../../libs/firebase";
+import { convertFileSize } from "@/utils/convert-filesize";
+import { firebaseApp } from "@/libs/firebase";
 
-export const FileManager = ({ customerId }) => {
+interface FileManagerProps {
+  customerId: string;
+}
+
+interface Document {
+  name: string;
+  url: string;
+  size: string;
+  time: string;
+}
+
+export const FileManager: React.FC<FileManagerProps> = ({ customerId }) => {
   const storage = getStorage(firebaseApp);
-  const [docList, setDocList] = React.useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [empty, setEmpty] = React.useState(false);
-  const [sucessUpload, setSucessUpload] = React.useState(false);
-  const [deletedDocuments, setDeletedDocuments] = React.useState([]);
+  const [docList, setDocList] = useState<Document[]>([]);
+  const [open, setOpen] = useState(false);
+  const [empty, setEmpty] = useState(false);
+  const [successUpload, setSuccessUpload] = useState(false);
+  const [deletedDocuments, setDeletedDocuments] = useState<string[]>([]);
 
-  const refreshDocumentList = async () => {
+  const refreshDocumentList = useCallback(async () => {
     if (!storage || !customerId) {
-      console.error('Storage ou customerId não definido');
+      console.error("Storage or customerId not defined");
       return;
     }
-  
-    const docListRef = ref(storage, `documents/${customerId}`);
-  
 
     try {
+      const docListRef = ref(storage, `documents/${customerId}`);
       const response = await listAll(docListRef);
-      const tempDocList = [];
-
-      await Promise.all(
+      const tempDocList: Document[] = await Promise.all(
         response.items.map(async (item) => {
           const [url, metadata] = await Promise.all([
             getDownloadURL(item),
             getMetadata(item),
           ]);
-          const payload = {
+          return {
             name: metadata.name,
             url,
             size: convertFileSize(metadata.size),
             time: metadata.updated,
           };
-          tempDocList.push(payload);
         })
       );
 
-      if (tempDocList.length === 0) {
-        setEmpty(true);
-      }
-
+      setEmpty(tempDocList.length === 0);
       setDocList(tempDocList);
     } catch (error) {
-      console.error("Erro ao listar documentos:", error);
+      console.error("Error listing documents:", error);
     }
-  };
+  }, [storage, customerId]);
 
   useEffect(() => {
-    if (customerId !== undefined) {
+    if (customerId) {
       refreshDocumentList();
-      setSucessUpload(false);
+      setSuccessUpload(false);
       setOpen(false);
     }
-  }, [customerId]);
+  }, [customerId, refreshDocumentList]);
 
   useEffect(() => {
-    if (sucessUpload || (!empty && docList.length === 0)) {
+    if (successUpload || (!empty && docList.length === 0)) {
       refreshDocumentList();
-      setSucessUpload(false);
+      setSuccessUpload(false);
       setOpen(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sucessUpload, docList, empty]);
+  }, [successUpload, docList, empty, refreshDocumentList]);
 
-  const handleDelete = async (name) => {
+  const handleDelete = async (name: string) => {
     const storageRef = ref(storage, `documents/${customerId}/${name}`);
 
     try {
       await deleteObject(storageRef);
-      setDeletedDocuments([...deletedDocuments, name]);
+      setDeletedDocuments((prev) => [...prev, name]);
       refreshDocumentList();
     } catch (error) {
-      console.error("Erro ao excluir documento:", error);
+      console.error("Error deleting document:", error);
     }
   };
 
-  const handleToggle = (isOpen) => setOpen(isOpen);
+  const handleToggle = (isOpen: boolean) => setOpen(isOpen);
+
   const filteredDocList = docList
     .filter((doc) => !deletedDocuments.includes(doc.name))
     .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
@@ -107,32 +107,23 @@ export const FileManager = ({ customerId }) => {
   return (
     <>
       <Stack direction="row" justifyContent="flex-end" mb={2}>
-        <Stack spacing={1}>
-          <Button
-            startIcon={<FileUploadOutlinedIcon />}
-            variant="contained"
-            onClick={() => handleToggle(true)}
-            size="small"
-          >
-            Carregar
-          </Button>
-        </Stack>
+        <Button
+          startIcon={<FileUploadOutlinedIcon />}
+          variant="contained"
+          onClick={() => handleToggle(true)}
+          size="small"
+        >
+          Carregar
+        </Button>
       </Stack>
 
       {filteredDocList.length === 0 ? (
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          textAlign="center"
-          justifyContent="center"
-        >
+        <Grid item xs={12} sm={6} md={4} textAlign="center" justifyContent="center">
           {empty ? (
             <>
               <img
                 src="/assets/errors/empty.jpg"
-                alt="imagem simbolizando extensão"
+                alt="No files found"
                 width={300}
               />
               <Typography sx={{ color: "rgb(108, 115, 127)" }}>
@@ -162,9 +153,11 @@ export const FileManager = ({ customerId }) => {
         open={open}
         handleToggle={handleToggle}
         customerId={customerId}
-        setSucessUpload={setSucessUpload}
-        sucessUpload={sucessUpload}
+        setSuccessUpload={setSuccessUpload}
+        successUpload={successUpload}
       />
     </>
   );
 };
+
+

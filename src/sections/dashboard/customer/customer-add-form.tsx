@@ -33,6 +33,7 @@ export const CustomerAddForm = ({ customer, ...other }) => {
 
   const onSubmit = async (values, helpers) => {
     try {
+
       const response = await CustomersApi.setCustomer(customerID, values);
 
       if (response.status === 200) {

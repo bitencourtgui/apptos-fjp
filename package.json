@@ -1,5 +1,5 @@
 {
-  "name": "@apptos/fa",
+  "name": "@goduck/fa",
   "version": "1.0.0",
   "author": "Guilherme",
   "homepage": "https://apptos.com.br",
@@ -66,6 +66,8 @@
     "next": "13.0.7",
     "nprogress": "0.2.0",
     "numeral": "2.0.6",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.5.136",
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-apexcharts": "1.4.0",
@@ -79,7 +81,6 @@
     "react-map-gl": "7.0.19",
     "react-markdown": "8.0.3",
     "react-number-format": "^5.3.4",
-    "react-quill": "2.0.0-beta.4",
     "react-redux": "8.0.2",
     "react-slick": "0.29.0",
     "react-syntax-highlighter": "15.5.0",

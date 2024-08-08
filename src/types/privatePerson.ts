@@ -12,4 +12,8 @@ export interface PrivatePersonProps {
     address: Address;
     managingPartner?: boolean;
     occupation?: string;
+    type?: string;
+    active?: boolean;
+    pocket?: string;
+    balance?: string;
   }

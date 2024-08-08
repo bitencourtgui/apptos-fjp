@@ -149,6 +149,15 @@ export const CustomerListTable = (props) => {
                 ? business?.document
                 : customer?.document;
 
+                const email = isBusiness
+                ? business?.email
+                : customer?.email;
+
+
+                const phone = isBusiness
+                ? business?.phone
+                : customer?.phone;
+
               const hasDevTeste = name?.includes("DEV");
               const clearName = hasDevTeste
                 ? name.replace("TESTE DEV -", "")
@@ -190,7 +199,7 @@ export const CustomerListTable = (props) => {
                           {clearName}
                         </Link>
                         <Typography color="text.secondary" variant="body2">
-                          {customer.email}
+                          {email}
                         </Typography>
                       </div>
                     </Stack>
@@ -200,7 +209,7 @@ export const CustomerListTable = (props) => {
                       {maskDocument(document)}
                     </Typography>
                   </TableCell>
-                  <TableCell>{phoneMask(customer.phone) ?? "--"}</TableCell>
+                  <TableCell>{phoneMask(phone) ?? "--"}</TableCell>
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}

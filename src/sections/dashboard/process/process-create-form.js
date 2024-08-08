@@ -18,7 +18,6 @@ import {
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { FileDropzone } from '../../../components/file-dropzone';
-import { QuillEditor } from '../../../components/quill-editor';
 import { paths } from '../../../paths';
 
 const categoryOptions = [
@@ -150,14 +149,7 @@ export const ProductCreateForm = (props) => {
                     >
                       Description
                     </Typography>
-                    <QuillEditor
-                      onChange={(value) => {
-                        formik.setFieldValue('description', value);
-                      }}
-                      placeholder="Write something"
-                      sx={{ height: 400 }}
-                      value={formik.values.description}
-                    />
+               
                     {!!(formik.touched.description && formik.errors.description) && (
                       <Box sx={{ mt: 2 }}>
                         <FormHelperText error>

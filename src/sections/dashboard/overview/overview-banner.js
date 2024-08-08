@@ -17,7 +17,7 @@ export const OverviewBanner = (props) => {
       sx={{
         backgroundColor: (theme) => theme.palette.mode === 'dark'
           ? 'primary.darkest'
-          : 'primary.lightest',
+          : 'neutral.300',
         borderRadius: 2.5,
         p: 4
       }}

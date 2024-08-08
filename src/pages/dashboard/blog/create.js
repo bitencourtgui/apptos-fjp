@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 import { BreadcrumbsSeparator } from '../../../components/breadcrumbs-separator';
 import { FileDropzone } from '../../../components/file-dropzone';
-import { QuillEditor } from '../../../components/quill-editor';
 import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { paths } from '../../../paths';
@@ -264,10 +263,7 @@ const Page = () => {
                     xs={12}
                     md={8}
                   >
-                    <QuillEditor
-                      placeholder="Write something"
-                      sx={{ height: 330 }}
-                    />
+                
                   </Grid>
                 </Grid>
               </CardContent>

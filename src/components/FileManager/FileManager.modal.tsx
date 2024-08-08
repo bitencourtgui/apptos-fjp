@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React, { useState } from "react";
 import {
   Avatar,
   Button,
@@ -16,24 +15,30 @@ import {
 } from "@mui/material";
 import { StyledContainer } from "./FileManager.style";
 import { useDropzone } from "react-dropzone";
-
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-// import { storage } from "@/utils/firebase";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { extensionFiles } from "../../utils/extension-files";
 import { convertFileSize } from "../../utils/convert-filesize";
 import { firebaseApp } from "../../libs/firebase";
 
-export default function FileManagerModal({
+interface FileManagerModalProps {
+  open: boolean;
+  handleToggle: (isOpen: boolean) => void;
+  customerId: string;
+  setSuccessUpload: React.Dispatch<React.SetStateAction<boolean>>;
+  successUpload: boolean;
+}
+
+const FileManagerModal: React.FC<FileManagerModalProps> = ({
   open,
   handleToggle,
   customerId,
-  setSucessUpload,
-  sucessUpload,
-}) {
-  const [droppedFiles, setDroppedFiles] = React.useState<File[]>([]);
+  setSuccessUpload,
+}) => {
+  const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const storage = getStorage(firebaseApp);
+
   const handleUpload = () => {
     if (droppedFiles.length > 0) {
       const promises = droppedFiles.map((file) => {
@@ -43,8 +48,8 @@ export default function FileManagerModal({
 
       Promise.all(promises)
         .then(() => {
-          setDroppedFiles([]); // Limpa os arquivos selecionados
-          setSucessUpload(true);
+          setDroppedFiles([]);
+          setSuccessUpload(true);
         })
         .catch((error) => {
           console.error("Erro no upload:", error);
@@ -53,7 +58,7 @@ export default function FileManagerModal({
   };
 
   const clearDocumentList = () => {
-    setDroppedFiles([]); // Limpa os arquivos selecionados
+    setDroppedFiles([]);
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -73,7 +78,7 @@ export default function FileManagerModal({
     },
   });
 
-  const handleDeleteFile = (index) => {
+  const handleDeleteFile = (index: number) => {
     const updatedFiles = [...droppedFiles];
     updatedFiles.splice(index, 1);
     setDroppedFiles(updatedFiles);
@@ -99,7 +104,7 @@ export default function FileManagerModal({
           <CloseOutlinedIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent dividers={true}>
+      <DialogContent dividers>
         <StyledContainer {...getRootProps()}>
           <input {...getInputProps()} />
           <Avatar
@@ -134,12 +139,26 @@ export default function FileManagerModal({
                     aria-label="delete"
                     onClick={() => handleDeleteFile(index)}
                   >
-                    <CloseOutlinedIcon fontSize="inherit" />
+                    <CloseOutlinedIcon />
                   </IconButton>
                 }
               >
                 <ListItemAvatar>
-                  <img src={extensionFiles(droppedFile.name)} alt="" />
+                  <Avatar
+                    variant="rounded"
+                    sx={{
+                      backgroundColor: "rgb(242, 244, 247)",
+                      width: "48px",
+                      height: "48px",
+                      padding: "10px",
+                    }}
+                  >
+                    <img
+                      src={extensionFiles(droppedFile.name)}
+                      alt={`Ícone de arquivo ${droppedFile.name}`}
+                      width="100%"
+                    />
+                  </Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={droppedFile.name}
@@ -149,27 +168,44 @@ export default function FileManagerModal({
             ))}
           </List>
         )}
-        {droppedFiles.length !== 0 && (
-          <Stack direction="row" justifyContent="flex-end" spacing={2}>
-            <Button
-              size="small"
-              variant="text"
-              color="primary"
-              onClick={clearDocumentList}
-            >
-              Remover tudo
-            </Button>
-            <Button
-              size="small"
-              color="primary"
-              variant="contained"
-              onClick={handleUpload}
-            >
-              Carregar
-            </Button>
-          </Stack>
-        )}
+        <Button
+          onClick={clearDocumentList}
+          sx={{
+            backgroundColor: "transparent",
+            color: "rgb(97, 170, 255)",
+            border: "none",
+            boxShadow: "none",
+            textDecoration: "underline",
+            margin: "5px 0 15px 0",
+            "&:hover": {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+          }}
+        >
+          Limpar lista
+        </Button>
+        <Stack direction="row" justifyContent="space-between" sx={{ mt: 2 }}>
+          <Button
+            onClick={() => handleToggle(false)}
+            color="error"
+            variant="outlined"
+            size="small"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleUpload}
+            variant="contained"
+            color="primary"
+            size="small"
+          >
+            Carregar
+          </Button>
+        </Stack>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default FileManagerModal;

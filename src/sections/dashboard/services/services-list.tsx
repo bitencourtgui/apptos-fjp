@@ -84,7 +84,11 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
     }
   };
 
-  const servicesList = ["Abertura de Empresa", "Contabilidade Empresarial", "Desenquadramento"];
+  const servicesList = [
+    "Abertura de Empresa",
+    "Contabilidade Empresarial",
+    "Desenquadramento",
+  ];
 
   function formatCurrency(value: number): string {
     return new Intl.NumberFormat("pt-BR", {
@@ -141,15 +145,18 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                   <Box>
                     <Accordion>
                       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Grid display="flex" gap={8} m={2}>
+                        <Grid display="flex" gap={{ xs: 3, sm: 8 }} flexDirection={{sx: 'column', sm: 'row'}} m={2}>
                           <Box
                             display="flex"
                             flexDirection="column"
-                            alignItems="left"
-                            sx={{ width: "180px" }}
+                            sx={{
+                              width: {
+                                xs: "120px",
+                                md: "180px",
+                              },
+                            }}
                           >
                             <Typography variant="caption">Serviço</Typography>
-
                             <Typography variant="h6">
                               {servicesList[serviceType]}
                             </Typography>
@@ -159,15 +166,20 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                             display="flex"
                             flexDirection="column"
                             alignItems="left"
-                            sx={{ width: "180px" }}
+                            sx={{
+                              width: {
+                                xs: "80px",
+                                md: "100px",
+                                lg: "180px",
+                              },
+                            }}
                           >
                             <Typography variant="caption">
                               Mensalidade
                             </Typography>
-
                             <Typography variant="h6">
                               {cashPayment
-                                ? "Pagamento a vista"
+                                ? "Pagamento à vista"
                                 : `${
                                     monthyFee
                                       ? `${monthyFee}x`
@@ -180,7 +192,12 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                             display="flex"
                             flexDirection="column"
                             alignItems="left"
-                            sx={{ width: "120px" }}
+                            sx={{
+                              width: {
+                                xs: "100px",
+                                md: "180px",
+                              },
+                            }}
                           >
                             <Typography variant="caption">
                               Data de pagamento
@@ -198,9 +215,14 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                             display="flex"
                             flexDirection="column"
                             alignItems="left"
+                            sx={{
+                              width: {
+                                xs: "80px",
+                                md: "auto",
+                              },
+                            }}
                           >
                             <Typography variant="caption">Valor</Typography>
-
                             <Typography variant="h6">
                               {serviceType === "0" || serviceType === "2"
                                 ? formatCurrency(openingContract)
@@ -209,6 +231,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                           </Box>
                         </Grid>
                       </AccordionSummary>
+
                       {!cashPayment && (
                         <AccordionDetails>
                           <Table>

@@ -32,7 +32,7 @@ const AdicionarClienteDash = () => {
           py: 8,
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth={false}>
           <Stack spacing={4}>
             <Stack spacing={4}>
               <div>

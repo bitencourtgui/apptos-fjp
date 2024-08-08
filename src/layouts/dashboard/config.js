@@ -1,6 +1,5 @@
 import { SvgIcon } from "@mui/material";
 import HomeSmileIcon from "../../icons/untitled-ui/duocolor/home-smile";
-import Bank from "../../icons/untitled-ui/duocolor/bank";
 import Server05 from "../../icons/untitled-ui/duocolor/server-05";
 import Users03Icon from "../../icons/untitled-ui/duocolor/users-03";
 import { tokens } from "../../locales/tokens";

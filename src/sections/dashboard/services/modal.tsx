@@ -56,9 +56,6 @@ const ServicesModal = ({
     values.createdAt = dayjs().format("DD/MM/YYYY");
     values.id = uuidv4();
 
-  console.log('service', customers)
-
-
     const payload = {
       ...customers,
       services: [...(customers.services || []), values],
@@ -108,7 +105,6 @@ const ServicesModal = ({
   const handleChange = (event) => {
     setService(event.target.value);
   };
-
 
   return (
     <Drawer open={open} anchor="right" onClose={() => handleToggle()}>

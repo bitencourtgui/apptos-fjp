@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from "react";
 import { useMounted } from "../../../hooks/use-mounted";
 import CustomersApi from "../../../api/customers";
 import { numberInWords } from "../../../utils/number-in-words";
-import { formatCurrency } from "../../../utils/masks/currencyMask";
 import { maskDocument } from "../../../utils/masks/maskDocument";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../hooks/use-auth";
@@ -27,13 +26,9 @@ const useCustomer = (userId: string) => {
     }
   }, [isMounted]);
 
-  useEffect(
-    () => {
-      getCustomer();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getCustomer();
+  }, []);
 
   return customer;
 };
@@ -62,31 +57,31 @@ const FeeContract = () => {
   const customer = useCustomer(customerId);
 
   useEffect(() => {
-    if (customer?.name) {
-      document.title = `Contrato contábil - ${customer?.name?.toUpperCase()}`;
+    if (customer?.name || customer?.business?.corporateName) {
+      const titleName = customer.name || customer.business.corporateName;
+      document.title = `Contrato contábil - ${titleName.toUpperCase()}`;
       handleLoad();
     }
+  
+    console.log("customer", customer?.name || customer?.business?.corporateName);
   }, [customer]);
 
   const today = new Date();
 
   const handleAfterPrint = () => {
-    // Lógica a ser executada após a impressão
-    // Por exemplo, fechar a janela ou redirecionar para outra página
     router.push(`/${gt}/clientes/${customerId}`);
   };
 
   useEffect(() => {
-    // Adiciona os ouvintes de eventos para a impressão
     window.addEventListener("afterprint", handleAfterPrint);
 
-    // Remove os ouvintes de eventos quando o componente é desmontado
     return () => {
       window.removeEventListener("afterprint", handleAfterPrint);
     };
-  }, []); // Vazio como dependência para ser executado apenas uma vez durante o montagem do componente
+  }, []);
 
   const handleLoad = () => {
+    console.log('teste')
     window.print();
   };
 
@@ -102,15 +97,6 @@ const FeeContract = () => {
 
     return maritalStatusMap[maritalStatus] || "Status desconhecido";
   }
-  const maleGender = customer?.gender === "male";
-
-  const customerAddress = customer?.address;
-
-  const address = `${customerAddress?.street}, nº ${customerAddress?.number},  ${customerAddress?.neighborhood}, ${customerAddress?.city}, ${customerAddress?.state} - ${customerAddress?.postalCode}`;
-
-  const holder = maleGender ? "portador" : "portadora";
-  const residing = maleGender ? "domiciliado" : "domiciliada";
-  const registered = maleGender ? "inscrito" : "inscrita";
 
   const PrintHeader: React.FC = () => {
     return (
@@ -242,7 +228,7 @@ const FeeContract = () => {
                     {service.cashPayment ? (
                       <p>
                         Valor: {formatBRL(service?.openingContract)} (
-                          {numberInWords(service?.openingContract)}) à vista
+                        {numberInWords(service?.openingContract)}) à vista
                       </p>
                     ) : (
                       <p>
@@ -378,10 +364,10 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                   {service.cashPayment ? (
-                      <p>
+                    {service.cashPayment ? (
+                      <p style={{margin: 10}}>
                         Valor: {formatBRL(service?.openingContract)} (
-                          {numberInWords(service?.openingContract)}) à vista
+                        {numberInWords(service?.openingContract)}) à vista
                       </p>
                     ) : (
                       <p>
@@ -434,7 +420,7 @@ const FeeContract = () => {
           fontFamily: "Arial, sans-serif",
           fontSize: "12pt",
           textAlign: "justify",
-          margin: "0 2cm", // Margens superior, direita, inferior e esquerda, nessa ordem.
+          margin: "0 2cm",
         }}
       >
         <thead>
@@ -775,8 +761,6 @@ const FeeContract = () => {
                   forma(s) que segue(m):
                 </p>
 
-                {/* ------------------------------------------ */}
-
                 <div style={{ paddingLeft: "50pt" }}>
                   {getContractServicesDetails(customer?.services)}
                 </div>
@@ -1092,24 +1076,24 @@ const FeeContract = () => {
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "center",
-                      gap: "20px",
+                      gap: "0px",
                     }}
                   >
-                    <div style={{ textAlign: "center", marginTop: 23.5 }}>
+                    <div style={{ textAlign: "center", marginTop: 50 }}>
                       <p style={{ marginTop: 0 }}>
                         ____________________________________________________
                       </p>
-                      <p>
+                      <p style={{ margin: 10 }}>
                         <strong>
                           FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
                         </strong>
                       </p>
-                      <p>
+                      <p style={{ margin: 5 }}>
                         <strong>CNPJ nº 50.675.326/0001-97</strong>
                       </p>
 
-                      <p>FLÁVIA ALMEIDA DA SILVA</p>
-                      <p>
+                      <p style={{ margin: 5 }}>FLÁVIA ALMEIDA DA SILVA</p>
+                      <p style={{ margin: 5 }}>
                         <i>Sócio administrador</i>
                       </p>
                     </div>
@@ -1121,12 +1105,12 @@ const FeeContract = () => {
                           <p style={{ marginTop: 0 }}>
                             ____________________________________________________
                           </p>
-                          <p>
+                          <p style={{ margin: 10 }}>
                             <strong style={{ textTransform: "uppercase" }}>
                               {partner?.name}
                             </strong>
                           </p>
-                          <p>
+                          <p style={{ margin: 5 }}>
                             <strong>
                               CPF n° {maskDocument(partner?.document)}
                             </strong>
@@ -1144,10 +1128,12 @@ const FeeContract = () => {
                           gap: "45px",
                         }}
                       >
-                        <p style={{ marginTop: 0 }}>________________________</p>
-                        <p style={{ marginTop: 0 }}>________________________</p>
+                        <p style={{ margin: 0 }}>________________________</p>
+                        <p style={{ margin: 0 }}>________________________</p>
                       </div>
-                      <p>TESTEMUNHAS</p>
+                      <p style={{ margin: 15 }}>
+                        <strong>TESTEMUNHAS</strong>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1159,11 +1145,11 @@ const FeeContract = () => {
                   <p style={{ textAlign: "center", fontSize: ".9em" }}>
                     <strong>CONTRATO VINCULADO Nº46943616-01</strong>
                   </p>
-                  <p style={{ marginTop: "50px" }}>
+                  <p style={{ marginTop: "30px" }}>
                     Pelo presente instrumento de Termo de Responsabilidade
                     Contábil:
                   </p>
-                  <p style={{ marginTop: "10px" }}>
+                  <p style={{ margin: 10 }}>
                     <strong>SUPORHTE CONSULTORIA EMPRESARIAL LTDA</strong>, com
                     sede na cidade de Maringá, Estado do Paraná, na Rua Neo
                     Alves martins, nº 903, Sala 03, bairro Zona 03, CEP
@@ -1176,7 +1162,7 @@ const FeeContract = () => {
                     </strong>
                     , inscrita no CNPJ nº 50.675.326/0001-97;
                   </p>
-                  <p style={{ marginTop: "10px", textIndent: "200pt" }}>
+                  <p style={{ textIndent: "200pt" }}>
                     ME COMPROMETO, a elaborar a Contabilidade de acordo com as
                     Normas Brasileiras de Contabilidade, executando atividades
                     na forma e limites discriminados abaixo e, em obediência
@@ -1310,16 +1296,16 @@ const FeeContract = () => {
                     <i> Mesmo local e data do contrato vinculado</i>
                   </p>
 
-                  <div style={{ marginTop: "40px" }}>
+                  <div style={{ marginTop: "30px" }}>
                     <div style={{ textAlign: "center" }}>
                       <p> &nbsp;</p>
                       <p style={{ marginTop: 0 }}>
                         ____________________________________________________
                       </p>
-                      <p>
+                      <p style={{ margin: 10 }}>
                         <strong>SUPORHTE CONSULTORIA EMPRESARIAL LTDA</strong>
                       </p>
-                      <p>CNPJ nº 13.925.866/0001-55</p>
+                      <p style={{ margin: 5 }}>CNPJ nº 13.925.866/0001-55</p>
                     </div>
                   </div>
                 </div>
