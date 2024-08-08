@@ -83,7 +83,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          contato@apptos.com.br
+          contato@goduck.com.br
         </Typography>
       </Box>
       {/* <Divider />

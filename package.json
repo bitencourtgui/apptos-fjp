@@ -1,8 +1,8 @@
 {
-  "name": "@goduck/fa",
+  "name": "@goduck/fjp",
   "version": "1.0.0",
   "author": "Guilherme",
-  "homepage": "https://apptos.com.br",
+  "homepage": "https://www.goduck.com.br",
   "private": true,
   "scripts": {
     "dev": "next -p 5555",

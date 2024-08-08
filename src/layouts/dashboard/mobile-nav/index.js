@@ -174,34 +174,9 @@ export const MobileNav = (props) => {
               />
             ))}
           </Stack>
-        {/*   <Box sx={{ p: 3 }}>
-            <Typography
-              color="neutral.400"
-              variant="subtitle1"
-            >
-              Need help?
-            </Typography>
-            <Typography
-              color="neutral.400"
-              sx={{ mb: 2 }}
-              variant="body2"
-            >
-              Please check our docs.
-            </Typography>
-            <Button
-              component={NextLink}
-              fullWidth
-              href={paths.docs.welcome}
-              startIcon={(
-                <SvgIcon>
-                  <File04Icon />
-                </SvgIcon>
-              )}
-              variant="contained"
-            >
-              Documentation
-            </Button>
-          </Box> */}
+          <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
+            <img src="/goduck.png" width={130} />
+          </Box>
         </Stack>
       </Scrollbar>
     </Drawer>

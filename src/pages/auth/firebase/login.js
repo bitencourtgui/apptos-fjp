@@ -165,10 +165,13 @@ const LoginFirebase = () => {
         <Stack spacing={3} display="flex" alignItems="center" sx={{ mt: 3 }}>
           <Alert severity="error">
             <div>
-              Problemas? entre em contato com: <b>contato@apptos.com.br</b>
+              Problemas? entre em contato com: <b>suporte@goduck.com.br</b>
             </div>
           </Alert>
         </Stack>
+        <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
+          <img src="/goduck-claro.png" width={130} />
+        </Box>
       </div>
     </>
   );
