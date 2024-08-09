@@ -16,7 +16,7 @@ import customersApi from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { CustomerEditForm } from "../../../sections/dashboard/customer/customer-edit-form";
+import { CustomerEditForm } from "@/sections/dashboard/customer/customer-edit-form";
 import { getInitials } from "../../../utils/get-initials";
 import { useAuth } from "../../../hooks/use-auth";
 
@@ -109,10 +109,10 @@ const EditarClienteDash = ({ userId }) => {
                       width: 64,
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(customer?.name || customer?.business.corporateName)}
                   </Avatar>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{customer.name}</Typography>
+                    <Typography variant="h4">{customer?.name || customer?.business.corporateName}</Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">id:</Typography>
                       <Chip label={customer.id} size="small" />
