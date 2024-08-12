@@ -63,7 +63,7 @@ export const CardProcess = ({
         router.reload();
       }
     } catch (err) {
-      toast.error("Falha ao cadastrar cliente");
+      toast.error("Falha ao cadastrar client31");
     }
   };
 

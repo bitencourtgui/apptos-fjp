@@ -19,13 +19,9 @@ import { gtm } from "../libs/gtm";
 import { store } from "../store";
 import { createTheme } from "../theme";
 import { createEmotionCache } from "../utils/create-emotion-cache";
-// Remove if nprogress is not used
 import "../libs/nprogress";
-// Remove if mapbox is not used
 import "../libs/mapbox";
-// Remove if locales are not used
 import "../locales/i18n";
-import { SettingsButton } from "../components/settings-button";
 import { SettingsDrawer } from "../components/settings-drawer";
 import "./printPage.scss";
 
@@ -105,9 +101,6 @@ const App = (props) => {
                               ) : (
                                 <>
                                   {getLayout(<Component {...pageProps} />)}
-                                  <SettingsButton
-                                    onClick={settings.handleDrawerOpen}
-                                  />
                                   <SettingsDrawer
                                     canReset={settings.isCustom}
                                     onClose={settings.handleDrawerClose}

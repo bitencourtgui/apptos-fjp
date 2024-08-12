@@ -1,12 +1,10 @@
 export const customersInitial = {
     cnae: "",
-    cpf: "",
     rg: "",
     name: "",
     gender: "",
     email: "",
-    phone1: "",
-    phone2: "",
+    phone: "",
     nationality: "",
     document: "",
     postalCode: "",

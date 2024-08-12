@@ -78,7 +78,7 @@ export const CustomerPartners = ({
         throw new Error("Unexpected response status");
       }
     } catch (err) {
-      toast.error("Falha ao cadastrar cliente");
+      toast.error("Falha ao cadastrar client5");
       helpers.setStatus({ success: false });
       helpers.setErrors({ submit: err.message });
     } finally {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import {
   Button,
+  Card,
   CircularProgress,
   Grid,
   Stack,
@@ -105,58 +106,60 @@ export const FileManager: React.FC<FileManagerProps> = ({ customerId }) => {
     .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
 
   return (
-    <>
-      <Stack direction="row" justifyContent="flex-end" mb={2}>
-        <Button
-          startIcon={<FileUploadOutlinedIcon />}
-          variant="contained"
-          onClick={() => handleToggle(true)}
-          size="small"
-        >
-          Carregar
-        </Button>
-      </Stack>
+    <Card>
+      <div style={{ padding: "16px" }}>
+        <Stack direction="row" justifyContent="flex-end" mb={2}>
+          <Button
+            startIcon={<FileUploadOutlinedIcon />}
+            variant="contained"
+            onClick={() => handleToggle(true)}
+            size="small"
+          >
+            Enviar
+          </Button>
+        </Stack>
 
-      {filteredDocList.length === 0 ? (
-        <Grid item xs={12} sm={6} md={4} textAlign="center" justifyContent="center">
-          {empty ? (
-            <>
-              <img
-                src="/assets/errors/empty.jpg"
-                alt="No files found"
-                width={300}
+        {filteredDocList.length === 0 ? (
+          <Grid item xs={12} sm={6} md={4} textAlign="center" justifyContent="center">
+            {empty ? (
+              <>
+                <img
+                  src="/assets/errors/empty.jpg"
+                  alt="No files found"
+                  width={230}
+                />
+                <Typography sx={{ color: "rgb(108, 115, 127)" }}>
+                  Nenhum arquivo encontrado
+                </Typography>
+              </>
+            ) : (
+              <CircularProgress disableShrink />
+            )}
+          </Grid>
+        ) : (
+          <Grid container spacing={2}>
+            {filteredDocList.map(({ url, name, size, time }) => (
+              <CardFile
+                url={url}
+                name={name}
+                size={size}
+                time={time}
+                key={name}
+                handleDelete={handleDelete}
               />
-              <Typography sx={{ color: "rgb(108, 115, 127)" }}>
-                Nenhum arquivo encontrado
-              </Typography>
-            </>
-          ) : (
-            <CircularProgress disableShrink />
-          )}
-        </Grid>
-      ) : (
-        <Grid container spacing={2}>
-          {filteredDocList.map(({ url, name, size, time }) => (
-            <CardFile
-              url={url}
-              name={name}
-              size={size}
-              time={time}
-              key={name}
-              handleDelete={handleDelete}
-            />
-          ))}
-        </Grid>
-      )}
+            ))}
+          </Grid>
+        )}
 
-      <FileManagerModal
-        open={open}
-        handleToggle={handleToggle}
-        customerId={customerId}
-        setSuccessUpload={setSuccessUpload}
-        successUpload={successUpload}
-      />
-    </>
+        <FileManagerModal
+          open={open}
+          handleToggle={handleToggle}
+          customerId={customerId}
+          setSuccessUpload={setSuccessUpload}
+          successUpload={successUpload}
+        />
+      </div>
+    </Card>
   );
 };
 

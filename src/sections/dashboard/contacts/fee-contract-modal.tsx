@@ -62,7 +62,7 @@ const FeeContractModal: FC<FeeContractModalProps> = ({
           router.reload();
         }
       } catch (err) {
-        toast.error("Falha ao cadastrar cliente");
+        toast.error("Falha ao cadastrar client1");
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);

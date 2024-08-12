@@ -50,6 +50,16 @@ const useCustomer = (userId: string) => {
   return { customer, getCustomer };
 };
 
+const CardServices = ({ children }: { children: JSX.Element[] }) => {
+  return (
+    <Card elevation={0}>
+      <div style={{ padding: "16px" }}>
+        {children}
+      </div>
+    </Card>
+  )
+}
+
 export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
   const { customer, getCustomer } = useCustomer(id);
 
@@ -121,7 +131,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
             onClick={() => handleToggle()}
             variant="contained"
           >
-            Nova movimentação
+            Adicionar serviço
           </Button>
         </Stack>
       </Stack>
@@ -145,90 +155,46 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                   <Box>
                     <Accordion>
                       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Grid display="flex" gap={{ xs: 3, sm: 8 }} flexDirection={{sx: 'column', sm: 'row'}} m={2}>
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            sx={{
-                              width: {
-                                xs: "120px",
-                                md: "180px",
-                              },
-                            }}
-                          >
+                        <Grid display="flex" gap={{ xs: 3, sm: 8 }} flexDirection={{ sx: 'column', sm: 'row' }} >
+                          <CardServices>
                             <Typography variant="caption">Serviço</Typography>
                             <Typography variant="h6">
                               {servicesList[serviceType]}
                             </Typography>
-                          </Box>
-                          <Divider orientation="vertical" />
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="left"
-                            sx={{
-                              width: {
-                                xs: "80px",
-                                md: "100px",
-                                lg: "180px",
-                              },
-                            }}
-                          >
+                          </CardServices>
+                          <CardServices>
                             <Typography variant="caption">
                               Mensalidade
                             </Typography>
                             <Typography variant="h6">
                               {cashPayment
                                 ? "Pagamento à vista"
-                                : `${
-                                    monthyFee
-                                      ? `${monthyFee}x`
-                                      : formatCurrency(accountingFee)
-                                  }`}
+                                : `${monthyFee
+                                  ? `${monthyFee}x`
+                                  : formatCurrency(accountingFee)
+                                }`}
                             </Typography>
-                          </Box>
-                          <Divider orientation="vertical" />
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="left"
-                            sx={{
-                              width: {
-                                xs: "100px",
-                                md: "180px",
-                              },
-                            }}
-                          >
+                          </CardServices>
+                          <CardServices>
                             <Typography variant="caption">
                               Data de pagamento
                             </Typography>
                             <Typography variant="h6">
                               {serviceType === "1"
                                 ? dayjs(others.accountingDate).format(
-                                    "DD/MM/YYYY"
-                                  )
+                                  "DD/MM/YYYY"
+                                )
                                 : `Dia ${paymentDate}`}
                             </Typography>
-                          </Box>
-                          <Divider orientation="vertical" />
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="left"
-                            sx={{
-                              width: {
-                                xs: "80px",
-                                md: "auto",
-                              },
-                            }}
-                          >
+                          </CardServices>
+                          <CardServices>
                             <Typography variant="caption">Valor</Typography>
                             <Typography variant="h6">
                               {serviceType === "0" || serviceType === "2"
                                 ? formatCurrency(openingContract)
                                 : formatCurrency(accountingFee * 12)}
                             </Typography>
-                          </Box>
+                          </CardServices>
                         </Grid>
                       </AccordionSummary>
 
@@ -254,22 +220,22 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                                   <TableCell>
                                     {serviceType === "0"
                                       ? formatCurrency(
-                                          openingContract / monthyFee
-                                        )
+                                        openingContract / monthyFee
+                                      )
                                       : formatCurrency(accountingFee)}
                                   </TableCell>
                                   <TableCell>
                                     {serviceType === "0"
                                       ? calculateDueDate(
-                                          others.createdAt,
-                                          paymentDate,
-                                          index
-                                        )
+                                        others.createdAt,
+                                        paymentDate,
+                                        index
+                                      )
                                       : calculateDueDate(
-                                          others.createdAt,
-                                          others.accountingDate.split("-")[2],
-                                          index
-                                        )}
+                                        others.createdAt,
+                                        others.accountingDate.split("-")[2],
+                                        index
+                                      )}
                                   </TableCell>
                                   <TableCell>
                                     {others.paymentMethod === "creditcard"

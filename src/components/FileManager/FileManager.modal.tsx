@@ -66,10 +66,14 @@ const FileManagerModal: React.FC<FileManagerModalProps> = ({
       "image/png": [".png", ".jpg", ".jpeg"],
       "application/msword": [".doc", ".docx"],
       "application/pdf": [".pdf"],
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-        ".xlsx",
-      ],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
       "text/plain": [".txt"],
+      "application/x-pkcs12": [".pfx"],
+      "application/x-pem-file": [".pem"],
+      "application/x-x509-ca-cert": [".crt", ".cer", ".der"],
+      "application/x-iwork-keynote-sffkey": [".key"],
+      "application/pkcs10": [".csr"],
+      "application/xml": [".xml"]  // Adiciona o suporte para arquivos .xml
     },
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {

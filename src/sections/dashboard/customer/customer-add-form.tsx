@@ -41,9 +41,10 @@ export const CustomerAddForm = ({ customer, ...other }) => {
         helpers.setStatus({ success: true });
         router.push(`/${gt}/clientes/${customerID}`);
       } else {
-        throw new Error("Unexpected response status");
+        console.error("[ERROR] CAD-CLIENTE", response)
       }
     } catch (err) {
+      console.error("[ERROR] CAD-CLIENTE", err)
       toast.error("Falha ao cadastrar cliente");
       helpers.setStatus({ success: false });
       helpers.setErrors({ submit: err.message });

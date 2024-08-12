@@ -139,23 +139,21 @@ export const CustomerListTable = (props) => {
           </TableHead>
           <TableBody>
             {customers.map((customer) => {
-              const business = customer?.business;
-              const isBusiness = Boolean(business);
+              const isBusiness = customer?.business?.corporateName !== "";
 
               const name = isBusiness
-                ? business?.corporateName
+                ? customer?.business?.corporateName
                 : customer?.name;
               const document = isBusiness
-                ? business?.document
+                ? customer?.business?.document
                 : customer?.document;
 
-                const email = isBusiness
-                ? business?.email
+              const email = isBusiness
+                ? customer?.business?.email
                 : customer?.email;
 
-
-                const phone = isBusiness
-                ? business?.phone
+              const phone = isBusiness
+                ? customer?.business?.phone
                 : customer?.phone;
 
               const hasDevTeste = name?.includes("DEV");

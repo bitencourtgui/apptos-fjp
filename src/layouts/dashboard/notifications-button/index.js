@@ -63,6 +63,7 @@ export const NotificationsButton = () => {
           </Badge>
         </IconButton>
       </Tooltip>
+      
       <NotificationsPopover
         anchorEl={anchorRef.current}
         notifications={notifications}

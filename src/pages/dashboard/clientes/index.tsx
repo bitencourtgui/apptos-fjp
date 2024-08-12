@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
-import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
 import {
   Box,
   Button,
@@ -15,7 +13,7 @@ import {
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
+import { CustomerListSearch } from "@/sections/dashboard/customer/customer-list-search";
 import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
 import { t } from "i18next";
 import { tokens } from "../../../locales/tokens";
@@ -159,10 +157,7 @@ const ClientesDash = () => {
               </Stack>
             </Stack>
             <Card>
-              <CustomerListSearch
-                onFiltersChange={handleFiltersChange}
-                onSortChange={handleSortChange}
-              />
+              <CustomerListSearch onFiltersChange={handleFiltersChange}/>
               <CustomerListTable
                 customers={customers}
                 customersCount={customersCount}

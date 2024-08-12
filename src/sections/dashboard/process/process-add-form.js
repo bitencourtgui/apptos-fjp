@@ -49,7 +49,7 @@ export const ProcessAddForm = (props) => {
           router.push(`/${gt}/clientes/${customerId}`);
         }
       } catch (err) {
-        toast.error("Falha ao cadastrar cliente");
+        toast.error("Falha ao cadastrar client6");
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);

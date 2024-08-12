@@ -182,7 +182,7 @@ export default function ContractModal({
                           }
                         />
                       }
-                      label="Pagamento a vista?"
+                      label="Pagamento a vista? -usa?"
                       sx={{ pl: 2 }}
                     />
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -346,7 +346,7 @@ export default function ContractModal({
                           }
                         />
                       }
-                      label="Pagamento a vista?"
+                      label="Pagamento a vista? -usa?"
                       sx={{ pl: 2 }}
                     />
                     <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -6,8 +6,7 @@ export const customersSchema = Yup.object().shape({
   cpf: Yup.string(),
   cnpj: Yup.string(),
   rg: Yup.string().required("Digite um RG válido"),
-  phone1: Yup.string(),
-  phone2: Yup.string(),
+  phone: Yup.string(),
   nationality: Yup.string().required("Digite a nacionalidade"),
 });
 

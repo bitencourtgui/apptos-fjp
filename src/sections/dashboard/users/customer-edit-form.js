@@ -403,14 +403,14 @@ export const CustomerEditForm = (props) => {
             </Grid>
             <Grid xs={12} md={3}>
               <TextField
-                error={!!(formik.touched.phone1 && formik.errors.phone1)}
+                error={!!(formik.touched.phone && formik.errors.phone)}
                 fullWidth
-                helperText={formik.touched.phone1 && formik.errors.phone1}
+                helperText={formik.touched.phone && formik.errors.phone}
                 label="Celular"
-                name="phone1"
+                name="phone"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.phone1}
+                value={formik.values.phone}
               />
             </Grid>
             <Grid xs={12} md={3}>

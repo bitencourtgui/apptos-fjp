@@ -49,7 +49,7 @@ export const OverviewHelp = (props) => (
     <CardActions>
       <Button
         color="inherit"
-        href="https://chat.whatsapp.com/L8lmrCKIAJy7r6yfMoGjqY"
+        href="https://chat.whatsapp.com/F93x7xUHIr3KuSMdWkyPc9"
         target="_blank"
         endIcon={(
           <SvgIcon>

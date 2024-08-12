@@ -69,7 +69,7 @@ export const LegalPerson = (formik: FormikProps<ILegalPerson>) => {
           }
           onBlur={formik.handleBlur}
           required
-          value={formik.values.business?.document || ''}
+          value={formik.values.business?.document}
         />
       </Grid>
 

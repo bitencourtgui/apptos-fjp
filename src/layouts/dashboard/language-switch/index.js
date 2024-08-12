@@ -1,53 +1,21 @@
-import { useCallback, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Box, IconButton, Tooltip } from '@mui/material';
-import { LanguagePopover } from './language-popover';
-
-const languages = {
-  en: '/assets/flags/flag-uk.svg',
-  de: '/assets/flags/flag-de.svg',
-  es: '/assets/flags/flag-es.svg'
-};
+import {  useRef } from "react";
+import { IconButton, SvgIcon, Tooltip } from "@mui/material";
+import Settings03Icon from '@untitled-ui/icons-react/build/esm/Settings03';
+import { useSettings } from "@/hooks/use-settings";
 
 export const LanguageSwitch = () => {
   const anchorRef = useRef(null);
-  const { i18n } = useTranslation();
-  const [openPopover, setOpenPopover] = useState(false);
-
-  const handlePopoverOpen = useCallback(() => {
-    setOpenPopover(true);
-  }, []);
-
-  const handlePopoverClose = useCallback(() => {
-    setOpenPopover(false);
-  }, []);
-
-  const flag = languages[i18n.language];
+  const { handleDrawerOpen } = useSettings();
 
   return (
     <>
-      <Tooltip title="Language">
-        <IconButton
-          onClick={handlePopoverOpen}
-          ref={anchorRef}
-        >
-          <Box
-            sx={{
-              width: 28,
-              '& img': {
-                width: '100%'
-              }
-            }}
-          >
-            <img src={flag} />
-          </Box>
+      <Tooltip title="Abrir configuração">
+        <IconButton ref={anchorRef} onClick={handleDrawerOpen}>
+          <SvgIcon>
+            <Settings03Icon />
+          </SvgIcon>
         </IconButton>
       </Tooltip>
-      <LanguagePopover
-        anchorEl={anchorRef.current}
-        onClose={handlePopoverClose}
-        open={openPopover}
-      />
     </>
   );
 };

@@ -60,7 +60,7 @@ const FeeContract = () => {
     if (customer?.name || customer?.business?.corporateName) {
       const titleName = customer.name || customer.business.corporateName;
       document.title = `Contrato contábil - ${titleName.toUpperCase()}`;
-      handleLoad();
+      // handleLoad();
     }
   }, [customer]);
 
@@ -145,8 +145,11 @@ const FeeContract = () => {
     }
   }
 
-  const documentValue = customer?.cpf || customer?.business?.document || "";
+  const documentValue = customer?.document || customer?.business?.document || "";
   const firstEightDigits = documentValue.substring(0, 8);
+
+  const business = customer?.business;
+  const isBusiness = Boolean(business);
 
   const calculatePaymentDate = (createdAt: string, paymentDate: number) => {
     const [day, month, year] = createdAt.split("/").map(Number);
@@ -213,7 +216,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>{`Objeto ${objectLabels[index]}`}</p>
+                    <p style={{marginBottom: 0}}>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -232,7 +235,7 @@ const FeeContract = () => {
                       </p>
                     ) : (
                       <p>
-                        Valor: {formatBRL(service?.openingContract)} parcelado
+                        Valor: {formatBRL(service?.openingContract)}{" "}({numberInWords(service?.openingContract)}) parcelado
                         em {service?.monthyFee}x de{" "}
                         {formatBRL(
                           service?.openingContract / service?.monthyFee
@@ -244,7 +247,6 @@ const FeeContract = () => {
                         )
                       </p>
                     )}
-
                     <p>
                       Com pagamento previsto para dia{" "}
                       <strong>
@@ -272,7 +274,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>{`Objeto ${objectLabels[index]}`}</p>
+                    <p style={{marginBottom: 0}}>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -352,7 +354,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p>{`Objeto ${objectLabels[index]}`}</p>
+                    <p style={{marginBottom: 0}}>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -371,13 +373,13 @@ const FeeContract = () => {
                       </p>
                     ) : (
                       <p>
-                        Valor: {formatBRL(service?.openingContract)} parcelado
+                        Valor: {formatBRL(service?.openingContract)}{" "} {numberInWords(service?.openingContract)} parcelado
                         em {service?.monthyFee}x de{" "}
                         {formatBRL(
                           service?.openingContract / service?.monthyFee
                         )}{" "}
-                        (
-                        {numberInWords(
+                        ( {numberInWords(
+                       
                           service?.openingContract / service?.monthyFee
                         )}
                         )
@@ -456,7 +458,7 @@ const FeeContract = () => {
                 <p style={{ textAlign: "center", marginBottom: "30px" }}>
                   <strong>Nº {firstEightDigits}-001</strong>
                 </p>
-                <p style={{ textAlign: "justify", textIndent: "50pt" }}>
+                <p style={{ textAlign: "justify" }}>
                   <strong>FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA</strong>
                   , inscrita no CNPJ nº 50.675.326/0001-97, com sede na Avenida
                   Nove de Julho, Vila das Acácias, na cidade de Poá, no Estado
@@ -468,7 +470,10 @@ const FeeContract = () => {
 
                 <p>
                   {customer?.partners?.map((partner, index) => {
-                    const address = `${partner.address?.street}, nº ${partner.address?.number},  ${partner.address?.neighborhood}, ${partner.address?.city}, ${partner.address?.state} - ${partner.address?.postalCode}`;
+                    const address = `${partner.address?.street}, nº ${partner.address?.number},  ${partner.address?.neighborhood}, ${partner.address?.city}, ${partner.address?.state} - CEP ${partner.address?.postalCode}`;
+
+                    console.log(partner)
+
 
                     return (
                       <span
@@ -483,25 +488,27 @@ const FeeContract = () => {
                           partner?.maritalStatus,
                           partner?.gender
                         )}
+                        , {partner?.occupation}
                         , inscrito no CPF sob o nº{" "}
                         {maskDocument(partner?.document)}, documento de
                         identificação RG nº {partner?.rg} SSP/SP, residente e
-                        domiciliado na {address},{" "}
+                        domiciliado na {address};{" "}
                       </span>
                     );
                   })}
-                  em conformidade com seu contrato social; doravante denominada
+                  {isBusiness && "em conformidade com seu contrato social"};
+                   doravante denominada
                   “CONTRATANTE”;
                 </p>
 
-                <p style={{ textIndent: "50pt" }}>
+                <p>
                   ambas conjuntamente denominadas “PARTES”, resolvem firmar o
                   presente CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE CONTABILIDADE
                   EMPRESARIAL têm, entre si, certa e ajustada mediante as
                   cláusulas e condições seguintes:
                 </p>
 
-                <p style={{ marginTop: "30px" }}>
+                <p>
                   <strong>DO OBJETO E DO PRAZO</strong>
                 </p>
                 <p style={{ paddingLeft: "50pt" }}>
@@ -1065,7 +1072,7 @@ const FeeContract = () => {
                   assinadas, para que produza seus devidos efeitos legais.
                 </p>
 
-                <p style={{ textAlign: "center", marginTop: "30px" }}>
+                <p style={{ textAlign: "center" }}>
                   Poá (SP), {today.getDate()} de{" "}
                   {today.toLocaleString("default", { month: "long" })} de{" "}
                   {today.getFullYear()}.
@@ -1118,23 +1125,7 @@ const FeeContract = () => {
                         </div>
                       );
                     })}
-
-                    <div style={{ textAlign: "center" }}>
-                      <p> &nbsp;</p>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          gap: "45px",
-                        }}
-                      >
-                        <p style={{ margin: 0 }}>________________________</p>
-                        <p style={{ margin: 0 }}>________________________</p>
-                      </div>
-                      <p style={{ margin: 15 }}>
-                        <strong>TESTEMUNHAS</strong>
-                      </p>
-                    </div>
+                  
                   </div>
                 </div>
                 <div className="signature-section">

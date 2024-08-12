@@ -15,7 +15,7 @@ export interface ICustomer {
   complement: string;
   postalCode: string;
   email: string;
-  phone1: string;
+  phone: string;
   phone2: string;
   businessName: string;
   cnpj: string;
