@@ -4,7 +4,7 @@ import { Box, Button, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSettings } from '../../../hooks/use-settings';
 
 export const OverviewBanner = (props) => {
-  const { handleDrawerOpen } = useSettings();
+  
 
   return (
     <Stack
@@ -47,12 +47,12 @@ export const OverviewBanner = (props) => {
           variant="body1"
         >
           
-          Curtiu nossa nova cara? Agora tá tudo separadinho e tem até modo noturno pra leitura sossegada. Em breve muito mais novidades!
+          Agora, você pode gerenciar sua conta com facilidade na nova página de configurações. Tudo isso com uma navegação mais intuitiva e segura!
         </Typography>
         <Box sx={{ mt: 2, mb: 2 }}>
           <Button
             color="primary"
-            onClick={handleDrawerOpen}
+            href="/minha-conta"
             startIcon={(
               <SvgIcon>
                 <Settings04Icon />
