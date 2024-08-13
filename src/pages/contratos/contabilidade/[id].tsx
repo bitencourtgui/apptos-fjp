@@ -6,7 +6,6 @@ import CustomersApi from "../../../api/customers";
 import { numberInWords } from "../../../utils/number-in-words";
 import { maskDocument } from "../../../utils/masks/maskDocument";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../../hooks/use-auth";
 import dayjs from "dayjs";
 
 const useCustomer = (userId: string) => {
@@ -38,8 +37,6 @@ const FeeContract = () => {
   let url: string;
 
   const router = useRouter();
-  const { getTenant } = useAuth();
-  const gt = getTenant();
 
   if (typeof window !== "undefined") {
     url = window.location.href;
@@ -67,7 +64,7 @@ const FeeContract = () => {
   const today = new Date();
 
   const handleAfterPrint = () => {
-    router.push(`/${gt}/clientes/${customerId}`);
+    router.push(`/trabalhista/clientes/${customerId}`);
   };
 
   useEffect(() => {
@@ -145,7 +142,8 @@ const FeeContract = () => {
     }
   }
 
-  const documentValue = customer?.document || customer?.business?.document || "";
+  const documentValue =
+    customer?.document || customer?.business?.document || "";
   const firstEightDigits = documentValue.substring(0, 8);
 
   const isBusiness = customer?.business?.corporateName.lenght > 1;
@@ -198,17 +196,22 @@ const FeeContract = () => {
       "Sexto",
     ];
 
-    console.log('service', services)
+    console.log("service", services);
 
     if (services) {
       return (
         <>
           {services.map((service, index) => {
             if (service?.serviceType === "0" && !isBusiness) {
-
-              const priceWithEntry = (service?.openingContract - Number(service?.accountingPayment)) / service?.monthyFee
-              const priceWithoutEntry = service?.openingContract / service?.monthyFee
-              const monthyPrice = service?.paymentEntry ? priceWithEntry : priceWithoutEntry
+              const priceWithEntry =
+                (service?.openingContract -
+                  Number(service?.accountingPayment)) /
+                service?.monthyFee;
+              const priceWithoutEntry =
+                service?.openingContract / service?.monthyFee;
+              const monthyPrice = service?.paymentEntry
+                ? priceWithEntry
+                : priceWithoutEntry;
 
               return (
                 <div key={index} style={{ display: "flex" }}>
@@ -222,7 +225,9 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p style={{ marginBottom: 0 }}>{`Objeto ${objectLabels[index]}`}</p>
+                    <p
+                      style={{ marginBottom: 0 }}
+                    >{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -241,15 +246,17 @@ const FeeContract = () => {
                       </p>
                     ) : (
                       <p>
-                        Valor: {formatBRL(service?.openingContract)}{" "}({numberInWords(service?.openingContract)})
-                        {service?.paymentEntry ? ` com uma entrada de ${formatBRL(service?.accountingPayment)} (${numberInWords(service?.accountingPayment)}) e o restante ` : ""}
-
-                        parcelado
-                        em {service?.monthyFee}x de{" "}
-                        {formatBRL(monthyPrice)}{" "}
-                        (
-                        {numberInWords(monthyPrice)}
-                        )
+                        Valor: {formatBRL(service?.openingContract)} (
+                        {numberInWords(service?.openingContract)})
+                        {service?.paymentEntry
+                          ? ` com uma entrada de ${formatBRL(
+                            service?.accountingPayment
+                          )} (${numberInWords(
+                            service?.accountingPayment
+                          )}) e o restante `
+                          : ""}
+                        parcelado em {service?.monthyFee}x de{" "}
+                        {formatBRL(monthyPrice)} ({numberInWords(monthyPrice)})
                       </p>
                     )}
                     <p>
@@ -259,7 +266,9 @@ const FeeContract = () => {
                           service?.createdAt,
                           parseInt(service?.paymentDate)
                         )}
-                      </strong>, e os demais no mesmo dia dos meses subsequentes, durante a vigência do presente instrumento.
+                      </strong>
+                      , e os demais no mesmo dia dos meses subsequentes, durante
+                      a vigência do presente instrumento.
                     </p>
                   </div>
                 </div>
@@ -279,7 +288,9 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p style={{ marginBottom: 0 }}>{`Objeto ${objectLabels[index]}`}</p>
+                    <p
+                      style={{ marginBottom: 0 }}
+                    >{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -359,7 +370,9 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p style={{ marginBottom: 0 }}>{`Objeto ${objectLabels[index]}`}</p>
+                    <p
+                      style={{ marginBottom: 0 }}
+                    >{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -378,13 +391,14 @@ const FeeContract = () => {
                       </p>
                     ) : (
                       <p>
-                        Valor: {formatBRL(service?.openingContract)}{" "} {numberInWords(service?.openingContract)} parcelado
-                        em {service?.monthyFee}x de{" "}
+                        Valor: {formatBRL(service?.openingContract)}{" "}
+                        {numberInWords(service?.openingContract)} parcelado em{" "}
+                        {service?.monthyFee}x de{" "}
                         {formatBRL(
                           service?.openingContract / service?.monthyFee
                         )}{" "}
-                        ( {numberInWords(
-
+                        ({" "}
+                        {numberInWords(
                           service?.openingContract / service?.monthyFee
                         )}
                         )
@@ -472,13 +486,12 @@ const FeeContract = () => {
                   forma do seu contrato social, doravante denominada
                   “CONTRATADA” e;
                 </p>
-
-
-
                 {isBusiness && (
                   <p>
                     {customer?.partners?.map((partner, index) => {
-                      const address = `${partner.address?.street}, nº ${partner.address?.number},  ${partner.address?.neighborhood}, ${partner.address?.city}, ${partner.address?.state} - CEP ${partner.address?.postalCode}`;
+                      const address = partner.address
+                        ? `${partner.address.street}, nº ${partner.address.number},  ${partner.address.neighborhood}, ${partner.address.city}, ${partner.address.state} - CEP ${partner.address.postalCode}`
+                        : 'Endereço não disponível';
 
                       return (
                         <span
@@ -493,43 +506,36 @@ const FeeContract = () => {
                             partner?.maritalStatus,
                             partner?.gender
                           )}
-                          , {partner?.occupation}
-                          , inscrito no CPF sob o nº{" "}
+                          , {partner?.occupation}, inscrito no CPF sob o nº{" "}
                           {maskDocument(partner?.document)}, documento de
                           identificação RG nº {partner?.rg} SSP/SP, residente e
                           domiciliado na {address};{" "}
                         </span>
                       );
                     })}
-                    em conformidade com seu contrato social; doravante denominada “CONTRATANTE”;
+                    em conformidade com seu contrato social; doravante
+                    denominada “CONTRATANTE”;
                   </p>
                 )}
 
-                {!isBusiness && (
+                {customer && !isBusiness && (
                   <p>
-                    <span
-                      style={{ textAlign: "justify", textIndent: "50pt" }}
-
-                    >
+                    <span style={{ textAlign: "justify", textIndent: "50pt" }}>
                       <strong style={{ textTransform: "uppercase" }}>
-                        {customer?.name}
+                        {customer.name}
                       </strong>
-                      , {customer?.nationality},{" "}
-                      {translateMaritalStatus(
-                        customer?.maritalStatus,
-                        customer?.gender
-                      )}
-                      , {customer?.occupation ? `${customer?.occupation},` : ""}
-                      inscrito no CPF sob o nº{" "}
-                      {maskDocument(customer?.document)}, documento de
-                      identificação RG nº {customer?.rg} SSP/SP, residente e
-                      domiciliado na {customer.address?.street}, nº {customer.address?.number}, {customer.address?.neighborhood}, {customer.address?.city}, {customer.address?.state} - CEP {customer.address?.postalCode}
-                      ,{customer?.phone ? ` telefone: ${customer?.phone}, ` : ""}
-                      {customer?.email ? ` e-mail: ${customer?.email};` : ";"}
-                    </span> doravante denominada “CONTRATANTE”;
+                      , {customer.nationality},{" "}
+                      {translateMaritalStatus(customer.maritalStatus, customer.gender)}
+                      , {customer.occupation ? `${customer.occupation},` : ""}
+                      inscrito no CPF sob o nº {maskDocument(customer.document)}, documento de
+                      identificação RG nº {customer.rg} SSP/SP, residente e domiciliado na {customer.address?.street || 'Endereço não disponível'}, nº {customer.address?.number || ''},
+                      {customer.address?.neighborhood || ''}, {customer.address?.city || ''}, {customer.address?.state || ''} - CEP {customer.address?.postalCode || ''},
+                      {customer.phone ? ` telefone: ${customer.phone}, ` : ""}
+                      {customer.email ? ` e-mail: ${customer.email};` : ";"}
+                    </span>{" "}
+                    doravante denominada “CONTRATANTE”;
                   </p>
                 )}
-
 
                 <p>
                   ambas conjuntamente denominadas “PARTES”, resolvem firmar o
@@ -1134,7 +1140,7 @@ const FeeContract = () => {
                         <i>Sócio administrador</i>
                       </p>
                     </div>
-                    {isBusiness && (
+                    {isBusiness &&
                       customer?.partners?.map((partner, index) => {
                         return (
                           <div style={{ textAlign: "center" }} key={index}>
@@ -1154,8 +1160,7 @@ const FeeContract = () => {
                             </p>
                           </div>
                         );
-                      })
-                    )}
+                      })}
 
                     {!isBusiness && (
                       <div style={{ textAlign: "center" }}>
@@ -1175,7 +1180,6 @@ const FeeContract = () => {
                         </p>
                       </div>
                     )}
-
                   </div>
                 </div>
                 <div className="signature-section">
@@ -1215,8 +1219,8 @@ const FeeContract = () => {
                     entre:
                   </p>
 
-                  <p style={{ marginTop: "10px" }}>
-                    {isBusiness && (
+                   <p style={{ marginTop: "10px" }}>
+                    {isBusiness &&
                       customer?.partners?.map((partner, index, array) => {
                         return (
                           <div key={index}>
@@ -1233,15 +1237,13 @@ const FeeContract = () => {
                             {index < array.length - 1 ? "," : " e"}{" "}
                           </div>
                         );
-                      })
-                    )}
+                      })}
                     {!isBusiness && (
                       <div>
                         <strong style={{ textTransform: "uppercase" }}>
                           {customer?.name}
                         </strong>
-                        , {customer?.nationality},{" "}
-                        , inscrito no CPF sob o nº{" "}
+                        , {customer?.nationality}, , inscrito no CPF sob o nº{" "}
                         {maskDocument(customer?.document)}
                       </div>
                     )}
