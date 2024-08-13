@@ -6,8 +6,12 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  updateProfile,
   signInWithPopup,
   signOut,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updatePassword,
 } from "firebase/auth";
 import { firebaseApp } from "../../libs/firebase";
 import { Issuer } from "../../utils/auth";
@@ -28,8 +32,6 @@ const getTenant = () => {
     }
   } catch (err) {
     console.error(err);
-    // If stored data is not a strigified JSON this will fail,
-    // that's why we catch the error
   }
 
   return value;
@@ -73,7 +75,9 @@ export const AuthContext = createContext({
   signInWithGoogle: () => Promise.resolve(),
   signOut: () => Promise.resolve(),
   getTenant,
-  setTenant
+  setTenant,
+  updateUserName: () => Promise.resolve(),
+  updateUserPassword: () => Promise.resolve(), // Adiciona a função ao contexto
 });
 
 export const AuthProvider = (props) => {
@@ -83,8 +87,6 @@ export const AuthProvider = (props) => {
   const handleAuthStateChanged = useCallback(
     (user) => {
       if (user) {
-        // Here you should extract the complete user profile to make it available in your entire app.
-        // The auth state only provides basic information.
         dispatch({
           type: ActionType.AUTH_STATE_CHANGED,
           payload: {
@@ -93,7 +95,7 @@ export const AuthProvider = (props) => {
               id: user.uid,
               avatar: user.photoURL || undefined,
               email: user.email || "anika.visser@devias.io",
-              name: "Anika Visser",
+              name: "Guilherme Bitencourt",
               plan: "Premium",
             },
           },
@@ -111,11 +113,7 @@ export const AuthProvider = (props) => {
     [dispatch]
   );
 
-  useEffect(
-    () => onAuthStateChanged(auth, handleAuthStateChanged),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => onAuthStateChanged(auth, handleAuthStateChanged), []);
 
   const _signInWithEmailAndPassword = useCallback(
     async (email, password, tenant) => {
@@ -125,15 +123,91 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const signInWithGoogle = useCallback(async () => {
-    const provider = new GoogleAuthProvider();
+  const signInWithGoogle = useCallback(async (name) => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-    await signInWithPopup(auth, provider);
+      // Chama a função para atualizar o nome de usuário
+      await _updateUserName(user, name);
+    } catch (error) {
+      console.error("Erro ao fazer login com o Google:", error);
+    }
   }, []);
 
+  const reauthenticateUser = async (currentPassword) => {
+    const user = auth.currentUser;
+    if (user) {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      try {
+        await reauthenticateWithCredential(user, credential);
+        console.log("Usuário reautenticado com sucesso.");
+      } catch (error) {
+        console.error("Erro ao reautenticar o usuário:", error);
+        throw error; // Propague o erro para tratar na interface
+      }
+    }
+  };
+
+  // Função para atualizar o nome de usuário
+  const updateUserName = async (name) => {
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        await updateProfile(user, {
+          displayName: name,
+        });
+        dispatch({
+          type: ActionType.AUTH_STATE_CHANGED,
+          payload: {
+            isAuthenticated: true,
+            user: {
+              ...state.user,
+              name,
+            },
+          },
+        });
+        console.log("Nome de usuário atualizado com sucesso!");
+      } catch (error) {
+        console.error("Erro ao atualizar o nome de usuário:", error);
+      }
+    }
+  };
+
+  // Função para atualizar a senha do usuário
+  const updateUserPassword = async (newPassword) => {
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        await updatePassword(user, newPassword);
+        console.log("Senha atualizada com sucesso!");
+      } catch (error) {
+        console.error("Erro ao atualizar a senha:", error);
+      }
+    }
+  };
+
   const _createUserWithEmailAndPassword = useCallback(
-    async (email, password) => {
-      await createUserWithEmailAndPassword(auth, email, password);
+    async (email, password, name) => {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+
+        // Chama a função para atualizar o nome de usuário
+        await _updateUserName(user, name);
+      } catch (error) {
+        console.error("Erro ao criar o usuário:", error);
+      }
     },
     []
   );
@@ -153,6 +227,10 @@ export const AuthProvider = (props) => {
         signOut: _signOut,
         getTenant,
         setTenant,
+        updateUserName,
+        updateUserPassword,
+        updateUserPassword,
+        reauthenticateUser,
       }}
     >
       {children}

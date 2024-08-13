@@ -110,7 +110,7 @@ export const CustomerPartners = ({
             </TableHead>
             <TableBody>
               {customers?.partners
-                ? customers.partners.map((partner, key) => {
+                ? customers.partners?.map((partner, key) => {
                     const managingPartner = partner.managingPartner
                       ? "Administrador"
                       : "";
@@ -128,7 +128,8 @@ export const CustomerPartners = ({
                     );
                   })
                 : []}
-            </TableBody>
+               
+            </TableBody> 
           </Table>
         </Scrollbar>
         <TablePagination

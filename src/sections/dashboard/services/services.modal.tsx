@@ -15,7 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { FormikProps, useFormik } from "formik";
+import { useFormik } from "formik";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 
@@ -23,8 +23,6 @@ import { OpeningService } from "./forms/openingService";
 import { AccountingService } from "./forms/accountingService";
 
 // so para subir corrigir para o certo
-import { partnersInitial } from "../customer/Partners/partners-initial";
-import { customersSchema } from "../customer/customer-schema";
 import {
   AccountingServiceSchema,
   openingServiceSchema,
@@ -49,7 +47,10 @@ const ServicesModal = ({
 }: ServicesModalProps) => {
   dayjs.locale("pt-br");
 
-  const [service, setService] = useState("0");
+  const isBusiness = customers?.business?.corporateName.lenght > 1;
+
+  const [service, setService] = useState(isBusiness ? "1" : "0");
+
 
   const onSubmit = async (values, helpers) => {
     values.serviceType = service;
@@ -72,6 +73,19 @@ const ServicesModal = ({
       throw new Error("Unexpected response status");
     }
   };
+
+
+  const serviceOptions = isBusiness
+    ? [
+      { value: "1", label: "Contabilidade Empresarial" },
+      { value: "2", label: "Desenquadramento" },
+      { value: "3", label: "Planejamento Tributário" },
+      { value: "4", label: "Isenção de IR" },
+      { value: "5", label: "Defesa Administrativa" },
+    ]
+    : [
+      { value: "0", label: "Abertura de Empresa" },
+    ];
 
   function getSchema(service: string) {
     switch (service) {
@@ -140,12 +154,11 @@ const ServicesModal = ({
               label="Serviços"
               onChange={handleChange}
             >
-              <MenuItem value="0">Abertura de Empresa</MenuItem>
-              <MenuItem value="1">Contabilidade Empresarial</MenuItem>
-              <MenuItem value="2">Desenquadramento</MenuItem>
-              <MenuItem value="3">Planejamento Tributário</MenuItem>
-              <MenuItem value="4">Isenção de IR</MenuItem>
-              <MenuItem value="5">Defesa Administrativa</MenuItem>
+              {serviceOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 

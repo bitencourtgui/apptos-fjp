@@ -90,19 +90,43 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
     }
   };
 
+  const removeUndefined = (obj) => {
+    return Array.isArray(obj)
+      ? obj.map((item) => removeUndefined(item))
+      : Object.fromEntries(
+          Object.entries(obj)
+            .filter(([_, v]) => v !== undefined)
+            .map(([k, v]) => [k, v === Object(v) ? removeUndefined(v) : v])
+        );
+  };
 
   const onSubmit = async (values, helpers) => {
+    const customerToPartner = [
+      {
+        address: customer?.address,
+        document: customer?.document,
+        gender: customer?.gender,
+        managingPartner: true,
+        maritalStatus: customer?.maritalStatus,
+        name: customer?.name,
+        nationality: customer?.nationality,
+        occupation: customer?.occupation,
+        rg: customer?.rg,
+      },
+    ];
 
     const payload = {
       ...customer,
-      business: values.business
-    }
+      business: values.business,
+      partners: customerToPartner,
+    };
 
-    //passar o cliente pf para sócio admnistrador quando executado a criação da empresa
-
-
+    const sanitizedPayload = removeUndefined(payload);
     try {
-      const response = await CustomersApi.updateCustomer(customer.id, payload);
+      const response = await CustomersApi.updateCustomer(
+        customer.id,
+        sanitizedPayload
+      );
 
       if (response.status === 200) {
         toast.success("Empresa cadastrada");
@@ -110,10 +134,10 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
         helpers.setSubmitting(false);
         window.location.reload();
       } else {
-        console.error("[ERROR] CAD-EMPRESA", response)
+        console.error("[ERROR] CAD-EMPRESA1", response);
       }
     } catch (err) {
-      console.error("[ERROR] CAD-EMPRESA", err)
+      console.error("[ERROR] CAD-EMPRESA2", err);
       toast.error("Falha ao cadastrar empresa");
       helpers.setStatus({ success: false });
       helpers.setErrors({ submit: err.message });
@@ -143,7 +167,6 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
   const handleToggle = () => {
     setOpen(!open);
   };
-
 
   return (
     <>
@@ -207,11 +230,21 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
               </Stack>
             </Stack>
             {!isBusiness && (
-              <Alert severity="warning" variant='outlined' action={
-                <Button variant="contained" color="warning" size="small" onClick={handleToggle} type="button">
-                  CADASTRAR EMPRESA
-                </Button>
-              }>
+              <Alert
+                severity="warning"
+                variant="outlined"
+                action={
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    size="small"
+                    onClick={handleToggle}
+                    type="button"
+                  >
+                    CADASTRAR EMPRESA
+                  </Button>
+                }
+              >
                 Processo de abertura concluído? Atualize o cadastro para empresa
               </Alert>
             )}
@@ -230,13 +263,15 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
             </Tabs>
             {currentTab === "details" && (
               <Grid container spacing={4}>
-
                 <Grid xs={12} lg={4}>
                   <CustomerBasicDetails customer={customer} />
                 </Grid>
                 <Grid xs={12} lg={8}>
                   <Stack spacing={4}>
-                    <ContractList customer={customer} hasServices={hasServices} />
+                    <ContractList
+                      customer={customer}
+                      hasServices={hasServices}
+                    />
                     {customer && <FileManager customerId={customer.id} />}
                   </Stack>
                 </Grid>

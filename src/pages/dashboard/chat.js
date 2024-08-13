@@ -110,7 +110,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Chat | Devias Kit PRO
+          FJP | Chat
         </title>
       </Head>
       <Divider />
@@ -150,7 +150,8 @@ const Page = () => {
             <Divider />
             {view === 'thread' && <ChatThread threadKey={threadKey} />}
             {view === 'compose' && <ChatComposer />}
-            {view === 'blank' && <ChatBlank />}
+            {view === 'blank' &&  <ChatBlank />}
+           
           </ChatContainer>
         </Box>
       </Box>

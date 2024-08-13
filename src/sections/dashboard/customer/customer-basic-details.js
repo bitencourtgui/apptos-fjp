@@ -49,7 +49,7 @@ export const CustomerBasicDetails = ({ customer }) => {
               />
               <ListItemText primary="CNAE" secondary={business?.cnae} />
             </ListItem>
-            <ListItem>
+            <ListItem divider>
               <ListItemText
                 primary="Endereço"
                 secondary={businessAddress.toLowerCase()}

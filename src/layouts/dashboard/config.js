@@ -2,6 +2,7 @@ import { SvgIcon } from "@mui/material";
 import HomeSmileIcon from "../../icons/untitled-ui/duocolor/home-smile";
 import Server05 from "../../icons/untitled-ui/duocolor/server-05";
 import Users03Icon from "../../icons/untitled-ui/duocolor/users-03";
+import MessageChatSquare from "../../icons/untitled-ui/duocolor/message-chat-square";
 import { tokens } from "../../locales/tokens";
 import { paths } from "../../paths";
 import FaceIdSquare from "@untitled-ui/icons-react/build/esm/FaceIdSquare";

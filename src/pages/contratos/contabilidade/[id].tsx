@@ -148,8 +148,7 @@ const FeeContract = () => {
   const documentValue = customer?.document || customer?.business?.document || "";
   const firstEightDigits = documentValue.substring(0, 8);
 
-  const business = customer?.business;
-  const isBusiness = Boolean(business);
+  const isBusiness = customer?.business?.corporateName.lenght > 1;
 
   const calculatePaymentDate = (createdAt: string, paymentDate: number) => {
     const [day, month, year] = createdAt.split("/").map(Number);
@@ -199,11 +198,18 @@ const FeeContract = () => {
       "Sexto",
     ];
 
+    console.log('service', services)
+
     if (services) {
       return (
         <>
           {services.map((service, index) => {
-            if (service?.serviceType === "0") {
+            if (service?.serviceType === "0" && !isBusiness) {
+
+              const priceWithEntry = (service?.openingContract - Number(service?.accountingPayment)) / service?.monthyFee
+              const priceWithoutEntry = service?.openingContract / service?.monthyFee
+              const monthyPrice = service?.paymentEntry ? priceWithEntry : priceWithoutEntry
+
               return (
                 <div key={index} style={{ display: "flex" }}>
                   <div
@@ -216,7 +222,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p style={{marginBottom: 0}}>{`Objeto ${objectLabels[index]}`}</p>
+                    <p style={{ marginBottom: 0 }}>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -235,15 +241,14 @@ const FeeContract = () => {
                       </p>
                     ) : (
                       <p>
-                        Valor: {formatBRL(service?.openingContract)}{" "}({numberInWords(service?.openingContract)}) parcelado
+                        Valor: {formatBRL(service?.openingContract)}{" "}({numberInWords(service?.openingContract)})
+                        {service?.paymentEntry ? ` com uma entrada de ${formatBRL(service?.accountingPayment)} (${numberInWords(service?.accountingPayment)}) e o restante ` : ""}
+
+                        parcelado
                         em {service?.monthyFee}x de{" "}
-                        {formatBRL(
-                          service?.openingContract / service?.monthyFee
-                        )}{" "}
+                        {formatBRL(monthyPrice)}{" "}
                         (
-                        {numberInWords(
-                          service?.openingContract / service?.monthyFee
-                        )}
+                        {numberInWords(monthyPrice)}
                         )
                       </p>
                     )}
@@ -254,14 +259,14 @@ const FeeContract = () => {
                           service?.createdAt,
                           parseInt(service?.paymentDate)
                         )}
-                      </strong>
+                      </strong>, e os demais no mesmo dia dos meses subsequentes, durante a vigência do presente instrumento.
                     </p>
                   </div>
                 </div>
               );
             }
 
-            if (service?.serviceType === "1") {
+            if (service?.serviceType === "1" && isBusiness) {
               return (
                 <div key={index} style={{ display: "flex" }}>
                   <div
@@ -274,7 +279,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p style={{marginBottom: 0}}>{`Objeto ${objectLabels[index]}`}</p>
+                    <p style={{ marginBottom: 0 }}>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -341,7 +346,7 @@ const FeeContract = () => {
               );
             }
 
-            if (service?.serviceType === "2") {
+            if (service?.serviceType === "2" && isBusiness) {
               return (
                 <div key={index} style={{ display: "flex" }}>
                   <div
@@ -354,7 +359,7 @@ const FeeContract = () => {
                       padding: "20px",
                     }}
                   >
-                    <p style={{marginBottom: 0}}>{`Objeto ${objectLabels[index]}`}</p>
+                    <p style={{ marginBottom: 0 }}>{`Objeto ${objectLabels[index]}`}</p>
                     <p>
                       <strong>{servicesMap[service.serviceType]}</strong>
                     </p>
@@ -367,7 +372,7 @@ const FeeContract = () => {
                     }}
                   >
                     {service.cashPayment ? (
-                      <p style={{margin: 10}}>
+                      <p style={{ margin: 10 }}>
                         Valor: {formatBRL(service?.openingContract)} (
                         {numberInWords(service?.openingContract)}) à vista
                       </p>
@@ -379,7 +384,7 @@ const FeeContract = () => {
                           service?.openingContract / service?.monthyFee
                         )}{" "}
                         ( {numberInWords(
-                       
+
                           service?.openingContract / service?.monthyFee
                         )}
                         )
@@ -468,38 +473,63 @@ const FeeContract = () => {
                   “CONTRATADA” e;
                 </p>
 
-                <p>
-                  {customer?.partners?.map((partner, index) => {
-                    const address = `${partner.address?.street}, nº ${partner.address?.number},  ${partner.address?.neighborhood}, ${partner.address?.city}, ${partner.address?.state} - CEP ${partner.address?.postalCode}`;
-
-                    console.log(partner)
 
 
-                    return (
-                      <span
-                        style={{ textAlign: "justify", textIndent: "50pt" }}
-                        key={index}
-                      >
-                        <strong style={{ textTransform: "uppercase" }}>
-                          {partner?.name}
-                        </strong>
-                        , {partner?.nationality},{" "}
-                        {translateMaritalStatus(
-                          partner?.maritalStatus,
-                          partner?.gender
-                        )}
-                        , {partner?.occupation}
-                        , inscrito no CPF sob o nº{" "}
-                        {maskDocument(partner?.document)}, documento de
-                        identificação RG nº {partner?.rg} SSP/SP, residente e
-                        domiciliado na {address};{" "}
-                      </span>
-                    );
-                  })}
-                  {isBusiness && "em conformidade com seu contrato social"};
-                   doravante denominada
-                  “CONTRATANTE”;
-                </p>
+                {isBusiness && (
+                  <p>
+                    {customer?.partners?.map((partner, index) => {
+                      const address = `${partner.address?.street}, nº ${partner.address?.number},  ${partner.address?.neighborhood}, ${partner.address?.city}, ${partner.address?.state} - CEP ${partner.address?.postalCode}`;
+
+                      return (
+                        <span
+                          style={{ textAlign: "justify", textIndent: "50pt" }}
+                          key={index}
+                        >
+                          <strong style={{ textTransform: "uppercase" }}>
+                            {partner?.name}
+                          </strong>
+                          , {partner?.nationality},{" "}
+                          {translateMaritalStatus(
+                            partner?.maritalStatus,
+                            partner?.gender
+                          )}
+                          , {partner?.occupation}
+                          , inscrito no CPF sob o nº{" "}
+                          {maskDocument(partner?.document)}, documento de
+                          identificação RG nº {partner?.rg} SSP/SP, residente e
+                          domiciliado na {address};{" "}
+                        </span>
+                      );
+                    })}
+                    em conformidade com seu contrato social; doravante denominada “CONTRATANTE”;
+                  </p>
+                )}
+
+                {!isBusiness && (
+                  <p>
+                    <span
+                      style={{ textAlign: "justify", textIndent: "50pt" }}
+
+                    >
+                      <strong style={{ textTransform: "uppercase" }}>
+                        {customer?.name}
+                      </strong>
+                      , {customer?.nationality},{" "}
+                      {translateMaritalStatus(
+                        customer?.maritalStatus,
+                        customer?.gender
+                      )}
+                      , {customer?.occupation ? `${customer?.occupation},` : ""}
+                      inscrito no CPF sob o nº{" "}
+                      {maskDocument(customer?.document)}, documento de
+                      identificação RG nº {customer?.rg} SSP/SP, residente e
+                      domiciliado na {customer.address?.street}, nº {customer.address?.number}, {customer.address?.neighborhood}, {customer.address?.city}, {customer.address?.state} - CEP {customer.address?.postalCode}
+                      ,{customer?.phone ? ` telefone: ${customer?.phone}, ` : ""}
+                      {customer?.email ? ` e-mail: ${customer?.email};` : ";"}
+                    </span> doravante denominada “CONTRATANTE”;
+                  </p>
+                )}
+
 
                 <p>
                   ambas conjuntamente denominadas “PARTES”, resolvem firmar o
@@ -1104,28 +1134,48 @@ const FeeContract = () => {
                         <i>Sócio administrador</i>
                       </p>
                     </div>
+                    {isBusiness && (
+                      customer?.partners?.map((partner, index) => {
+                        return (
+                          <div style={{ textAlign: "center" }} key={index}>
+                            <p> &nbsp;</p>
+                            <p style={{ marginTop: 0 }}>
+                              ____________________________________________________
+                            </p>
+                            <p style={{ margin: 10 }}>
+                              <strong style={{ textTransform: "uppercase" }}>
+                                {partner?.name}
+                              </strong>
+                            </p>
+                            <p style={{ margin: 5 }}>
+                              <strong>
+                                CPF n° {maskDocument(partner?.document)}
+                              </strong>
+                            </p>
+                          </div>
+                        );
+                      })
+                    )}
 
-                    {customer?.partners?.map((partner, index) => {
-                      return (
-                        <div style={{ textAlign: "center" }} key={index}>
-                          <p> &nbsp;</p>
-                          <p style={{ marginTop: 0 }}>
-                            ____________________________________________________
-                          </p>
-                          <p style={{ margin: 10 }}>
-                            <strong style={{ textTransform: "uppercase" }}>
-                              {partner?.name}
-                            </strong>
-                          </p>
-                          <p style={{ margin: 5 }}>
-                            <strong>
-                              CPF n° {maskDocument(partner?.document)}
-                            </strong>
-                          </p>
-                        </div>
-                      );
-                    })}
-                  
+                    {!isBusiness && (
+                      <div style={{ textAlign: "center" }}>
+                        <p> &nbsp;</p>
+                        <p style={{ marginTop: 0 }}>
+                          ____________________________________________________
+                        </p>
+                        <p style={{ margin: 10 }}>
+                          <strong style={{ textTransform: "uppercase" }}>
+                            {customer?.name}
+                          </strong>
+                        </p>
+                        <p style={{ margin: 5 }}>
+                          <strong>
+                            CPF n° {maskDocument(customer?.document)}
+                          </strong>
+                        </p>
+                      </div>
+                    )}
+
                   </div>
                 </div>
                 <div className="signature-section">
@@ -1164,24 +1214,37 @@ const FeeContract = () => {
                     mais especificadamente na CLÁUSULA 1ª e seguintes, firmado
                     entre:
                   </p>
+
                   <p style={{ marginTop: "10px" }}>
-                    {customer?.partners?.map((partner, index, array) => {
-                      return (
-                        <div key={index}>
-                          <strong style={{ textTransform: "uppercase" }}>
-                            {partner?.name}
-                          </strong>
-                          , {partner?.nationality},{" "}
-                          {translateMaritalStatus(
-                            partner?.maritalStatus,
-                            partner?.gender
-                          )}
-                          , inscrito no CPF sob o nº{" "}
-                          {maskDocument(partner?.document)}
-                          {index < array.length - 1 ? "," : " e"}{" "}
-                        </div>
-                      );
-                    })}
+                    {isBusiness && (
+                      customer?.partners?.map((partner, index, array) => {
+                        return (
+                          <div key={index}>
+                            <strong style={{ textTransform: "uppercase" }}>
+                              {partner?.name}
+                            </strong>
+                            , {partner?.nationality},{" "}
+                            {translateMaritalStatus(
+                              partner?.maritalStatus,
+                              partner?.gender
+                            )}
+                            , inscrito no CPF sob o nº{" "}
+                            {maskDocument(partner?.document)}
+                            {index < array.length - 1 ? "," : " e"}{" "}
+                          </div>
+                        );
+                      })
+                    )}
+                    {!isBusiness && (
+                      <div>
+                        <strong style={{ textTransform: "uppercase" }}>
+                          {customer?.name}
+                        </strong>
+                        , {customer?.nationality},{" "}
+                        , inscrito no CPF sob o nº{" "}
+                        {maskDocument(customer?.document)}
+                      </div>
+                    )}
                     <strong>
                       FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
                     </strong>

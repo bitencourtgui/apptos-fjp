@@ -17,8 +17,10 @@ import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface OpeningServiceProps {
+  paymentEntry: boolean;
   cashPayment: boolean;
   openingContract: string;
+  accountingPayment: string;
   paymentMethod: "creditcard" | "bankslip";
   monthyFee: string;
   paymentDate: "10" | "15" | "20";
@@ -32,6 +34,8 @@ export const OpeningService = (
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
+
+
       <FormControlLabel
         control={
           <Switch
@@ -57,7 +61,7 @@ export const OpeningService = (
           formik.setFieldValue("openingContract", values.value);
         }}
         customInput={TextField}
-        label="Valor da taxa de"
+        label="Valor da taxa de abertura"
         name="openingContract"
         error={
           formik.touched.openingContract &&
@@ -69,8 +73,48 @@ export const OpeningService = (
         fullWidth
       />
 
+
+
       {!formik.values.cashPayment && (
         <>
+          <FormControlLabel
+            control={
+              <Switch
+                color="primary"
+                edge="start"
+                name="paymentEntry"
+                checked={formik.values.paymentEntry}
+                onChange={() =>
+                  formik.setFieldValue("paymentEntry", !formik.values.paymentEntry)
+                }
+              />
+            }
+            label="O pagamento possui entrada?"
+            sx={{ pl: 2 }}
+          />
+          {formik.values.paymentEntry && (
+            <NumericFormat
+              thousandSeparator="."
+              decimalSeparator=","
+              decimalScale={2}
+              prefix={"R$ "}
+              value={formik.values.accountingPayment}
+              onValueChange={(values) => {
+                formik.setFieldValue("accountingPayment", values.value);
+              }}
+              customInput={TextField}
+              label="Valor de entrada"
+              name="accountingPayment"
+              error={
+                formik.touched.accountingPayment &&
+                Boolean(formik.errors.accountingPayment)
+              }
+              helperText={
+                formik.touched.accountingPayment && formik.errors.accountingPayment
+              }
+              fullWidth
+            />
+          )}
           <FormControl fullWidth>
             <InputLabel id="paymentMethod">Método de pagamento</InputLabel>
             <Select
@@ -105,7 +149,7 @@ export const OpeningService = (
               error={!!(formik.touched.monthyFee && formik.errors.monthyFee)}
             >
               {[
-                ...Array(formik.values.paymentMethod === "bankslip" ? 8 : 10),
+                ...Array(formik.values.paymentMethod === "bankslip" ? 8 : 12),
               ].map((_, index) => (
                 <MenuItem key={index + 1} value={index + 1}>
                   {index + 1}

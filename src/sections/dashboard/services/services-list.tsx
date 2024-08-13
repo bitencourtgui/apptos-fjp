@@ -21,7 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { useMounted } from "../../../hooks/use-mounted";
 import { Scrollbar } from "../../../components/scrollbar";
-import ServicesModal from "./modal";
+import ServicesModal from "./services.modal";
 import CustomersApi from "@/api/customers";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
@@ -142,6 +142,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
               cashPayment,
               openingContract,
               paymentDate,
+              accountingPayment,
               serviceType,
               monthyFee,
               accountingFee,
@@ -212,6 +213,12 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
+                              <TableRow hover key={index}>
+                                <TableCell>0</TableCell>
+                                <TableCell>{formatCurrency(Number(accountingPayment))}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell>Entrada</TableCell>
+                              </TableRow>
                               {[
                                 ...Array(serviceType === "0" ? monthyFee : 12),
                               ].map((_, index) => (
@@ -220,7 +227,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                                   <TableCell>
                                     {serviceType === "0"
                                       ? formatCurrency(
-                                        openingContract / monthyFee
+                                        (openingContract - Number(accountingPayment)) / monthyFee
                                       )
                                       : formatCurrency(accountingFee)}
                                   </TableCell>

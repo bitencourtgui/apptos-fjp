@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours, subMinutes, subMonths } from 'date-fns';
 import { Box, Container, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
-import { useMockedUser } from '../../hooks/use-mocked-user';
 import { usePageView } from '../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../layouts/dashboard';
 import { AccountBillingSettings } from '../../sections/dashboard/account/account-billing-settings';
@@ -10,19 +9,20 @@ import { AccountGeneralSettings } from '../../sections/dashboard/account/account
 import { AccountNotificationsSettings } from '../../sections/dashboard/account/account-notifications-settings';
 import { AccountTeamSettings } from '../../sections/dashboard/account/account-team-settings';
 import { AccountSecuritySettings } from '../../sections/dashboard/account/account-security-settings';
+import { useAuth } from '@/hooks/use-auth';
 
 const now = new Date();
 
 const tabs = [
-  { label: 'General', value: 'general' },
-  { label: 'Billing', value: 'billing' },
-  { label: 'Team', value: 'team' },
-  { label: 'Notifications', value: 'notifications' },
-  { label: 'Security', value: 'security' }
+  { label: 'Geral', value: 'general' },
+  // { label: 'Billing', value: 'billing' },
+  // { label: 'Team', value: 'team' },
+  // { label: 'Notifications', value: 'notifications' },
+  { label: 'Segurança', value: 'security' }
 ];
 
 const Page = () => {
-  const user = useMockedUser();
+  const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('general');
 
   usePageView();
@@ -35,14 +35,14 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Account | Devias Kit PRO
+          FJP | Minha conta
         </title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 3
         }}
       >
         <Container maxWidth="xl">
@@ -51,7 +51,7 @@ const Page = () => {
             sx={{ mb: 3 }}
           >
             <Typography variant="h4">
-              Account
+              Minha conta
             </Typography>
             <div>
               <Tabs

@@ -13,7 +13,7 @@ export const CardFile: React.FC<ICardFile> = ({ name, size, url, time, handleDel
 
 // remover isso daqui
   const handleAssingDocument  = (url) => {
-    console.log('assinar docs', url)
+    console.info('assinar docs', url)
   }
 
   return (

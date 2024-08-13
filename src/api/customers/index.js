@@ -168,7 +168,7 @@ class CustomersApi {
     } catch (error) {
       return {
         status: 901,
-        res: "failure",
+        res: `Falha: ${error}`,
       };
     }
   }

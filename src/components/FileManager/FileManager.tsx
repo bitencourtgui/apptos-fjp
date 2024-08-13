@@ -124,11 +124,11 @@ export const FileManager: React.FC<FileManagerProps> = ({ customerId }) => {
             {empty ? (
               <>
                 <img
-                  src="/assets/errors/empty.jpg"
+                  src="/assets/errors/empty.png"
                   alt="No files found"
-                  width={230}
+                  width={250}
                 />
-                <Typography sx={{ color: "rgb(108, 115, 127)" }}>
+                <Typography color="inherit" variant="body2" m={1}>
                   Nenhum arquivo encontrado
                 </Typography>
               </>

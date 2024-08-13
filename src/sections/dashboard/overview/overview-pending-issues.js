@@ -36,7 +36,7 @@ export const OverviewPendingIssues = (props) => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Typography color="text.secondary" variant="body2">
-            Processos
+            Juridico
           </Typography>
           <Typography color="text.primary" variant="h4">
             {amount}
