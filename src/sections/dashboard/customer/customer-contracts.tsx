@@ -2,28 +2,26 @@ import { useRouter } from "next/navigation";
 import { Box, Card, ListItemText, Tooltip } from "@mui/material";
 
 const contracts = [
-  { id: 1, name: "Contabilidade" },
-  { id: 2, name: "Prestação de serviços" },
+  { id: 1, name: "Contabilidade", path: "contabilidade" },
+  { id: 2, name: "Prestação de serviços", path: "outros-servicos" },
 ];
 
 export const ContractList = ({ customer, hasServices }) => {
   const router = useRouter();
 
-  const handleContractClick = (name: string) => {
-    const contractType = name.toLowerCase();
-    if (hasServices) {
-      router.push(`/contratos/${contractType}/${customer.id}`);
-    }
+  const handleContractClick = (path: string) => {
+    const contractType = path.toLowerCase();
+
+    router.push(`/contratos/${contractType}/${customer.id}`);
   };
 
   return (
     <Box sx={{ display: "flex", gap: 2 }}>
-      {contracts.map(({ name, id }) => (
-
+      {contracts.map(({ name, id, path }) => (
         <Card
           key={id}
           sx={{ cursor: "pointer", width: "100%" }}
-          onClick={() => handleContractClick(name)}
+          onClick={() => handleContractClick(path)}
         >
           <Tooltip
             key={id}
@@ -44,10 +42,8 @@ export const ContractList = ({ customer, hasServices }) => {
               </Box>
             </div>
           </Tooltip>
-
         </Card>
-      ))
-      }
-    </Box >
+      ))}
+    </Box>
   );
 };
