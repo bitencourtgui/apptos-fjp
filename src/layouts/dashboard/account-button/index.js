@@ -39,7 +39,7 @@ export const AccountButton = () => {
             height: 32,
             width: 32
           }}
-          src={user.avatar}
+          src={user.avatar ?? undefined}
         >
           <SvgIcon>
             <User01Icon />

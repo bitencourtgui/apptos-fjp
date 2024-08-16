@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
   Box,
   Stack,
@@ -9,8 +8,8 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Scrollbar } from "../../../components/scrollbar";
-import { UserMenu } from "../../../components/menu-user";
+import { Scrollbar } from "@/components/scrollbar";
+import { UserMenu } from "@/components/menu-user";
 
 export const UserListTable = (props) => {
   const {
@@ -23,7 +22,7 @@ export const UserListTable = (props) => {
     ...other
   } = props;
 
-  function translateRole(role) {
+  function rolesList(role) {
     const roles = {
       developer: "Desenvolvedor",
       intern: "Estagiário",
@@ -39,6 +38,7 @@ export const UserListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
+              <TableCell>Nome</TableCell>
               <TableCell>Usuário</TableCell>
               <TableCell>Função</TableCell>
               <TableCell align="right">Ações</TableCell>
@@ -50,13 +50,18 @@ export const UserListTable = (props) => {
                 <TableRow hover key={user.id}>
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
+                      <Typography variant="body2">{user.name}</Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell>
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="body2">{user.user}</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="body2">
-                        {translateRole(user.role)}
+                        {rolesList(user.role)}
                       </Typography>
                     </Stack>
                   </TableCell>
@@ -70,28 +75,6 @@ export const UserListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
-      {/* <TablePagination
-        component="div"
-        count={customersCount}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[10, 25, 50]}
-        labelRowsPerPage="Linhas por página:"
-        labelDisplayedRows={({ from, to, count }) =>
-          `${from}-${to} de ${count}`
-        }
-      /> */}
     </Box>
   );
-};
-
-UserListTable.propTypes = {
-  customers: PropTypes.array.isRequired,
-  customersCount: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  onRowsPerPageChange: PropTypes.func,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
 };

@@ -197,6 +197,8 @@ const FeeContract = () => {
       "Sexto",
     ];
 
+    console.log("services", services);
+
     if (services) {
       return (
         <>
@@ -253,9 +255,12 @@ const FeeContract = () => {
                             )} (${numberInWords(
                               service?.accountingPayment
                             )}) e o restante `
-                          : ""}
+                          : ""}{" "}
                         parcelado em {service?.monthyFee}x de{" "}
-                        {formatBRL(monthyPrice)} ({numberInWords(monthyPrice)})
+                        {formatBRL(monthyPrice)} ({numberInWords(monthyPrice)}){" "}
+                        {service?.paymentMethod === "bankslip"
+                          ? "no Boleto"
+                          : "no Cartão de Crédito"}
                       </p>
                     )}
                     <p>
@@ -1242,7 +1247,13 @@ const FeeContract = () => {
                             )}
                             , inscrito no CPF sob o nº{" "}
                             {maskDocument(partner?.document)}
-                            {index < array.length - 1 ? "," : " e"}{" "}
+                            {index < array.length - 1 ? "," : " e"} e {" "}
+                            <strong>
+                              FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
+                            </strong>
+                            , inscrita no CNPJ nº 50.675.326/0001-97,
+                            denominadas PARTES, devidamente qualificadas no
+                            contrato vinculado.
                           </div>
                         );
                       })}
@@ -1252,14 +1263,14 @@ const FeeContract = () => {
                           {customer?.name}
                         </strong>
                         , {customer?.nationality}, , inscrito no CPF sob o nº{" "}
-                        {maskDocument(customer?.document)}
+                        {maskDocument(customer?.document)} e {" "}
+                        <strong>
+                          FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
+                        </strong>
+                        , inscrita no CNPJ nº 50.675.326/0001-97, denominadas
+                        PARTES, devidamente qualificadas no contrato vinculado.
                       </div>
                     )}
-                    <strong>
-                      FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
-                    </strong>
-                    , inscrita no CNPJ nº 50.675.326/0001-97, denominadas
-                    PARTES, devidamente qualificadas no contrato vinculado.
                   </p>
                   <p style={{ marginTop: "10px" }}>
                     Cláusula primeira. Descrição das atividades a serem

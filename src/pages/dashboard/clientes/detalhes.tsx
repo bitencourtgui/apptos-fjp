@@ -152,7 +152,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
   });
 
   const [hasServices, setHasServices] = useState<boolean>(false);
-  const isBusiness = customer?.business?.corporateName !== "";
+  const isBusiness = customer?.business?.corporateName.lenght > 1;
 
   useEffect(() => {
     if (!hasServices) {
@@ -266,7 +266,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                 <Grid xs={12} lg={4}>
                   <CustomerBasicDetails customer={customer} />
                 </Grid>
-                <Grid xs={12} lg={8}>
+                {hasServices && (        <Grid xs={12} lg={8}>
                   <Stack spacing={4}>
                     <ContractList
                       customer={customer}
@@ -274,11 +274,12 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                     />
                     {customer && <FileManager customerId={customer.id} />}
                   </Stack>
-                </Grid>
+                </Grid>)}
+        
               </Grid>
             )}
             {currentTab === "services" && <ServicesList id={customer?.id} />}
-            {currentTab === "partners" && (
+            {(currentTab === "partners" && isBusiness) && (
               <CustomerPartners
                 getCustomer={getCustomer}
                 customers={customer}

@@ -28,7 +28,9 @@ export const CustomerEditForm = ({ customer, ...other }) => {
   const { getTenant } = useAuth();
   const gt = getTenant();
 
-  const [IsLegalPerson, setLegalPerson] = useState(true);
+  const isBusiness = customer?.business?.corporateName.lenght > 1;
+
+  const [IsLegalPerson, setLegalPerson] = useState(isBusiness);
 
   const onSubmit = async (values, helpers) => {
     try {

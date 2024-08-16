@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import Head from "next/head";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import {
   Box,
@@ -18,7 +17,7 @@ import { UserListTable } from "../../../sections/dashboard/users/users-list-tabl
 import { t } from "i18next";
 import { tokens } from "../../../locales/tokens";
 import UserApi from "../../../api/users";
-import { UserDrawer } from "../../../sections/dashboard/users/user-drawer";
+import { Head } from "@/components/Head";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -75,7 +74,7 @@ const UsuariosDash = () => {
   });
 
   const { search, updateSearch } = useSearch();
-  const { customers, reload } = useCustomers();
+  const { customers } = useCustomers();
 
   usePageView();
 
@@ -99,18 +98,9 @@ const UsuariosDash = () => {
     [updateSearch]
   );
 
-  const handleOrderClose = useCallback(() => {
-    setDrawer({
-      isOpen: false,
-      data: undefined,
-    });
-  }, []);
-
   return (
     <>
-      <Head>
-        <title>Usuários | FA</title>
-      </Head>
+      <Head page="Usuários" />
       <Box
         component="main"
         sx={{
@@ -151,12 +141,6 @@ const UsuariosDash = () => {
               />
             </Card>
           </Stack>
-          <UserDrawer
-            container={rootRef.current}
-            onClose={handleOrderClose}
-            open={drawer.isOpen}
-            reload={reload}
-          />
         </Container>
       </Box>
     </>

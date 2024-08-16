@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import Head from "next/head";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import {
   Box,
@@ -15,10 +14,8 @@ import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerListSearch } from "@/sections/dashboard/customer/customer-list-search";
 import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
-import { t } from "i18next";
-import { tokens } from "../../../locales/tokens";
 import customersApi from "../../../api/customers";
-import { useAuth } from "../../../hooks/use-auth";
+import { Head } from "@/components/Head";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -76,88 +73,57 @@ const useCustomers = (search) => {
 const ClientesDash = () => {
   const { search, updateSearch } = useSearch();
   const { customers, customersCount } = useCustomers(search);
-  const { getTenant } = useAuth();
-  const gt = getTenant();
 
   usePageView();
 
-  const handleFiltersChange = useCallback(
-    (filters) => {
+  const handleFiltersChange = useCallback((filters) => {
       updateSearch((prevState) => ({
         ...prevState,
         filters,
       }));
-    },
-    [updateSearch]
-  );
+    },[updateSearch]);
 
-  const handleSortChange = useCallback(
-    (sort) => {
-      updateSearch((prevState) => ({
-        ...prevState,
-        sortBy: sort.sortBy,
-        sortDir: sort.sortDir,
-      }));
-    },
-    [updateSearch]
-  );
-
-  const handlePageChange = useCallback(
-    (event, page) => {
+  const handlePageChange = useCallback((event, page) => {
       updateSearch((prevState) => ({
         ...prevState,
         page,
       }));
-    },
-    [updateSearch]
-  );
+    },[updateSearch]);
 
-  const handleRowsPerPageChange = useCallback(
-    (event) => {
+  const handleRowsPerPageChange = useCallback((event) => {
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
       }));
-    },
-    [updateSearch]
-  );
+    },[updateSearch]);
 
   return (
     <>
-      <Head>
-        <title>Clientes | FJP</title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-        }}
-      >
-        <Container maxWidth="xl">
+      <Head page="Clientes" />
+      <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
+        <Container maxWidth={false}>
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
-              <Stack spacing={1}>
-                <Typography variant="h4">
-                  {t(tokens.nav.customers).toString()}
-                </Typography>
+              <Stack>
+                <Typography variant="h4">Clientes</Typography>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
-                  href={`/${gt}/clientes/adicionar`}
+                  href="/tributario/clientes/adicionar"
+                  size="small"
+                  variant="contained"
                   startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
                   }
-                  variant="contained"
-                >
-                  {t(tokens.nav.add).toString()}
+                 >
+                  Adicionar
                 </Button>
               </Stack>
             </Stack>
             <Card>
-              <CustomerListSearch onFiltersChange={handleFiltersChange}/>
+              <CustomerListSearch onFiltersChange={handleFiltersChange} />
               <CustomerListTable
                 customers={customers}
                 customersCount={customersCount}

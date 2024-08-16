@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useCallback, useEffect } from "react";
-import Head from "next/head";
 import {
   Box,
   Container,
@@ -16,6 +15,8 @@ import { OverviewDoneTasks } from "../../sections/dashboard/overview/overview-do
 import { OverviewPendingIssues } from "../../sections/dashboard/overview/overview-pending-issues";
 import { OverviewHelp } from "../../sections/dashboard/overview/overview-help";
 import { OverviewOpenTickets } from "../../sections/dashboard/overview/overview-open-tickets";
+
+import { Head } from "@/components/Head";
 
 import { useMounted } from "../../hooks/use-mounted";
 import CustomersApi from "../../api/customers";
@@ -80,9 +81,8 @@ const Page = () => {
 
   return (
     <>
-      <Head>
-        <title>tributario | FJP</title>
-      </Head>
+      <Head page="Visão Geral" />
+       
       <Box
         component="main"
         sx={{

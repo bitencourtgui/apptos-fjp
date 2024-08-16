@@ -33,7 +33,7 @@ export const OptionsColorScheme = (props) => {
         color="text.secondary"
         variant="overline"
       >
-        Modo escuro
+        Tema
       </Typography>
       <Stack
         alignItems="center"

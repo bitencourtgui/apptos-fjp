@@ -20,18 +20,6 @@ export const UserMenu = ({ user, ...props }) => {
 
   const [userData, setUserData] = useState(null);
 
-  const fetchUserData = useCallback(async () => {
-    try {
-      const data = await getUser(user.uuid);
-      setUserData(data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      toast.error("Erro ao buscar dados do usuário");
-    }
-  }, [getUser, user.uuid]);
-
-
-
   const handleMenuOpen = useCallback(() => {
     setOpenMenu(true);
   }, []);
@@ -39,7 +27,6 @@ export const UserMenu = ({ user, ...props }) => {
   const handleMenuClose = useCallback(() => {
     setOpenMenu(false);
   }, []);
-
 
   const handleResetPassword = useCallback(async () => {
     setOpenMenu(false);

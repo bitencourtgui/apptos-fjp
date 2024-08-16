@@ -47,10 +47,9 @@ const ServicesModal = ({
 }: ServicesModalProps) => {
   dayjs.locale("pt-br");
 
-  const isBusiness = customers?.business?.corporateName.lenght > 1;
+  const isBusiness = customers?.business?.corporateName?.length > 1;
 
-  const [service, setService] = useState(isBusiness ? "1" : "0");
-
+  const [service, setService] = useState("10");
 
   const onSubmit = async (values, helpers) => {
     values.serviceType = service;
@@ -75,17 +74,22 @@ const ServicesModal = ({
   };
 
 
+  const defaultOptions = [{ value: "10", label: "Outros Serviços" }];
+
   const serviceOptions = isBusiness
     ? [
-      { value: "1", label: "Contabilidade Empresarial" },
-      { value: "2", label: "Desenquadramento" },
-      { value: "3", label: "Planejamento Tributário" },
-      { value: "4", label: "Isenção de IR" },
-      { value: "5", label: "Defesa Administrativa" },
-    ]
+        { value: "1", label: "Contabilidade Empresarial" },
+        { value: "2", label: "Desenquadramento" },
+        { value: "3", label: "Planejamento Tributário" },
+        { value: "4", label: "Isenção de IR" },
+        { value: "5", label: "Defesa Administrativa" },
+        ...defaultOptions,
+      ]
     : [
-      { value: "0", label: "Abertura de Empresa" },
-    ];
+        { value: "0", label: "Abertura de Empresa" },
+        ...defaultOptions,
+      ];
+  
 
   function getSchema(service: string) {
     switch (service) {

@@ -79,7 +79,7 @@ export const SettingsDrawer = (props) => {
             pt: 2,
           }}
         >
-          <Typography variant="h6">Cofigurações</Typography>
+          <Typography variant="h6">Ajsutes</Typography>
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <Badge
               anchorOrigin={{
