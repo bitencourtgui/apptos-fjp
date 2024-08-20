@@ -1,36 +1,18 @@
 /** @type {import('next').NextConfig} */
-const config = {
-  swcMinify: true,
-  reactStrictMode: false,
-  experimental: {
-    appDir: false
-  },
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack']
-    });
-    return config;
-  },
-  async redirects() {
-    return [
-      {
-        source: '/docs',
-        destination: '/docs/welcome',
-        permanent: true
-      }
-    ];
-  }
+const nextConfig = {
+  trailingSlash: true,
+  staticPageGenerationTimeout: 1000,
 };
 
-// Remove this if you're not using Fullcalendar features
-const withTM = require('next-transpile-modules')([
-  '@fullcalendar/common',
-  '@fullcalendar/react',
-  '@fullcalendar/daygrid',
-  '@fullcalendar/list',
-  '@fullcalendar/timegrid',
-  '@fullcalendar/timeline'
-]);
+// // Configuração do next-transpile-modules para transpilar pacotes do Fullcalendar
+// const withTM = require("next-transpile-modules")([
+//   "@fullcalendar/common",
+//   "@fullcalendar/react",
+//   "@fullcalendar/daygrid",
+//   "@fullcalendar/list",
+//   "@fullcalendar/timegrid",
+//   "@fullcalendar/timeline",
+// ]);
 
-module.exports = withTM(config);
+// Exportando a configuração final com next-transpile-modules
+module.exports = nextConfig
