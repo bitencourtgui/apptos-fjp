@@ -135,6 +135,7 @@ export const PrivatePerson = (formik: PrivatePersonWithPocket) => {
           />
         </Grid>
       )}
+      {formik.pocket && (
         <Grid xs={12} md={3}>
           <TextField
             error={!!(formik.touched.occupation && formik.errors.occupation)}
@@ -147,6 +148,7 @@ export const PrivatePerson = (formik: PrivatePersonWithPocket) => {
             value={formik.values.occupation}
           />
         </Grid>
+      )}
       <Grid xs={12} md={3}>
         <TextField
           error={!!(formik.touched.rg && formik.errors.rg)}
