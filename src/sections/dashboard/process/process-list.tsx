@@ -51,7 +51,7 @@ export const ProcessList = (customer: any) => {
             }
             onClick={() =>
               router.push(
-                `/juridico/adicionar?customerId=${customer.id}`
+                `/${gt}/processos/adicionar?customerId=${customer.id}`
               )
             }
             variant="contained"

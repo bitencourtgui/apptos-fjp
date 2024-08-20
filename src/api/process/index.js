@@ -72,9 +72,6 @@ class ProcessApi {
   }
 
   static async setProcess(processId, values) {
-
-    console.log('data:', processId, values)
-
     try {
       await setDoc(doc(db, processCollection, processId), values);
 

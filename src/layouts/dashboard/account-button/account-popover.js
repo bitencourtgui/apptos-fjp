@@ -64,6 +64,8 @@ export const AccountPopover = (props) => {
     }
   }, [auth, router, onClose]);
 
+  console.log("user", user);
+
   return (
     <Popover
       anchorEl={anchorEl}
