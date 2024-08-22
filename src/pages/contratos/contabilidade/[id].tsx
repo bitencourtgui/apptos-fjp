@@ -53,11 +53,15 @@ const FeeContract = () => {
 
   const customer = useCustomer(customerId);
 
+  const serviceTypes = customer?.services
+    .map((service) => String(service.serviceType))
+    .join("");
+
   useEffect(() => {
     if (customer?.name || customer?.business?.corporateName) {
       const titleName = customer.name || customer.business.corporateName;
-      document.title = `Contrato contábil - ${titleName.toUpperCase()}`;
-      handleLoad();
+      document.title = `[${serviceTypes}] Contrato Contábil - ${titleName.toUpperCase()}`;
+      // handleLoad();
     }
   }, [customer]);
 
@@ -147,7 +151,7 @@ const FeeContract = () => {
     customer?.document || customer?.business?.document || "";
   const firstEightDigits = documentValue.substring(0, 8);
 
-  const isBusiness = customer?.business?.corporateName.lenght > 1;
+  const isBusiness = customer?.business?.corporateName.length > 1;
 
   const calculatePaymentDate = (createdAt: string, paymentDate: number) => {
     const [day, month, year] = createdAt.split("/").map(Number);
@@ -163,7 +167,7 @@ const FeeContract = () => {
     }
 
     const dd = String(paymentDueDate.getDate()).padStart(2, "0");
-    const mm = String(paymentDueDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const mm = String(paymentDueDate.getMonth() + 1).padStart(2, "0");
     const yyyy = paymentDueDate.getFullYear();
 
     return `${dd}/${mm}/${yyyy}`;
@@ -533,7 +537,7 @@ const FeeContract = () => {
                         customer.maritalStatus,
                         customer.gender
                       )}
-                      , {customer.occupation ? `${customer.occupation},` : ""}
+                      {customer.occupation ? `${customer.occupation},` : ""}
                       inscrito no CPF sob o nº {maskDocument(customer.document)}
                       , documento de identificação RG nº {customer.rg} SSP/SP,
                       residente e domiciliado na{" "}
@@ -1247,7 +1251,7 @@ const FeeContract = () => {
                             )}
                             , inscrito no CPF sob o nº{" "}
                             {maskDocument(partner?.document)}
-                            {index < array.length - 1 ? "," : " e"} e {" "}
+                            {index < array.length - 1 ? "," : " e"} e{" "}
                             <strong>
                               FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
                             </strong>
@@ -1263,7 +1267,7 @@ const FeeContract = () => {
                           {customer?.name}
                         </strong>
                         , {customer?.nationality}, , inscrito no CPF sob o nº{" "}
-                        {maskDocument(customer?.document)} e {" "}
+                        {maskDocument(customer?.document)} e{" "}
                         <strong>
                           FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
                         </strong>

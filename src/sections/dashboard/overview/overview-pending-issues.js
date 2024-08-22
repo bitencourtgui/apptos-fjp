@@ -47,7 +47,7 @@ export const OverviewPendingIssues = (props) => {
       <CardActions>
         <Button
           color="inherit"
-          href={`/${gt}/processos`}
+          href={`/juridico`}
           endIcon={
             <SvgIcon>
               <ArrowRightIcon />

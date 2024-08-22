@@ -146,7 +146,7 @@ const FeeContract = () => {
     customer?.document || customer?.business?.document || "";
   const firstEightDigits = documentValue.substring(0, 8);
 
-  const isBusiness = customer?.business?.corporateName.lenght > 1;
+  const isBusiness = customer?.business?.corporateName.length > 1;
 
   const calculatePaymentDate = (createdAt: string, paymentDate: number) => {
     const [day, month, year] = createdAt.split("/").map(Number);

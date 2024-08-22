@@ -47,7 +47,7 @@ const AdicionarProcessos = ({ userId }) => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={`/${gt}/processos`}
+                  href={`/juridico`}
                   variant="subtitle2"
                 >
                   Processos

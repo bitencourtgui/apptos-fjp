@@ -201,7 +201,7 @@ export const CardProcess = ({
                 <Button
                   variant="contained"
                   onClick={() =>
-                    router.push(`/${gt}/processos/${props.id}/editar`)
+                    router.push(`/juridico/${props.id}/editar`)
                   }
                 >
                   Editar

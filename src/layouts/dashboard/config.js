@@ -1,9 +1,10 @@
 import { SvgIcon } from "@mui/material";
-import HomeSmileIcon from "@/icons/untitled-ui/duocolor/home-smile";
-import Server05 from "@/icons/untitled-ui/duocolor/server-05";
-import Users03Icon from "@/icons/untitled-ui/duocolor/users-03";
 import { tokens } from "@/locales/tokens";
 import { paths } from "@/paths";
+import BankIcon from "@/icons/untitled-ui/duocolor/bank";
+import Server05 from "@/icons/untitled-ui/duocolor/server-05";
+import Users03Icon from "@/icons/untitled-ui/duocolor/users-03";
+import HomeSmileIcon from "@/icons/untitled-ui/duocolor/home-smile";
 import FaceIdSquare from "@untitled-ui/icons-react/build/esm/FaceIdSquare";
 
 export const getSections = (t, gt) => [
@@ -28,6 +29,15 @@ export const getSections = (t, gt) => [
         icon: (
           <SvgIcon fontSize="small">
             <Users03Icon color="#CFA950"/>
+          </SvgIcon>
+        ),
+      },
+      {
+        title: "Jurídico",
+        path: `/juridico`,
+        icon: (
+          <SvgIcon fontSize="small">
+            <BankIcon color="#CFA950" />
           </SvgIcon>
         ),
       },

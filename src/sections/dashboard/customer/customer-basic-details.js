@@ -12,6 +12,8 @@ import { phoneMask } from "@/utils/masks/phoneMask";
 export const CustomerBasicDetails = ({ customer }) => {
   const hasCnpj = customer?.business?.document?.length >= 1;
 
+  console.log(customer)
+
   const hasComplement =
     customer?.address?.complement || customer?.businessComplement?.length >= 1
       ? `, ${customer?.address?.complement || customer?.businessComplement}, `

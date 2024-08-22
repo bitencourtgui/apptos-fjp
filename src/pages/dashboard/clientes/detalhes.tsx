@@ -36,11 +36,13 @@ import { useFormik } from "formik";
 import { customersInitial } from "@/sections/dashboard/customer/customer-initial";
 import { businessSchema } from "@/sections/dashboard/customer/customer-schema";
 import CustomersApi from "../../../api/customers";
+import { ProcessList } from "@/sections/dashboard/process/process-list";
 
 const tabs = [
   { label: "Detalhes", value: "details" },
   { label: "Serviços", value: "services" },
   { label: "Sócios", value: "partners" },
+  { label: "Processos", value: "legal" },
 ];
 
 const useCustomer = (userId: string) => {
@@ -152,7 +154,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
   });
 
   const [hasServices, setHasServices] = useState<boolean>(false);
-  const isBusiness = customer?.business?.corporateName.lenght > 1;
+  const isBusiness = customer?.business?.corporateName.length > 1;
 
   useEffect(() => {
     if (!hasServices) {
@@ -266,16 +268,18 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                 <Grid xs={12} lg={4}>
                   <CustomerBasicDetails customer={customer} />
                 </Grid>
-                {hasServices && (        <Grid xs={12} lg={8}>
+                <Grid xs={12} lg={8}>
                   <Stack spacing={4}>
-                    <ContractList
-                      customer={customer}
-                      hasServices={hasServices}
-                    />
+                    {hasServices && (
+                      <ContractList
+                        customer={customer}
+                        hasServices={hasServices}
+                      />
+                    )}
+
                     {customer && <FileManager customerId={customer.id} />}
                   </Stack>
-                </Grid>)}
-        
+                </Grid>
               </Grid>
             )}
             {currentTab === "services" && <ServicesList id={customer?.id} />}
@@ -285,6 +289,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                 customers={customer}
               />
             )}
+            {currentTab === "legal" && <ProcessList {...customer} />}
           </Stack>
         </Container>
       </Box>

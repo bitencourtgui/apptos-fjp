@@ -1,28 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
-import Head from "next/head";
 import NextLink from "next/link";
-import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import {
   Box,
   Breadcrumbs,
-  Button,
   Card,
   Container,
   Link,
   Stack,
-  SvgIcon,
   Typography,
 } from "@mui/material";
-import ProcessApi from "../../../api/process";
-import { BreadcrumbsSeparator } from "../../../components/breadcrumbs-separator";
-import { useMounted } from "../../../hooks/use-mounted";
-import { usePageView } from "../../../hooks/use-page-view";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { paths } from "../../../paths";
-import { ProductListSearch } from "../../../sections/dashboard/product/product-list-search";
-import { ProcessListTable } from "../../../sections/dashboard/process/process-list-table";
-import { useAuth } from "../../../hooks/use-auth";
-import { capitalize } from "../../../utils/capitalize";
+import ProcessApi from "@/api/process";
+import { BreadcrumbsSeparator } from "@/components/breadcrumbs-separator";
+import { useMounted } from "@/hooks/use-mounted";
+import { usePageView } from "@/hooks/use-page-view";
+import { Layout as DashboardLayout } from "@/layouts/dashboard";
+import { ProductListSearch } from "@/sections/dashboard/product/product-list-search";
+import { ProcessListTable } from "@/sections/dashboard/process/process-list-table";
+import { useAuth } from "@/hooks/use-auth";
+import { capitalize } from "@/utils/capitalize";
+
+import { Head } from "@/components/Head";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -115,9 +112,7 @@ const ListaProcessos = () => {
 
   return (
     <>
-      <Head>
-        <title>Processos | FJP</title>
-      </Head>
+      <Head page="Processos"/>
       <Box
         component="main"
         sx={{
@@ -151,21 +146,6 @@ const ListaProcessos = () => {
                     Lista
                   </Typography>
                 </Breadcrumbs>
-              </Stack>
-              <Stack alignItems="center" direction="row" spacing={3}>
-                {/*@TODO: criar pagina de criar processos*/}
-                {/* <Button
-                  component={NextLink}
-                  href={paths.dashboard.products.create}
-                  startIcon={
-                    <SvgIcon>
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                >
-                  Novo processo
-                </Button> */}
               </Stack>
             </Stack>
             <Card>

@@ -8,13 +8,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { usePageView } from "../../../hooks/use-page-view";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { BreadcrumbsSeparator } from "../../../components/breadcrumbs-separator";
+import { usePageView } from "@/hooks/use-page-view";
+import { Layout as DashboardLayout } from "@/layouts/dashboard";
+import { BreadcrumbsSeparator } from "@/components/breadcrumbs-separator";
 import { useRouter } from "next/router";
-import { ProcessEditForm } from "../../../sections/dashboard/process/process-edit-form";
-import { useAuth } from "../../../hooks/use-auth";
-import { capitalize } from "../../../utils/capitalize";
+import { ProcessEditForm } from "@/sections/dashboard/process/process-edit-form";
+import { useAuth } from "@/hooks/use-auth";
+import { capitalize } from "@/utils/capitalize";
 
 const EditarProcessoDash = ({ userId }) => {
   usePageView();
@@ -24,7 +24,7 @@ const EditarProcessoDash = ({ userId }) => {
   return (
     <>
       <Head>
-        <title>Editar Processo | FJP</title>
+        <title>Editar Processo | FA</title>
       </Head>
       <Box
         component="main"

@@ -28,7 +28,7 @@ export const CustomerEditForm = ({ customer, ...other }) => {
   const { getTenant } = useAuth();
   const gt = getTenant();
 
-  const isBusiness = customer?.business?.corporateName.lenght > 1;
+  const isBusiness = customer?.business?.corporateName.length > 1;
 
   const [IsLegalPerson, setLegalPerson] = useState(isBusiness);
 
