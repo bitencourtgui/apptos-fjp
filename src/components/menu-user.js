@@ -16,9 +16,7 @@ import toast from "react-hot-toast";
 export const UserMenu = ({ user, ...props }) => {
   const anchorRef = useRef(null);
   const [openMenu, setOpenMenu] = useState(false);
-  const { sendPasswordResetEmail, getUser } = useAuth();
-
-  const [userData, setUserData] = useState(null);
+  const { sendPasswordResetEmail } = useAuth();
 
   const handleMenuOpen = useCallback(() => {
     setOpenMenu(true);
@@ -33,17 +31,17 @@ export const UserMenu = ({ user, ...props }) => {
     try {
       await sendPasswordResetEmail(user.user);
 
-      toast.success("Solicitação de redefinição de senha enviada");
+      toast.success("Redefinição de senha solicitada");
     } catch (err) {
       console.error(err);
-      toast.error("Erro ao solicitação de redefinição de senha");
+      toast.error("Erro na solicitação de redefinição de senha");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <Tooltip title="More options">
+      <Tooltip title="Mais opções">
         <IconButton onClick={handleMenuOpen} ref={anchorRef} {...props}>
           <SvgIcon>
             <DotsHorizontalIcon />

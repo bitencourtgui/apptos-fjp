@@ -22,8 +22,6 @@ export const AccountGeneralSettings = (props) => {
 
   const { user, updateUserName } = useAuth();
 
-  console.log(user);
-
   const [name, setName] = useState(initialName);
 
   const handleNameChange = (event) => {

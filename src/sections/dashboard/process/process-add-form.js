@@ -46,7 +46,7 @@ export const ProcessAddForm = (props) => {
           toast.success("Cliente cadastrado");
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          router.push(`/${gt}/clientes/${customerId}`);
+          router.push(`/clientes/${customerId}`);
         }
       } catch (err) {
         toast.error("Falha ao cadastrar client6");
@@ -257,7 +257,7 @@ export const ProcessAddForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={`/${gt}/clientes`}
+            href="/clientes"
           >
             Cancelar
           </Button>

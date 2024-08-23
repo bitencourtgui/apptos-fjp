@@ -47,7 +47,7 @@ export const OverviewDoneTasks = (props) => {
       <CardActions>
         <Button
           color="inherit"
-          href={`/${gt}/clientes`}
+          href="/clientes"
           endIcon={
             <SvgIcon>
               <ArrowRightIcon />

@@ -18,36 +18,12 @@ import {
 import React, { useEffect, useState, useCallback } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { useMounted } from "../../../hooks/use-mounted";
-import { Scrollbar } from "../../../components/scrollbar";
+import { Scrollbar } from "@/components/scrollbar";
 import ServicesModal from "./services.modal";
 import CustomersApi from "@/api/customers";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
-
-const useCustomer = (userId: string) => {
-  const isMounted = useMounted();
-
-  const [customer, setCustomer] = useState(null);
-
-  const getCustomer = useCallback(async () => {
-    try {
-      const response = await CustomersApi.getCustomer(userId.toString());
-
-      if (isMounted()) {
-        setCustomer(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(() => {
-    getCustomer();
-  }, []);
-
-  return { customer, getCustomer };
-};
+import { useCustomer } from "@/hooks/useCustomer";
 
 const CardServices = ({ children }: { children: JSX.Element[] }) => {
   return (
@@ -247,11 +223,16 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                                           paymentDate,
                                           index
                                         )
-                                      : calculateDueDate(
-                                          others.createdAt,
-                                          others.accountingDate.split("-")[2],
-                                          index
-                                        )}
+                                      : // calculateDueDate(
+                                        //     others.createdAt,
+                                        //     others?.accountingDate
+                                        //       ? others?.accountingDate?.split(
+                                        //           "-"
+                                        //         )[2]
+                                        //       : new Date(),
+                                        //     index
+                                        //   )
+                                        "13/25/9999"}
                                   </TableCell>
                                   <TableCell>
                                     {others.paymentMethod === "creditcard"

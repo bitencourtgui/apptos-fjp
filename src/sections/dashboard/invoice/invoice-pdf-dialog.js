@@ -1,53 +1,45 @@
-import PropTypes from 'prop-types';
-import { PDFViewer } from '@react-pdf/renderer';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
-import { Box, Button, Dialog, SvgIcon } from '@mui/material';
-import { InvoicePdfDocument } from './invoice-pdf-document';
+import { PDFViewer } from "@react-pdf/renderer";
+import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
+import { Box, Button, Dialog, SvgIcon } from "@mui/material";
+import { AberturaDeEmpresa } from "@/sections/contratos/tipos/abertura-empresa";
 
 export const InvoicePdfDialog = (props) => {
-  const { invoice, onClose, open = false, ...other } = props;
+  const { contract, onClose, open = false, ...other } = props;
 
-  if (!invoice) {
+  if (!contract) {
     return null;
   }
 
   return (
-    <Dialog
-      fullScreen
-      open={open}
-      {...other}>
+    <Dialog fullScreen open={open} {...other}>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%'
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
         }}
       >
         <Box
           sx={{
-            backgroundColor: 'background.paper',
-            p: 2
+            backgroundColor: "background.paper",
+            p: 2,
           }}
         >
           <Button
             color="inherit"
-            startIcon={(
+            startIcon={
               <SvgIcon>
                 <ArrowLeftIcon />
               </SvgIcon>
-            )}
+            }
             onClick={onClose}
           >
             Fechar
           </Button>
         </Box>
         <Box sx={{ flexGrow: 1 }}>
-          <PDFViewer
-            height="100%"
-            style={{ border: 'none' }}
-            width="100%"
-          >
-            <InvoicePdfDocument invoice={invoice} />
+          <PDFViewer height="100%" style={{ border: "none" }} width="100%">
+            <AberturaDeEmpresa contract={contract} />
           </PDFViewer>
         </Box>
       </Box>
@@ -55,9 +47,3 @@ export const InvoicePdfDialog = (props) => {
   );
 };
 
-InvoicePdfDialog.propTypes = {
-  // @ts-ignore
-  invoice: PropTypes.object,
-  onClose: PropTypes.func,
-  open: PropTypes.bool
-};

@@ -11,7 +11,6 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { translateMaritalStatus } from "@/utils/translate";
 import { maskDocument } from "@/utils/masks/maskDocument";
-import { phoneMask } from "@/utils/masks/phoneMask";
 import { numberInWords } from "@/utils/number-in-words";
 
 const useStyles = () => {
@@ -251,29 +250,12 @@ const useStyles = () => {
         textAlign: "center",
       },
     });
-  }, [theme]);
+  }, []);
 };
 
-export const InvoicePdfDocument = ({ contract }) => {
+export const AberturaDeEmpresa = ({ contract }) => {
   const styles = useStyles();
   const today = new Date();
-
-  const customerData = contract;
-
-
-  const isBusiness = customerData?.business?.corporateName.length > 1;
-  const customer = isBusiness ? customerData?.business : customerData;
-
-  const partners = customer?.partners;
-  const address = `${customer.address?.street || ""}, nº ${
-    customer.address?.number || ""
-  }, ${customer.address?.neighborhood || ""}, ${
-    customer.address?.city || ""
-  }, ${customer.address?.state || ""} - CEP ${
-    customer.address?.postalCode || ""
-  }`;
-
-  const contractNumber = customer?.document?.substring(0, 8);
 
   function formatBRL(value) {
     const currency = Number(value);
@@ -315,35 +297,18 @@ export const InvoicePdfDocument = ({ contract }) => {
       "Quinto",
       "Sexto",
     ];
-    const servicesMap = [
-      "Abertura de Empresa",
-      "Contabilidade Empresarial",
-      "Desenquadramento",
-      "Planejamento Tributário",
-      "Isenção de IR",
-      "Defesa Administrativa",
-    ];
 
     return services
-      .sort((a, b) => a.serviceType - b.serviceType)
-      .map(({ serviceType }, index) => (
+      .sort((a, b) => a.type - b.type)
+      .map((service, index) => (
         <Text style={[styles.body2, styles.contractText]} key={index}>
           {`Objeto ${labels[index]} – `}
-          <Text style={styles.boldText}>{servicesMap[serviceType]}</Text>
+          <Text style={styles.boldText}>{service.name}</Text>
         </Text>
       ));
   }
 
   function getContractServicesDetails(services) {
-    const servicesMap = {
-      0: "Abertura de Empresa",
-      1: "Contabilidade Empresarial",
-      2: "Desenquadramento",
-      3: "Planejamento Tributário",
-      4: "Isenção de IR",
-      5: "Defesa Administrativa",
-    };
-
     const objectLabels = [
       "Primeiro",
       "Segundo",
@@ -357,7 +322,7 @@ export const InvoicePdfDocument = ({ contract }) => {
       return (
         <>
           {services.map((service, index) => {
-            if (service?.serviceType === "0" && !isBusiness) {
+            if (service.type === "0") {
               const priceWithEntry =
                 (service?.openingContract -
                   Number(service?.accountingPayment)) /
@@ -375,9 +340,7 @@ export const InvoicePdfDocument = ({ contract }) => {
                       style={styles.body2}
                     >{`Objeto ${objectLabels[index]}`}</Text>
                     <Text style={styles.body2}>
-                      <Text style={styles.boldText}>
-                        {servicesMap[service.serviceType]}
-                      </Text>
+                      <Text style={styles.boldText}>{service.name}</Text>
                     </Text>
                   </View>
                   <View style={styles.paymentDetails2}>
@@ -420,7 +383,7 @@ export const InvoicePdfDocument = ({ contract }) => {
               );
             }
 
-            if (service?.serviceType === "1" && isBusiness) {
+            if (service.type === "1") {
               return (
                 <View style={styles.payment} wrap={false} key={index}>
                   <View style={styles.paymentDetails}>
@@ -428,9 +391,7 @@ export const InvoicePdfDocument = ({ contract }) => {
                       style={styles.body2}
                     >{`Objeto ${objectLabels[index]}`}</Text>
                     <Text style={styles.body2}>
-                      <Text style={styles.boldText}>
-                        {servicesMap[service.serviceType]}
-                      </Text>
+                      <Text style={styles.boldText}>{service.name}</Text>
                     </Text>
                     <Text style={styles.body2}>
                       <Text style={styles.boldText}>
@@ -493,7 +454,7 @@ export const InvoicePdfDocument = ({ contract }) => {
               );
             }
 
-            if (service?.serviceType === "2" && isBusiness) {
+            if (service.type === "2") {
               return (
                 <View style={styles.payment} wrap={false} key={index}>
                   <View style={styles.paymentDetails}>
@@ -501,9 +462,7 @@ export const InvoicePdfDocument = ({ contract }) => {
                       style={styles.body2}
                     >{`Objeto ${objectLabels[index]}`}</Text>
                     <Text style={styles.body2}>
-                      <Text style={styles.boldText}>
-                        {servicesMap[service.serviceType]}
-                      </Text>
+                      <Text style={styles.boldText}>{service.name}</Text>
                     </Text>
                   </View>
                   <View style={styles.paymentDetails2}>
@@ -582,7 +541,7 @@ export const InvoicePdfDocument = ({ contract }) => {
         {renderHeader()}
         <View style={styles.contractTitle}>
           <Text style={styles.body3}>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</Text>
-          <Text style={styles.body3}>Nº {contractNumber}-001</Text>
+          <Text style={styles.body3}>Nº {contract.number}</Text>
         </View>
         <View style={styles.contract}>
           <View>
@@ -597,37 +556,19 @@ export const InvoicePdfDocument = ({ contract }) => {
               forma do seu contrato social, doravante denominada “CONTRATADA” e;
             </Text>
 
-            {isBusiness &&
-              customer?.partners?.map((partner, key) => (
-                <Text style={[styles.body2, styles.contractText]} key={key}>
-                  <Text style={styles.boldText}>{partner.name}</Text>,
-                  brasileira, Solteira, inscrito no CPF sob o nº 139.257.458-74,
-                  documento de identificação RG nº 179088907 SSP/SP, residente e
-                  domiciliado na Rua Expedicionário Abílio Fernandes, nº
-                  248,Vila Paiva, Suzano, SP - CEP 08675100, telefone:
-                  11976467496, e-mail: msiqueira478@gmail.com; doravante
-                  denominada “CONTRATANTE”;
-                </Text>
-              ))}
+            {contract.persons?.map((person, key) => (
+              <Text style={[styles.body2, styles.contractText]} key={key}>
+                <Text style={styles.boldText}>{person.name}</Text>,{" "}
+                {person.nationality},{person.maritalStatus} inscrito no CPF sob
+                o nº {person.document}, documento de identificação RG nº{" "}
+                {person.rg} SSP/SP, residente e domiciliado na {person.address},
+                telefone:
+                {person.phone}, e-mail: {person.email}; em conformidade com seu
+                contrato social; doravante denominada “CONTRATANTE”;
+              </Text>
+            ))}
 
             {/* @TODO RG SSP/SP FIXO? */}
-            {!isBusiness && (
-              <Text style={[styles.body2, styles.contractText]}>
-                <Text style={styles.boldText}>{'contract.person.name'}</Text>,{" "}
-                {customer.nationality},
-                {translateMaritalStatus(
-                  customer.maritalStatus,
-                  customer.gender
-                )}{" "}
-                {customer.occupation && `${customer.occupation},`} inscrito(a)
-                no CPF sob o nº {maskDocument(customer.document)}, documento de
-                identificação RG nº {customer.rg} SSP/SP, residente e
-                domiciliado na {address}, telefone: {phoneMask(customer.phone)},
-                e-mail:
-                {customer.email}; em conformidade com seu contrato social;
-                doravante denominada “CONTRATANTE”;
-              </Text>
-            )}
 
             <Text style={[styles.body2, styles.contractText]}>
               ambas conjuntamente denominadas “PARTES”, resolvem firmar o
@@ -647,7 +588,7 @@ export const InvoicePdfDocument = ({ contract }) => {
               limites, o estipulado(s) no(s) objeto(s) abaixo:
             </Text>
 
-            {getContractServices(customer.services)}
+            {getContractServices(contract.services)}
 
             <Text style={[styles.body2, styles.contractText]}>
               Parágrafo único. A execução dos serviços contábeis objeto(s) deste
@@ -881,7 +822,7 @@ export const InvoicePdfDocument = ({ contract }) => {
           </View>
         </View>
 
-        {getContractServicesDetails(customer?.services)}
+        {getContractServicesDetails(contract.services)}
 
         <View style={styles.contract}>
           <View>
@@ -1139,10 +1080,11 @@ export const InvoicePdfDocument = ({ contract }) => {
             <Text style={[styles.body2, styles.contractText]}>
               <Text style={styles.boldText}>CLÁUSULA DÉCIMA SÉTIMA</Text> – O
               presente instrumento de contrato vigerá pelo período de 1 (um)
-              ano, com início em {customer?.contractStartDate} e será renovado
-              automaticamente pelo mesmo período nos anos subsequentes, salvo
-              notificação de qualquer das PARTES com, no mínimo, 30 (trinta)
-              dias corridos de antecedência.
+              ano, com início em {today.getDate()} de{" "}
+              {today.toLocaleString("default", { month: "long" })} de{" "}
+              {today.getFullYear()} e será renovado automaticamente pelo mesmo
+              período nos anos subsequentes, salvo notificação de qualquer das
+              PARTES com, no mínimo, 30 (trinta) dias corridos de antecedência.
             </Text>
             <Text style={[styles.body2, styles.contractText]}>
               <Text style={styles.boldText}>DOS CASOS OMISSOS E DO FORO</Text>
@@ -1188,39 +1130,19 @@ export const InvoicePdfDocument = ({ contract }) => {
           </Text>
         </View>
 
-        {isBusiness &&
-          partners?.map((partner, index) => {
-            return (
-              <View style={styles.signature} wrap={false} key={index}>
-                <Text style={[styles.body2, styles.centeredText]}>
-                  ________________________________________________________________
-                </Text>
-                <Text
-                  style={[styles.body2, styles.centeredText, styles.boldText]}
-                >
-                  {partner?.name}
-                </Text>
-                <Text
-                  style={[styles.body2, styles.centeredText, styles.boldText]}
-                >
-                  <strong>CPF n° {maskDocument(partner?.document)}</strong>
-                </Text>
-              </View>
-            );
-          })}
-        {!isBusiness && (
-          <View style={styles.signature} wrap={false}>
+        {contract.persons?.map((person, key) => (
+          <View style={styles.signature} wrap={false} key={key}>
             <Text style={[styles.body2, styles.centeredText]}>
               ________________________________________________________________
             </Text>
             <Text style={[styles.body2, styles.centeredText, styles.boldText]}>
-              {customer?.name}
+              {person.name}
             </Text>
-            <Text style={[styles.body2, styles.centeredText, styles.boldText]}>
-              CPF n° {maskDocument(customer?.document)}
+            <Text style={[styles.body2, styles.centeredText]}>
+              CPF n° {person.document}
             </Text>
           </View>
-        )}
+        ))}
         {renderFooter()}
       </Page>
       <Page size="A4" style={styles.page} wrap={true}>
@@ -1228,7 +1150,7 @@ export const InvoicePdfDocument = ({ contract }) => {
         <View style={styles.contractTitle}>
           <Text style={styles.body3}>TERMO DE RESPONSABILIDADE CONTÁBIL</Text>
           <Text style={styles.body3}>
-            CONTRATO VINCULADO Nº {contractNumber}-001
+            CONTRATO VINCULADO Nº {contract.number}
           </Text>
         </View>
         <View style={styles.contract}>
@@ -1261,50 +1183,20 @@ export const InvoicePdfDocument = ({ contract }) => {
               Título – DO OBJETO E DO PRAZO, mais especificadamente na CLÁUSULA
               1ª e seguintes, firmado entre:
             </Text>
-            <Text style={[styles.body2, styles.contractText]}>
-              <Text style={styles.boldText}>Marisa Siqueira do Nascimento</Text>
-              , com sede na cidade de Maringá, Estado do Paraná, na Rua Neo
-              brasileira, , inscrito no CPF sob o nº 139.257.458-74 e{" "}
-              <Text style={styles.boldText}>
-                FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
-              </Text>
-              , inscrita no CNPJ nº 50.675.326/0001-97, denominadas PARTES,
-              devidamente qualificadas no contrato vinculado.
-            </Text>
-
-            {isBusiness &&
-              customer?.partners?.map((partner, index, array) => {
-                return (
-                  <Text style={[styles.body2, styles.contractText]} key={index}>
-                    <Text style={styles.boldText}>{partner?.name}</Text>,{" "}
-                    {partner?.nationality},{" "}
-                    {translateMaritalStatus(
-                      partner?.maritalStatus,
-                      partner?.gender
-                    )}
-                    , inscrito no CPF sob o nº {maskDocument(partner?.document)}
-                    {index < array.length - 1 ? "," : " e"} e{" "}
-                    <Text style={styles.boldText}>
-                      FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
-                    </Text>
-                    , inscrita no CNPJ nº 50.675.326/0001-97, denominadas
-                    PARTES, devidamente qualificadas no contrato vinculado.
-                  </Text>
-                );
-              })}
-
-            {!isBusiness && (
-              <Text style={[styles.body2, styles.contractText]}>
-                <Text style={styles.boldText}>{customer?.name}</Text>,{" "}
-                {customer?.nationality}, inscrito no CPF sob o nº{" "}
-                {maskDocument(customer?.document)} e{" "}
+            {contract.persons?.map((person, key, array) => (
+              <Text style={[styles.body2, styles.contractText]} key={key}>
+                <Text style={styles.boldText}>{person.name}</Text>,{" "}
+                {person.nationality},{person.maritalStatus} inscrito no CPF sob
+                o nº {person.document}
+                {key < array.length - 1 ? "," : " e"} e{" "}
                 <Text style={styles.boldText}>
                   FJP CONSULTORIA TRIBUTÁRIA E EMPRESARIAL LTDA
                 </Text>
                 , inscrita no CNPJ nº 50.675.326/0001-97, denominadas PARTES,
                 devidamente qualificadas no contrato vinculado.
               </Text>
-            )}
+            ))}
+
             <Text style={[styles.body2, styles.contractText]}>
               Cláusula primeira. Descrição das atividades a serem executadas:
             </Text>

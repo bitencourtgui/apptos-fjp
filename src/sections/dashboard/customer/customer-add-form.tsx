@@ -39,7 +39,7 @@ export const CustomerAddForm = ({ customer, ...other }) => {
       if (response.status === 200) {
         toast.success("Cliente cadastrado");
         helpers.setStatus({ success: true });
-        router.push(`/${gt}/clientes/${customerID}`);
+        router.push(`/clientes/${customerID}`);
       } else {
         console.error("[ERROR] CAD-CLIENTE", response)
       }
@@ -114,7 +114,7 @@ export const CustomerAddForm = ({ customer, ...other }) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={`/${gt}/clientes`}
+            href="/clientes"
           >
             Cancelar
           </Button>

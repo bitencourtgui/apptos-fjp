@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import {
   Button,
   CardActions,
@@ -22,15 +23,17 @@ import "dayjs/locale/pt-br";
 import { OpeningService } from "./forms/openingService";
 import { AccountingService } from "./forms/accountingService";
 
-// so para subir corrigir para o certo
 import {
   AccountingServiceSchema,
   openingServiceSchema,
 } from "./services.schema";
 import { iAccountingService, iOpeningService } from "./financial-initial";
 import CustomersApi from "@/api/customers";
+import ContractsApi from "@/api/contracts";
+
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
+import { transformContractPayload } from "@/transformrs/contract";
 
 interface ServicesModalProps {
   open: boolean;
@@ -56,23 +59,38 @@ const ServicesModal = ({
     values.createdAt = dayjs().format("DD/MM/YYYY");
     values.id = uuidv4();
 
-    const payload = {
+    let updatedPayload = {
       ...customers,
       services: [...(customers.services || []), values],
     };
 
-    const response = await CustomersApi.updateCustomer(customers.id, payload);
+    // Verifica se o serviço é de abertura de empresa e não é uma empresa
 
-    if (response.status === 200) {
-      handleToggle();
-      reload();
-      toast.success("Serviço cadastrado");
-      helpers.setStatus({ success: true });
-    } else {
-      throw new Error("Unexpected response status");
+    try {
+      const response = await CustomersApi.updateCustomer(
+        customers.id,
+        updatedPayload
+      );
+
+      if (service === "0" && !isBusiness) {
+        const contractId = uuidv4();
+        const transformedPayload = transformContractPayload(updatedPayload);
+        await ContractsApi.setContract(contractId, transformedPayload);
+      }
+
+      if (response.status === 200) {
+        handleToggle();
+        reload();
+        toast.success("Serviço cadastrado");
+        helpers.setStatus({ success: true });
+      } else {
+        throw new Error("Unexpected response status");
+      }
+    } catch (error) {
+      toast.error("Erro ao cadastrar o serviço");
+      helpers.setStatus({ success: false });
     }
   };
-
 
   const defaultOptions = [{ value: "10", label: "Outros Serviços" }];
 
@@ -85,11 +103,7 @@ const ServicesModal = ({
         { value: "5", label: "Defesa Administrativa" },
         ...defaultOptions,
       ]
-    : [
-        { value: "0", label: "Abertura de Empresa" },
-        ...defaultOptions,
-      ];
-  
+    : [{ value: "0", label: "Abertura de Empresa" }, ...defaultOptions];
 
   function getSchema(service: string) {
     switch (service) {
@@ -109,16 +123,21 @@ const ServicesModal = ({
       case "1":
         return iAccountingService;
       default:
-        return null;
+        return {};
     }
   }
 
-  // rever imports
   const formik = useFormik({
     initialValues: getInitial(service),
     validationSchema: getSchema(service),
     onSubmit,
   });
+
+  useEffect(() => {
+    formik.setValues(getInitial(service));
+    formik.setErrors({});
+    formik.setTouched({});
+  }, [service]);
 
   const handleChange = (event) => {
     setService(event.target.value);

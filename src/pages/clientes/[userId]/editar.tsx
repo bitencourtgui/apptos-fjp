@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
-import Head from "next/head";
+import { Head } from "@/components/Head";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import {
   Avatar,
@@ -12,49 +11,19 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import customersApi from "../../../api/customers";
-import { useMounted } from "../../../hooks/use-mounted";
-import { usePageView } from "../../../hooks/use-page-view";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
+import { Layout as DashboardLayout } from "@/layouts/dashboard";
 import { CustomerEditForm } from "@/sections/dashboard/customer/customer-edit-form";
-import { getInitials } from "../../../utils/get-initials";
-import { useAuth } from "../../../hooks/use-auth";
+import { getInitials } from "@/utils/get-initials";
+import { useRouter } from "next/router";
+import { useCustomer } from "@/hooks/useCustomer";
 
-const useCustomer = (userId) => {
-  const isMounted = useMounted();
+const EditarCliente = () => {
+  const router = useRouter();
+  const userId = Array.isArray(router.query.userId)
+    ? router.query.userId[0]
+    : router.query.userId ?? "";
 
-  const [customer, setCustomer] = useState(null);
-
-  const getCustomer = useCallback(async () => {
-    try {
-      const response = await customersApi.getCustomer(userId.toString());
-
-      if (isMounted()) {
-        setCustomer(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted]);
-
-  useEffect(
-    () => {
-      getCustomer();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return customer;
-};
-
-const EditarClienteDash = ({ userId }) => {
-  const customer = useCustomer(userId);
-  const { getTenant } = useAuth();
-  const gt = getTenant();
-
-  usePageView();
+  const { customer } = useCustomer(userId);
 
   if (!customer) {
     return null;
@@ -62,14 +31,12 @@ const EditarClienteDash = ({ userId }) => {
 
   return (
     <>
-      <Head>
-        <title>Editar Cliente | FJP</title>
-      </Head>
+      <Head page="Editar Cliente" />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 6,
         }}
       >
         <Container maxWidth="lg">
@@ -79,7 +46,7 @@ const EditarClienteDash = ({ userId }) => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={`/${gt}/clientes`}
+                  href="/clientes"
                   sx={{
                     alignItems: "center",
                     display: "inline-flex",
@@ -109,10 +76,14 @@ const EditarClienteDash = ({ userId }) => {
                       width: 64,
                     }}
                   >
-                    {getInitials(customer?.name || customer?.business.corporateName)}
+                    {getInitials(
+                      customer?.name || customer?.business?.corporateName
+                    )}
                   </Avatar>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{customer?.name || customer?.business.corporateName}</Typography>
+                    <Typography variant="h4">
+                      {customer?.name || customer?.business?.corporateName}
+                    </Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">id:</Typography>
                       <Chip label={customer.id} size="small" />
@@ -129,8 +100,6 @@ const EditarClienteDash = ({ userId }) => {
   );
 };
 
-EditarClienteDash.getLayout = (page) => (
-  <DashboardLayout>{page}</DashboardLayout>
-);
+EditarCliente.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default EditarClienteDash;
+export default EditarCliente;

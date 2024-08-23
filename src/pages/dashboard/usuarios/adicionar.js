@@ -38,7 +38,7 @@ const AdicionarClienteDash = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={`/${gt}/clientes`}
+                  href="/clientes"
                   sx={{
                     alignItems: "center",
                     display: "inline-flex",

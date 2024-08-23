@@ -34,8 +34,6 @@ export const OpeningService = (
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
-
-
       <FormControlLabel
         control={
           <Switch
@@ -73,8 +71,6 @@ export const OpeningService = (
         fullWidth
       />
 
-
-
       {!formik.values.cashPayment && (
         <>
           <FormControlLabel
@@ -85,7 +81,10 @@ export const OpeningService = (
                 name="paymentEntry"
                 checked={formik.values.paymentEntry}
                 onChange={() =>
-                  formik.setFieldValue("paymentEntry", !formik.values.paymentEntry)
+                  formik.setFieldValue(
+                    "paymentEntry",
+                    !formik.values.paymentEntry
+                  )
                 }
               />
             }
@@ -110,7 +109,8 @@ export const OpeningService = (
                 Boolean(formik.errors.accountingPayment)
               }
               helperText={
-                formik.touched.accountingPayment && formik.errors.accountingPayment
+                formik.touched.accountingPayment &&
+                formik.errors.accountingPayment
               }
               fullWidth
             />

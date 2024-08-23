@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
-import Head from "next/head";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/Trash01";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
@@ -9,7 +8,6 @@ import {
   Button,
   Chip,
   Container,
-  Divider,
   Link,
   Stack,
   SvgIcon,
@@ -17,64 +15,46 @@ import {
   Tabs,
   Typography,
   Unstable_Grid2 as Grid,
-  Alert,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import customersApi from "../../../api/customers";
-import { useMounted } from "../../../hooks/use-mounted";
-import { usePageView } from "../../../hooks/use-page-view";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { CustomerBasicDetails } from "../../../sections/dashboard/customer/customer-basic-details";
-import { ServicesList } from "../../../sections/dashboard/services/services-list";
-import { useAuth } from "../../../hooks/use-auth";
-import FileManager from "../../../components/FileManager";
+import customersApi from "@/api/customers";
+import { Layout as DashboardLayout } from "@/layouts/dashboard";
+import { ServicesList } from "@/sections/dashboard/services/services-list";
+import FileManager from "@/components/FileManager";
 import { CustomerPartners } from "@/sections/dashboard/customer/customer-partners";
-import { ContractList } from "@/sections/dashboard/customer/customer-contracts";
+import { ContractListOld } from "@/sections/dashboard/customer/customer-contracts";
 import LegalModal from "@/sections/dashboard/customer/LegalPerson/modal";
 import { useFormik } from "formik";
 import { customersInitial } from "@/sections/dashboard/customer/customer-initial";
 import { businessSchema } from "@/sections/dashboard/customer/customer-schema";
-import CustomersApi from "../../../api/customers";
+import CustomersApi from "@/api/customers";
 import { ProcessList } from "@/sections/dashboard/process/process-list";
+import { useCustomer } from "@/hooks/useCustomer";
+import { Head } from "@/components/Head";
+import { BusinessAlert } from "@/components/businessAlert";
+import { BasicDetails } from "@/sections/clientes/basicDetails";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ContractList } from "@/sections/contratos";
+import { transformContractPayload } from "@/transformrs/contract";
 
 const tabs = [
   { label: "Detalhes", value: "details" },
+  { label: "Contratos", value: "contracts" },
   { label: "Serviços", value: "services" },
   { label: "Sócios", value: "partners" },
   { label: "Processos", value: "legal" },
 ];
 
-const useCustomer = (userId: string) => {
-  const isMounted = useMounted();
-  const [customer, setCustomer] = useState(null);
-
-  const getCustomer = useCallback(async () => {
-    try {
-      const response = await customersApi.getCustomer(userId.toString());
-      if (isMounted()) {
-        setCustomer(response.data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted, userId]);
-
-  useEffect(() => {
-    getCustomer();
-  }, [getCustomer]);
-
-  return { customer, getCustomer };
-};
-
-const DetalhesClienteDash = ({ userId }: { userId: string }) => {
-  const [currentTab, setCurrentTab] = useState("details");
-  const { customer, getCustomer } = useCustomer(userId);
-  const { getTenant } = useAuth();
-  const tenant = getTenant();
+const DetalhesCliente = () => {
   const router = useRouter();
 
-  usePageView();
+  const userId = Array.isArray(router.query.userId)
+    ? router.query.userId[0]
+    : router.query.userId ?? "";
+
+  const [currentTab, setCurrentTab] = useState("details");
+  const { customer, getCustomer } = useCustomer(userId);
 
   const handleTabsChange = useCallback((_, value) => {
     setCurrentTab(value);
@@ -85,7 +65,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
       const response = await customersApi.deleteCustomer(userId);
       if (response.status === 200) {
         toast.success("Cliente excluído");
-        router.push(`/${tenant}/clientes`);
+        router.push(`/clientes`);
       }
     } catch (err) {
       toast.error(`Erro: ${err}`);
@@ -170,26 +150,20 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
     setOpen(!open);
   };
 
+  const filteredTabs = tabs.filter((tab) => {
+    if (tab.value === "partners" && !isBusiness) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <>
-      <Head>
-        <title>{customerName} | FJP</title>
-      </Head>
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Head page={customerName} />
+      <Box component="main" sx={{ flexGrow: 1, pt: 3 }}>
         <Container maxWidth="xl">
-          <Stack spacing={3}>
-            <Link
-              color="text.primary"
-              component={NextLink}
-              href={`/${tenant}/clientes`}
-              sx={{ alignItems: "center", display: "inline-flex" }}
-              underline="hover"
-            >
-              <SvgIcon sx={{ mr: 1 }}>
-                <ArrowLeftIcon />
-              </SvgIcon>
-              <Typography variant="subtitle2">Clientes</Typography>
-            </Link>
+          <Stack spacing={2}>
+            <Breadcrumbs />
             <Stack
               alignItems="flex-start"
               direction={{ xs: "column", md: "row" }}
@@ -208,6 +182,7 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
               <Stack alignItems="center" direction="row" spacing={2}>
                 <Button
                   color="inherit"
+                  size="small"
                   onClick={handleDelete}
                   endIcon={
                     <SvgIcon>
@@ -223,33 +198,19 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
                       <Edit02Icon />
                     </SvgIcon>
                   }
+                  size="small"
                   variant="contained"
                   component={NextLink}
-                  href={`/${tenant}/clientes/${customer?.id}/editar`}
+                  href={`/clientes/${customer?.id}/editar`}
                 >
                   Editar
                 </Button>
               </Stack>
             </Stack>
-            {!isBusiness && (
-              <Alert
-                severity="warning"
-                variant="outlined"
-                action={
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    size="small"
-                    onClick={handleToggle}
-                    type="button"
-                  >
-                    CADASTRAR EMPRESA
-                  </Button>
-                }
-              >
-                Processo de abertura concluído? Atualize o cadastro para empresa
-              </Alert>
-            )}
+            <BusinessAlert
+              isBusiness={isBusiness}
+              handleToggle={handleToggle}
+            />
             <Tabs
               indicatorColor="primary"
               onChange={handleTabsChange}
@@ -259,31 +220,30 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
               value={currentTab}
               variant="scrollable"
             >
-              {tabs.map((tab) => (
+              {filteredTabs.map((tab) => (
                 <Tab key={tab.value} label={tab.label} value={tab.value} />
               ))}
             </Tabs>
             {currentTab === "details" && (
-              <Grid container spacing={4}>
-                <Grid xs={12} lg={4}>
-                  <CustomerBasicDetails customer={customer} />
-                </Grid>
+              <Grid container>
+                <BasicDetails customer={customer} />
                 <Grid xs={12} lg={8}>
                   <Stack spacing={4}>
                     {hasServices && (
-                      <ContractList
+                      <ContractListOld
                         customer={customer}
                         hasServices={hasServices}
                       />
                     )}
-
                     {customer && <FileManager customerId={customer.id} />}
                   </Stack>
                 </Grid>
               </Grid>
             )}
+
+            {currentTab === "contracts" && <ContractList {...customer} />}
             {currentTab === "services" && <ServicesList id={customer?.id} />}
-            {(currentTab === "partners" && isBusiness) && (
+            {currentTab === "partners" && isBusiness && (
               <CustomerPartners
                 getCustomer={getCustomer}
                 customers={customer}
@@ -298,8 +258,6 @@ const DetalhesClienteDash = ({ userId }: { userId: string }) => {
   );
 };
 
-DetalhesClienteDash.getLayout = (page) => (
-  <DashboardLayout>{page}</DashboardLayout>
-);
+DetalhesCliente.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default DetalhesClienteDash;
+export default DetalhesCliente;

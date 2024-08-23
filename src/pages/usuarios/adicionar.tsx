@@ -9,11 +9,10 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-
 import { usePageView } from "@/hooks/use-page-view";
-import { useAuth } from "@/hooks/use-auth";
 import { Layout as DashboardLayout } from "@/layouts/dashboard";
 import { CustomerAddForm } from "@/sections/dashboard/customer/customer-add-form";
+import { useAuth } from "@/hooks/use-auth";
 
 const AdicionarClienteDash = () => {
   const { getTenant } = useAuth();
@@ -23,7 +22,7 @@ const AdicionarClienteDash = () => {
   return (
     <>
       <Head>
-        <title>Novo Cliente | FJP</title>
+        <title>Novo Cliente | FA</title>
       </Head>
       <Box
         component="main"
@@ -32,14 +31,14 @@ const AdicionarClienteDash = () => {
           py: 8,
         }}
       >
-        <Container maxWidth={false}>
+        <Container maxWidth="lg">
           <Stack spacing={4}>
             <Stack spacing={4}>
               <div>
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={`/${gt}/clientes`}
+                  href="/clientes"
                   sx={{
                     alignItems: "center",
                     display: "inline-flex",
@@ -53,7 +52,7 @@ const AdicionarClienteDash = () => {
                 </Link>
               </div>
             </Stack>
-            <CustomerAddForm />
+            <CustomerAddForm customer={undefined} />
           </Stack>
         </Container>
       </Box>

@@ -68,7 +68,7 @@ const FeeContract = () => {
   const today = new Date();
 
   const handleAfterPrint = () => {
-    router.push(`/tributario/clientes/${customerId}`);
+    router.push(`/clientes/${customerId}`);
   };
 
   useEffect(() => {
@@ -200,8 +200,6 @@ const FeeContract = () => {
       "Quinto",
       "Sexto",
     ];
-
-    console.log("services", services);
 
     if (services) {
       return (

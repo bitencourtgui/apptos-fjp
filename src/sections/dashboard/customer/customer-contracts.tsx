@@ -6,7 +6,7 @@ const contracts = [
   { id: 2, name: "Prestação de serviços", path: "outros-servicos" },
 ];
 
-export const ContractList = ({ customer, hasServices }) => {
+export const ContractListOld = ({ customer, hasServices }) => {
   const router = useRouter();
 
   const handleContractClick = (path: string) => {

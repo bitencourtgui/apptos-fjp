@@ -32,7 +32,7 @@ export const LoginForm = () => {
         // @ts-ignore
         await signInWithEmailAndPassword(values.email, values.password, values.tenant);
 
-        const provisional = `/${values.tenant}/clientes`;
+        const provisional = `/clientes`;
 
         if (isMounted()) {
           router.push(returnTo || provisional);

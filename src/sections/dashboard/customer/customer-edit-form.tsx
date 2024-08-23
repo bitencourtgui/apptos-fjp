@@ -41,7 +41,7 @@ export const CustomerEditForm = ({ customer, ...other }) => {
         toast.success("Cliente editado com sucesso");
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
-        router.push(`/${gt}/clientes/${customer.id}`);
+        router.push(`/clientes/${customer.id}`);
       } else {
         throw new Error("Unexpected response status");
       }
@@ -115,7 +115,7 @@ export const CustomerEditForm = ({ customer, ...other }) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={`/${gt}/clientes`}
+            href="/clientes"
           >
             Cancelar
           </Button>

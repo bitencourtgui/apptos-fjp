@@ -19,10 +19,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Scrollbar } from "../../../components/scrollbar";
-import { phoneMask } from "../../../utils/masks/phoneMask";
-import { maskDocument } from "../../../utils/masks/maskDocument";
-import { useAuth } from "../../../hooks/use-auth";
+import { Scrollbar } from "@/components/scrollbar";
+import { phoneMask } from "@/utils/masks/phoneMask";
+import { maskDocument } from "@/utils/masks/maskDocument";
+import { useAuth } from "@/hooks/use-auth";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -61,20 +61,17 @@ const useSelectionModel = (customers) => {
   };
 };
 
-export const CustomerListTable = (props) => {
-  const {
-    customers,
-    customersCount,
-    onPageChange,
-    onRowsPerPageChange,
-    page,
-    rowsPerPage,
-    ...other
-  } = props;
+export const CustomerListTable = ({
+  customers,
+  customersCount,
+  onPageChange,
+  onRowsPerPageChange,
+  page,
+  rowsPerPage,
+  ...other
+}) => {
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
     useSelectionModel(customers);
-  const { getTenant } = useAuth();
-  const gt = getTenant();
   const handleToggleAll = useCallback(
     (event) => {
       const { checked } = event.target;
@@ -190,7 +187,7 @@ export const CustomerListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={`/${gt}/clientes/${customer.id}`}
+                          href={`/clientes/${customer.id}`}
                           variant="subtitle2"
                         >
                           {chip}
@@ -211,7 +208,7 @@ export const CustomerListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={`/${gt}/clientes/${customer.id}/editar`}
+                      href={`/clientes/${customer.id}/editar`}
                     >
                       <SvgIcon>
                         <Edit02Icon />
@@ -219,7 +216,7 @@ export const CustomerListTable = (props) => {
                     </IconButton>
                     <IconButton
                       component={NextLink}
-                      href={`/${gt}/clientes/${customer.id}`}
+                      href={`/clientes/${customer.id}`}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />

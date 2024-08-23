@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   signInWithPopup,
+  sendPasswordResetEmail,
   signOut,
   reauthenticateWithCredential,
   EmailAuthProvider,
@@ -146,7 +147,7 @@ export const AuthProvider = (props) => {
       );
       try {
         await reauthenticateWithCredential(user, credential);
-        console.log("Usuário reautenticado com sucesso.");
+        console.info("Usuário reautenticado com sucesso.");
       } catch (error) {
         console.error("Erro ao reautenticar o usuário:", error);
         throw error; // Propague o erro para tratar na interface
@@ -173,7 +174,7 @@ export const AuthProvider = (props) => {
             },
           },
         });
-        console.log("Nome de usuário atualizado com sucesso!");
+        console.info("Nome de usuário atualizado com sucesso!");
       } catch (error) {
         console.error("Erro ao atualizar o nome de usuário:", error);
       }
@@ -187,12 +188,16 @@ export const AuthProvider = (props) => {
     if (user) {
       try {
         await updatePassword(user, newPassword);
-        console.log("Senha atualizada com sucesso!");
+        console.info("Senha atualizada com sucesso!");
       } catch (error) {
         console.error("Erro ao atualizar a senha:", error);
       }
     }
   };
+  
+  const _sendPasswordResetEmail = useCallback(async (email) => {
+    await sendPasswordResetEmail(auth, email);
+  }, []);
 
   const _createUserWithEmailAndPassword = useCallback(
     async (email, password, name) => {
@@ -224,6 +229,7 @@ export const AuthProvider = (props) => {
         issuer: Issuer.Firebase,
         createUserWithEmailAndPassword: _createUserWithEmailAndPassword,
         signInWithEmailAndPassword: _signInWithEmailAndPassword,
+        sendPasswordResetEmail: _sendPasswordResetEmail,
         signInWithGoogle,
         signOut: _signOut,
         getTenant,

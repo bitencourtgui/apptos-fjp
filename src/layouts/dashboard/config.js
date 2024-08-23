@@ -24,8 +24,8 @@ export const getSections = (t, gt) => [
   {
     items: [
       {
-        title: t(tokens.nav.customers),
-        path: `/${gt}/clientes`,
+        title: "Clientes",
+        path: `/clientes`,
         icon: (
           <SvgIcon fontSize="small">
             <Users03Icon color="#CFA950"/>
@@ -58,7 +58,7 @@ export const getSections = (t, gt) => [
       },
       {
         title: "Usuários",
-        path: `/${gt}/usuarios`,
+        path: `/usuarios`,
         icon: (
           <SvgIcon fontSize="small">
             <FaceIdSquare color="#CFA950" />

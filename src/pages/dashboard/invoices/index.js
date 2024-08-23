@@ -109,7 +109,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Invoice List | Devias Kit PRO
+          asdasd
         </title>
       </Head>
       <Divider />

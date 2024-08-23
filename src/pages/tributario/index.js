@@ -19,36 +19,8 @@ import { OverviewOpenTickets } from "../../sections/dashboard/overview/overview-
 import { Head } from "@/components/Head";
 
 import { useMounted } from "../../hooks/use-mounted";
-import CustomersApi from "../../api/customers";
 import ProcessApi from "../../api/process";
-
-const useCustomer = () => {
-  const isMounted = useMounted();
-
-  const [customer, setCustomer] = useState(0);
-
-  const getCustomer = useCallback(async () => {
-    try {
-      const response = await CustomersApi.getTotalCount();
-
-      if (isMounted()) {
-        setCustomer(response.count);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(
-    () => {
-      getCustomer();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return customer;
-};
+import { useCustomer } from "@/hooks/useCustomer";
 
 const useProcess = () => {
   const isMounted = useMounted();
@@ -82,7 +54,7 @@ const Page = () => {
   return (
     <>
       <Head page="Visão Geral" />
-       
+
       <Box
         component="main"
         sx={{

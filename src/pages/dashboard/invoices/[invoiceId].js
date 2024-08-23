@@ -49,10 +49,8 @@ const useCustomer = (userId) => {
 };
 
 const Page = () => {
-  const invoice = useCustomer("b948afb9-543c-49ba-9457-bedb91ed9c66");
+  const invoice = useCustomer("211c32bd-d7a1-4658-8c69-e382cd12c8bb");
   const [openPdf, setOpenPdf] = useState(false);
-
-  console.log("invoicePage[invoceid]", invoice);
 
   usePageView();
 

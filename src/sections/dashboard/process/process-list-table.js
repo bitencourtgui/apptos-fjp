@@ -50,7 +50,7 @@ export const ProcessListTable = (props) => {
   }, []);
 
   const handleEdit = (id) => {
-    router.push(`/${gt}/clientes/${id}`);
+    router.push(`/clientes/${id}`);
   };
 
   return (
