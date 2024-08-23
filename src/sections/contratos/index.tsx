@@ -41,7 +41,7 @@ export const ContractList = ({ id }) => {
         <Scrollbar>
           <Table sx={{ minWidth: 600 }}>
             <TableBody>
-              {contracts.map((contract, index) => {
+              {contracts.map((contract, key) => {
                 const serviceNames = contract.services
                   .map(({ name }) => name)
                   .join(", ");
@@ -49,7 +49,7 @@ export const ContractList = ({ id }) => {
                 return (
                   <>
                     <TableRow
-                      key={index}
+                      key={key}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell width="25%">

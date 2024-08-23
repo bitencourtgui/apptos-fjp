@@ -8,55 +8,37 @@ import {
   View,
   Font,
 } from "@react-pdf/renderer";
-import { useTheme } from "@mui/material/styles";
-import { translateMaritalStatus } from "@/utils/translate";
-import { maskDocument } from "@/utils/masks/maskDocument";
 import { numberInWords } from "@/utils/number-in-words";
+import localFont from 'next/font/local'
+
+const font100 = { src: "../../assets/fonts/font-100.ttf", fontWeight: 100 };
+const font200 = { src: "../../assets/fonts/font-200.ttf", fontWeight: 200 };
+const font300 = { src: "../../assets/fonts/font-300.ttf", fontWeight: 300 };
+const font400 = { src: "../../assets/fonts/font-400.ttf", fontWeight: 400 };
+const font500 = { src: "../../assets/fonts/font-500.ttf", fontWeight: 500 };
+const font600 = { src: "../../assets/fonts/font-600.ttf", fontWeight: 600 };
+const font700 = { src: "../../assets/fonts/font-700.ttf", fontWeight: 700 };
+const font800 = { src: "../../assets/fonts/font-800.ttf", fontWeight: 800 };
+const font900 = { src: "../../assets/fonts/font-900.ttf", fontWeight: 900 };
+
 
 const useStyles = () => {
-  const theme = useTheme();
 
   Font.register({
     family: "Inter",
     fonts: [
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyeMZhrib2Bg-4.ttf",
-        fontWeight: 100,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyfMZhrib2Bg-4.ttf",
-        fontWeight: 200,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuOKfMZhrib2Bg-4.ttf",
-        fontWeight: 300,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfMZhrib2Bg-4.ttf",
-        fontWeight: 400,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fMZhrib2Bg-4.ttf",
-        fontWeight: 500,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYMZhrib2Bg-4.ttf",
-        fontWeight: 600,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYMZhrib2Bg-4.ttf",
-        fontWeight: 700,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyYMZhrib2Bg-4.ttf",
-        fontWeight: 800,
-      },
-      {
-        src: "http://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuBWYMZhrib2Bg-4.ttf",
-        fontWeight: 900,
-      },
+      font100,
+      font200,
+      font300,
+      font400,
+      font500,
+      font600,
+      font700,
+      font800,
+      font900,
     ],
   });
+
   return useMemo(() => {
     return StyleSheet.create({
       page: {

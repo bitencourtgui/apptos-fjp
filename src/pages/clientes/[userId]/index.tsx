@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
-import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/Trash01";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import {
@@ -36,7 +35,6 @@ import { BusinessAlert } from "@/components/businessAlert";
 import { BasicDetails } from "@/sections/clientes/basicDetails";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ContractList } from "@/sections/contratos";
-import { transformContractPayload } from "@/transformrs/contract";
 
 const tabs = [
   { label: "Detalhes", value: "details" },
@@ -220,8 +218,8 @@ const DetalhesCliente = () => {
               value={currentTab}
               variant="scrollable"
             >
-              {filteredTabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
+              {filteredTabs.map((tab, key) => (
+                <Tab key={key} label={tab.label} value={tab.value} />
               ))}
             </Tabs>
             {currentTab === "details" && (
