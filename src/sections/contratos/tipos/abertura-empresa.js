@@ -9,7 +9,6 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import { numberInWords } from "@/utils/number-in-words";
-import localFont from 'next/font/local'
 
 const font100 = { src: "../../assets/fonts/font-100.ttf", fontWeight: 100 };
 const font200 = { src: "../../assets/fonts/font-200.ttf", fontWeight: 200 };
@@ -21,9 +20,7 @@ const font700 = { src: "../../assets/fonts/font-700.ttf", fontWeight: 700 };
 const font800 = { src: "../../assets/fonts/font-800.ttf", fontWeight: 800 };
 const font900 = { src: "../../assets/fonts/font-900.ttf", fontWeight: 900 };
 
-
 const useStyles = () => {
-
   Font.register({
     family: "Inter",
     fonts: [
