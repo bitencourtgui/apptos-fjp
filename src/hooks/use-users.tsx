@@ -1,55 +1,67 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
 import { useMounted } from "./use-mounted";
-import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  updateDoc,
+  collection,
+  getDocs,
+} from "firebase/firestore";
 import { getFirebaseStore } from "@/lib/auth/firebase/client";
 
 export const useUsers = () => {
-    const isMounted = useMounted();
-    const [users, setUsers] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const db = getFirebaseStore();
-  
-    const getUsers = useCallback(async () => {
-      setLoading(true);
-      setError(null);
-  
-      try {
-        const usersCollection = collection(db, "users");
-        const userSnapshot = await getDocs(usersCollection);
-  
-        const usersList = userSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-  
-        if (isMounted()) {
-          setUsers(usersList);
-        }
-      } catch (err) {
-        console.error("[useUsers] Error:", err);
-        if (isMounted()) {
-          setError(err);
-        }
-      } finally {
-        if (isMounted()) {
-          setLoading(false);
+  const isMounted = useMounted();
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>();
+  const db = getFirebaseStore();
+
+  const getUsers = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const usersCollection = collection(db, "users");
+      const userSnapshot = await getDocs(usersCollection);
+
+      const usersList = userSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      if (isMounted()) {
+        setUsers(usersList);
+      }
+    } catch (err) {
+      if (isMounted()) {
+        // Verifica se o erro é uma instância de Error e define a mensagem
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Ocorreu um erro desconhecido.");
         }
       }
-    }, [db, isMounted]);
-  
-    useEffect(() => {
-      getUsers();
-    }, [getUsers]);
-  
-    return {
-      users,
-      loading,
-      error,
-      reload: getUsers,
-    };
+    } finally {
+      if (isMounted()) {
+        setLoading(false);
+      }
+    }
+  }, [db, isMounted]);
+
+  useEffect(() => {
+    getUsers();
+  }, [getUsers]);
+
+  return {
+    users,
+    loading,
+    error,
+    reload: getUsers,
   };
+};
 
 export const useUser = (userId?: string) => {
   const isMounted = useMounted();
@@ -115,7 +127,9 @@ export const useUser = (userId?: string) => {
       const currentId = id || userId;
 
       if (!currentId) {
-        console.error("[useUser] Error: Nenhum userId fornecido para atualizar.");
+        console.error(
+          "[useUser] Error: Nenhum userId fornecido para atualizar.",
+        );
         return {
           status: 902,
           res: "failure",

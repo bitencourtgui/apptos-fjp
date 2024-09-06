@@ -1,15 +1,15 @@
-import {
-  useDispatch as useReduxDispatch,
-  useSelector as useReduxSelector,
-} from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import { rootReducer } from "@/store/root-reducer";
+// import {
+//   useDispatch as useReduxDispatch,
+//   useSelector as useReduxSelector,
+// } from "react-redux";
+// import { configureStore } from "@reduxjs/toolkit";
+// import { rootReducer } from "@/store/root-reducer";
 
-export const store = configureStore({
-  reducer: rootReducer,
-  devTools: process.env.REACT_APP_ENABLE_REDUX_DEV_TOOLS === "true",
-});
+// export const store = configureStore({
+//   reducer: rootReducer,
+//   devTools: process.env.REACT_APP_ENABLE_REDUX_DEV_TOOLS === "true",
+// });
 
-export const useSelector = useReduxSelector;
+// export const useSelector = useReduxSelector;
 
-export const useDispatch = () => useReduxDispatch();
+// export const useDispatch = () => useReduxDispatch();

@@ -16,7 +16,7 @@ import { EnvelopeSimple as EnvelopeSimpleIcon } from '@phosphor-icons/react/dist
 import { dayjs } from '@/lib/dayjs';
 import { DataTable } from '@/components/core/data-table';
 import type { ColumnDef } from '@/components/core/data-table';
-import { Option } from '@/components/core/option';
+// import { Option } from '@/components/core/option';
 
 export interface Notification {
   id: string;
@@ -79,9 +79,9 @@ export function Notifications({ notifications }: NotificationsProps): React.JSX.
         <Stack spacing={3}>
           <Stack spacing={2}>
             <Select defaultValue="last_invoice" name="type" sx={{ maxWidth: '100%', width: '320px' }}>
-              <Option value="last_invoice">Resend last invoice</Option>
+              {/* <Option value="last_invoice">Resend last invoice</Option>
               <Option value="password_reset">Send password reset</Option>
-              <Option value="verification">Send verification</Option>
+              <Option value="verification">Send verification</Option> */}
             </Select>
             <div>
               <Button startIcon={<EnvelopeSimpleIcon />} variant="contained">

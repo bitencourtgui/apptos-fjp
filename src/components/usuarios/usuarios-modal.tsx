@@ -91,12 +91,16 @@ export const UserDrawer = ({
       } catch (err) {
         console.error(err);
 
-        // Verifica se o componente ainda está montado antes de setar erros
         if (isMounted()) {
           helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message }); // Define os erros no Formik
-          helpers.setSubmitting(false); // Define que o formulário parou de enviar
-          // toast.error("Erro ao criar usuário: " + err.message); // Descomente se for usar notificações
+
+          if (err instanceof Error) {
+            helpers.setErrors({ submit: err.message });
+          } else {
+            helpers.setErrors({ submit: "Ocorreu um erro desconhecido." });
+          }
+
+          helpers.setSubmitting(false);
         }
       }
     },

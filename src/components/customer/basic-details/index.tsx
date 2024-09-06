@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React from "react";
 
-import { BasicBusiness } from './business';
+import { BasicBusiness } from "./business";
 
 export function BasicDetails({ customers }: any): React.JSX.Element {
   const isBusiness = customers?.business?.document?.length >= 1;

@@ -70,7 +70,7 @@ const columns = [
 
       return (
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <Typography variant="body2">{maskDocument(dataDocument)}</Typography>
+          <Typography variant="body2">{maskDocument(dataDocument ?? "")}</Typography>
         </Stack>
       );
     },
@@ -82,7 +82,7 @@ const columns = [
       const isBusiness = row?.business?.corporateName !== '';
       const dataPhone = isBusiness ? row?.business?.phone : row?.phone;
 
-      return <Typography variant="body2">{maskPhone(dataPhone) ?? 'N/A'}</Typography>;
+      return <Typography variant="body2">{maskPhone(dataPhone ?? "") ?? 'N/A'}</Typography>;
     },
     name: 'Telefone',
     width: '150px',
