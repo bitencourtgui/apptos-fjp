@@ -1,17 +1,15 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Link, Typography, Breadcrumbs as MUIBreadcrumbs } from "@mui/material";
 import NextLink from "next/link";
 import React, { useEffect, useState } from "react";
 
 export const Breadcrumbs = () => {
   const router = useRouter();
-  const [asPath, setAsPath] = useState('');
+  const [asPath, setAsPath] = useState("");
 
   useEffect(() => {
-    // Como `useRouter` de `next/navigation` não expõe `asPath` diretamente,
-    // podemos usar `window.location.pathname` para obter o caminho atual.
     setAsPath(window.location.pathname);
   }, []);
 
@@ -23,6 +21,19 @@ export const Breadcrumbs = () => {
 
   return (
     <MUIBreadcrumbs aria-label="breadcrumb">
+      {/* Item fixo "Início" */}
+      <Link
+        color="text.primary"
+        component={NextLink}
+        href="/visao-geral"
+        underline="hover"
+      >
+        <Typography variant="subtitle2" color="neutral.700">
+          Início
+        </Typography>
+      </Link>
+
+      {/* Demais breadcrumbs dinâmicos */}
       {pathnames.map((value, index) => {
         const isLast = index === pathnames.length - 1;
         const to = `/${pathnames.slice(0, index + 1).join("/")}`;

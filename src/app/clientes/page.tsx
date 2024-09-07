@@ -1,5 +1,6 @@
 "use client";
 
+import { Breadcrumbs } from "@/components/core/breadcrumbs";
 import {
   CustomersFilters,
   Filters,
@@ -43,6 +44,7 @@ export default function Page({ searchParams }: PageProps): React.JSX.Element {
       <Box component="main" sx={{ flexGrow: 1, py: 6 }}>
         <Container maxWidth={false}>
           <Stack spacing={4}>
+            <Breadcrumbs />
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Typography variant="h4">Clientes</Typography>
               <Stack alignItems="center" direction="row" spacing={3}>

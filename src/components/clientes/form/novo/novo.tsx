@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Button,
@@ -19,16 +19,19 @@ import { useState } from "react";
 import NextLink from "next/link";
 import { FormBusiness } from "../business/business";
 
-export const NovoCliente = ({customer}: any) => {
-  const [IsLegalPerson, setLegalPerson] = useState(true);
+export const NovoCliente = ({ customer }: any) => {
+  const [IsLegalPerson, setLegalPerson] = useState(
+    customer.business?.corporateName !== "",
+  );
 
   const onSubmit = async (values: any, helpers: any) => {
-    // criar função
+    //@TODO FUNÇÃO CADASTRAR USUÁRIO
   };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: customer ?? initialValues,
     validationSchema: IsLegalPerson ? businessSchema : customersSchema,
+    enableReinitialize: true,
     onSubmit,
   });
 

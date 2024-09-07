@@ -1,16 +1,7 @@
-import {
-  Box,
-  Container,
-  Link,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 
-import NextLink from "next/link";
-
-import { ArrowLeft as ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr/ArrowLeft";
 import { NovoCliente } from "@/components/clientes/form/novo/novo";
+import { Breadcrumbs } from "@/components/core/breadcrumbs";
 
 export default function Page(): React.JSX.Element {
   return (
@@ -23,21 +14,7 @@ export default function Page(): React.JSX.Element {
     >
       <Container maxWidth={false}>
         <Stack spacing={4}>
-          <Stack spacing={4}>
-            <Link
-              color="text.primary"
-              component={NextLink}
-              href="/clientes"
-              sx={{
-                alignItems: "center",
-                display: "inline-flex",
-              }}
-              underline="hover"
-            >
-              <ArrowLeftIcon />
-              <Typography variant="subtitle2">Clientes</Typography>
-            </Link>
-          </Stack>
+          <Breadcrumbs />
           <NovoCliente customer={undefined} />
         </Stack>
       </Container>

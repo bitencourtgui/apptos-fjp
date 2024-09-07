@@ -18,7 +18,6 @@ import type { User } from "@/types/user";
 import { useDialog } from "@/hooks/use-dialog";
 
 import { usePopover } from "@/hooks/use-popover";
-import { ContactsPopover } from "../contacts-popover";
 import { MobileNav } from "../mobile-nav";
 import { NotificationsPopover } from "../notifications-popover";
 import { SearchDialog } from "../search-dialog";
@@ -82,7 +81,6 @@ export function MainNav({ items }: MainNavProps): React.JSX.Element {
             }}
           >
             <NotificationsButton />
-            <ContactsButton />
             <Divider
               flexItem
               orientation="vertical"
@@ -134,11 +132,6 @@ function ContactsButton(): React.JSX.Element {
           <UsersIcon />
         </IconButton>
       </Tooltip>
-      <ContactsPopover
-        anchorEl={popover.anchorRef.current}
-        onClose={popover.handleClose}
-        open={popover.open}
-      />
     </React.Fragment>
   );
 }
@@ -149,7 +142,6 @@ function NotificationsButton(): React.JSX.Element {
   return (
     <React.Fragment>
       <Tooltip title="Notificações">
-        
         <Badge
           color="error"
           sx={{
@@ -180,7 +172,7 @@ function NotificationsButton(): React.JSX.Element {
 const user = {
   id: "USR-000",
   name: "Sofia Rivers",
-  avatar: "/assets/avatar.png",
+  avatar: "/assets/logos/goduck.webp",
   email: "sofia@devias.io",
 } satisfies User;
 
