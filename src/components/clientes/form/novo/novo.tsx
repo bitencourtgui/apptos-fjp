@@ -18,14 +18,44 @@ import { customersSchema } from "../personal/schema";
 import { useState } from "react";
 import NextLink from "next/link";
 import { FormBusiness } from "../business/business";
+import { useAddCustomer } from "@/hooks/use-customers";
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "@/components/core/toaster";
+import { useRouter } from "next/navigation";
 
 export const NovoCliente = ({ customer }: any) => {
   const [IsLegalPerson, setLegalPerson] = useState(
-    customer.business?.corporateName !== "",
+    customer?.business?.corporateName !== "",
   );
 
+  const customerID = uuidv4();
+  const router = useRouter();
+  const [addCustomerState, addCustomer] = useAddCustomer(); // Usa o hook
+
   const onSubmit = async (values: any, helpers: any) => {
-    //@TODO FUNÇÃO CADASTRAR USUÁRIO
+    try {
+      // Chama a função `addCustomer` para adicionar o cliente
+     await addCustomer(customerID, values);
+
+        toast.success("Cliente cadastrado");
+        helpers.setStatus({ success: true });
+        router.push(`/clientes/${customerID}`);
+    } catch (err) {
+      console.error(err);
+
+      helpers.setStatus({ success: false });
+
+      if (err instanceof Error) {
+        helpers.setErrors({ submit: err.message });
+      } else {
+        helpers.setErrors({ submit: "Ocorreu um erro desconhecido." });
+      }
+
+      helpers.setSubmitting(false);
+    } finally {
+      // Libera o estado de submissão do formulário
+      helpers.setSubmitting(false);
+    }
   };
 
   const formik = useFormik({

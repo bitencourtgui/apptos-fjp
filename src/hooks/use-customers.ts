@@ -7,6 +7,8 @@ import {
   updateCustomerAPI,
 } from "@/api/customers";
 import { useMounted } from "./use-mounted";
+import { setDoc, doc } from "firebase/firestore";
+import { getFirebaseStore } from "@/lib/auth/firebase/client";
 
 interface CustomerState {
   customers: any; // Defina um tipo mais específico para o cliente, se possível
@@ -119,4 +121,55 @@ export const useUpdateCustomer = (): [
   );
 
   return [state, updateCustomer];
+};
+
+
+export const useAddCustomer = (): [
+  any,
+  (customerId: string, values: any) => Promise<void>,
+] => {
+  const isMounted = useMounted();
+  const db = getFirebaseStore();
+  const [state, setState] = useState<any>({
+    isLoading: false,
+    error: null,
+    success: false,
+    reload: () => {},
+  });
+
+  const addCustomer = useCallback(
+    async (customerId: string, values: any) => {
+      setState((prevState: any) => ({
+        ...prevState,
+        isLoading: true,
+        error: null,
+      }));
+
+      try {
+
+        await setDoc(doc(db, "customers", customerId), values);
+
+        if (isMounted()) {
+          setState({
+            isLoading: false,
+            success: true,
+            error: null,
+            reload: () => addCustomer(customerId, values),
+          });
+        }
+      } catch (error: any) {
+        if (isMounted()) {
+          setState({
+            isLoading: false,
+            success: false,
+            error: error.message || "Erro ao adicionar cliente",
+            reload: () => addCustomer(customerId, values),
+          });
+        }
+      }
+    },
+    [isMounted],
+  );
+
+  return [state, addCustomer];
 };

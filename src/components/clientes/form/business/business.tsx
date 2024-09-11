@@ -31,7 +31,7 @@ export const FormBusiness = (formik: any) => {
         console.log(response);
 
         if (!response.ok) {
-          throw new Error("Falha ao buscar dados do CEP.");
+          throw new Error("Falha ao buscar dados do CNPJ.");
         }
 
         const data = await response.json();
