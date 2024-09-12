@@ -27,6 +27,7 @@ import {
   transformContractPayload,
 } from "@/transforms/contract";
 import { useContract } from "@/hooks/use-contracts";
+import ServicesModal from "./servicos-modal";
 
 export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
   const { customers, reload } = useCustomerById(id);
@@ -318,12 +319,12 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
           </TableBody>
         </Table>
       </Card>
-      {/* <ServicesModal
-        customers={customer}
+       <ServicesModal
+        customers={customers}
         open={open}
         handleToggle={toggleModal}
-        reload={getCustomer}
-      /> */}
+        reload={reload}
+      />
     </>
   );
 };

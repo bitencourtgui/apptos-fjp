@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import XClose from "@untitled-ui/icons-react/build/esm/XClose";
 import { FormikProps } from "formik";
+import { FormBusiness } from "./form/business/business";
 // import { LegalPerson } from ".";
 // import { ILegalPerson } from "@/types/legalPerson";
 
@@ -44,7 +45,7 @@ const BusinessModal = ({ formik, open, handleToggle }: PartnersModalProps) => {
             gap: "8px",
           }}
         >
-          {/* <LegalPerson {...formik} /> */}
+          <FormBusiness {...formik} />
         </CardContent>
         <CardActions sx={{ justifyContent: "flex-end", px: 3 }}>
           <Button
