@@ -20,6 +20,7 @@ import { ContractDialog } from "./contract-dialog";
 import { AberturaDeEmpresa } from "./tipos/abertura-empresa";
 import { SeverityPill } from "../core/severity-pill";
 import { AutentiqueModal } from "./autentique/modal";
+import { formatDate } from "@/utils/format-date";
 
 const statusColorsMap: Record<
   "canceled" | "paid" | "pending",
@@ -81,7 +82,7 @@ export const ContractList = ({ id }: { id: string }) => {
 
       const signersData = contract.persons.map((person: any) => ({
         name: person.name,
-        phone: `+55${person.phone}`,
+        phone: `+551140028922`,
         delivery_method: "DELIVERY_METHOD_LINK",
         action: "SIGN",
       }));
@@ -95,6 +96,8 @@ export const ContractList = ({ id }: { id: string }) => {
       });
 
       const result = await response.json();
+
+      console.log('result', result)
 
       // Extraindo dados da resposta para realizar a atualização
       const updateData = {
@@ -122,6 +125,7 @@ export const ContractList = ({ id }: { id: string }) => {
 
       // Chama a função updateContract para atualizar o contrato
       updateContract(updateData, contractId);
+      window.location.reload();
 
       console.info("Mutation response data", result);
     } catch (err) {
@@ -141,6 +145,7 @@ export const ContractList = ({ id }: { id: string }) => {
   const handleCloseAutentique = React.useCallback(() => {
     setAutOpen(false);
   }, []);
+
 
   return (
     <>
@@ -196,13 +201,13 @@ export const ContractList = ({ id }: { id: string }) => {
                     <TableCell>
                       <Typography variant="subtitle2">Criação</Typography>
                       <Typography color="text.secondary" variant="body2">
-                        {contract.createdAt}
+                        {formatDate(contract.createdAt)}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">Atualização</Typography>
                       <Typography color="text.secondary" variant="body2">
-                        {contract.updatedAt}
+                        {formatDate(contract.updatedAt)}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">

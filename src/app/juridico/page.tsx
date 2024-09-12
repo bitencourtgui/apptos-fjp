@@ -1,18 +1,26 @@
+"use client";
+
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import {
   Box,
+  Button,
+  Card,
   Container,
+  Divider,
   Stack,
+  SvgIcon,
   Typography,
-  Unstable_Grid2 as Grid,
 } from "@mui/material";
-import { ResumoClientes } from "@/components/visao-geral/resumo/clientes";
-import { ResumoJuridico } from "@/components/visao-geral/resumo/juridico";
-import { ResumoCalendario } from "@/components/visao-geral/resumo/calendario";
-import { Novidades } from "@/components/visao-geral/novidades/novidades";
-import { Suporte } from "@/components/visao-geral/suporte/suporte";
+
+import { Breadcrumbs } from "@/components/core/breadcrumbs";
+import { JuridicoBusca } from "@/components/juridico/juridico-busca";
+import { ProcessListTable } from "@/components/juridico/juridico-tabela";
+import { useCustomers } from "@/hooks/use-customers";
 
 export default function Page(): React.JSX.Element {
+ const customers: any = []
+
   return (
     <Box
       component="main"
@@ -22,16 +30,25 @@ export default function Page(): React.JSX.Element {
       }}
     >
       <Container maxWidth="xl">
-        <Grid
-          container
-          disableEqualOverflow
-          spacing={{
-            xs: 3,
-            lg: 4,
-          }}
-        >
-          EM BREVE
-        </Grid>
+        <Stack spacing={4}>
+          <Stack direction="row" justifyContent="space-between" spacing={4}>
+            <Stack spacing={1}>
+              <Typography variant="h4">Juridico</Typography>
+              <Breadcrumbs />
+            </Stack>
+          </Stack>
+          <Card>
+            <JuridicoBusca />
+            <ProcessListTable
+              onPageChange={() => console.log("onPageChange")}
+              onRowsPerPageChange={() => console.log("onPageChange")}
+              page={1}
+              products={customers}
+              productsCount={0}
+              rowsPerPage={10}
+            />
+          </Card>
+        </Stack>
       </Container>
     </Box>
   );

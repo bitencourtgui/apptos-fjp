@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState, useCallback, Fragment } from "react";
 import ChevronDown from "@untitled-ui/icons-react/build/esm/ChevronDown";
 import Plus from "@untitled-ui/icons-react/build/esm/Plus";
-
+import { toast } from "@/components/core/toaster";
 import dayjs from "dayjs";
 import Hash02 from "@untitled-ui/icons-react/build/esm/Hash02";
 
@@ -28,6 +28,7 @@ import {
 } from "@/transforms/contract";
 import { useContract } from "@/hooks/use-contracts";
 import ServicesModal from "./servicos-modal";
+import { updateCustomerAPI } from "@/api/customers";
 
 export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
   const { customers, reload } = useCustomerById(id);
@@ -62,7 +63,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
 
   const groupSelectedServices = () => {
     const payload = {
-      ...useCustomerById,
+      ...customers,
       services: selectedServices,
     };
 
@@ -70,17 +71,28 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
       payload as OriginalPayload,
     );
 
+    console.log(transformedPayload)
+
     handleGenerateContract(transformedPayload);
     setIsGrouping(false);
   };
 
   const handleGenerateContract = async (payload: any) => {
-    const response = await createContract(payload);
+ 
 
-    if (response.status === 200) {
-      console.info("Contrato gerado e salvo com sucesso");
-    } else {
-      console.error("Erro ao salvar o contrato");
+   
+
+    try {
+      const response = await createContract(payload);
+      if (response.status === 200) {
+        toast.success("Contrato gerado e salvo com sucesso");
+        reload()
+      } else {
+        toast.error("Erro ao gerar o contrato");
+      }
+    } catch (error) {
+      toast.error("Erro ao gerar o contrato");
+      console.error(`Erro ao excluir installments: ${error}`);
     }
   };
   const deleteInstallments = async (paymentId: string) => {
@@ -90,15 +102,15 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
 
     const payload = { ...customers, services: updatedServices };
 
-    // try {
-    //   const response = await CustomersApi.updateCustomer(customers.id, payload);
-    //   if (response.status === 200) {
-    //     toast.success("Movimentação excluída com sucesso");
-    //     getCustomer();
-    //   }
-    // } catch (error) {
-    //   console.error(`Erro ao excluir installments: ${error}`);
-    // }
+    try {
+      const result = await updateCustomerAPI(customers.id, payload);
+      if (result.success) {
+        toast.success("Movimentação excluída com sucesso");
+        reload();
+      }
+    } catch (error) {
+      console.error(`Erro ao excluir installments: ${error}`);
+    }
   };
 
   const formatCurrency = useCallback(
@@ -115,11 +127,14 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
       createdAt: string,
       paymentDate: number,
       monthsToAdd: number,
-      accountingDate?: string,
+      accountingDate?: any, // Pode ser Timestamp ou string
     ) => {
-      let baseDate = accountingDate
-        ? dayjs(accountingDate, "YYYY-MM-DD")
-        : dayjs(createdAt, "DD/MM/YYYY");
+      // Verifica se o accountingDate é um Firebase Timestamp e o converte para Date
+      let baseDate =
+        accountingDate && accountingDate.seconds
+          ? dayjs(new Date(accountingDate.seconds * 1000)) // Converte Timestamp para Date
+          : dayjs(createdAt, "DD/MM/YYYY"); // Caso contrário, usa createdAt
+
       let dueDate = baseDate
         .add(monthsToAdd, "month")
         .set("date", paymentDate || baseDate.date());
@@ -134,10 +149,16 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
   );
 
   const formatPaymentDate = useCallback(
-    (accountingDate: string, paymentDate: number, createdAt: string) =>
-      accountingDate
-        ? dayjs(accountingDate).format("DD/MM/YYYY")
-        : `Dia ${paymentDate}` || createdAt,
+    (accountingDate: any, paymentDate: number, createdAt: string) => {
+      const formattedAccountingDate =
+        accountingDate && accountingDate.seconds
+          ? dayjs(new Date(accountingDate.seconds * 1000)).format("DD/MM/YYYY")
+          : dayjs(accountingDate).format("DD/MM/YYYY");
+
+      return accountingDate
+        ? formattedAccountingDate
+        : `Dia ${paymentDate}` || createdAt;
+    },
     [],
   );
 
@@ -319,7 +340,7 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
           </TableBody>
         </Table>
       </Card>
-       <ServicesModal
+      <ServicesModal
         customers={customers}
         open={open}
         handleToggle={toggleModal}

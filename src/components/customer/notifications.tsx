@@ -16,6 +16,7 @@ import { EnvelopeSimple as EnvelopeSimpleIcon } from '@phosphor-icons/react/dist
 import { dayjs } from '@/lib/dayjs';
 import { DataTable } from '@/components/core/data-table';
 import type { ColumnDef } from '@/components/core/data-table';
+import { formatDate } from '@/utils/format-date';
 // import { Option } from '@/components/core/option';
 
 export interface Notification {
@@ -52,7 +53,7 @@ const columns = [
   {
     formatter: (row): React.JSX.Element => (
       <Typography sx={{ whiteSpace: 'nowrap' }} variant="inherit">
-        {dayjs(row.createdAt).format('MMM D, YYYY hh:mm A')}
+        {formatDate(row.createdAt)}
       </Typography>
     ),
     name: 'Date',

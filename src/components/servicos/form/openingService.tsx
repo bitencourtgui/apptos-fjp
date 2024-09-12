@@ -27,9 +27,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 //   cashPaymentDate: Date;
 // }
 
-export const OpeningService = (
-  formik: any
-): JSX.Element => {
+export const OpeningService = (formik: any): JSX.Element => {
   const currentDay = dayjs().date();
 
   return (
@@ -83,7 +81,7 @@ export const OpeningService = (
                 onChange={() =>
                   formik.setFieldValue(
                     "paymentEntry",
-                    !formik.values.paymentEntry
+                    !formik.values.paymentEntry,
                   )
                 }
               />
@@ -192,16 +190,18 @@ export const OpeningService = (
             onChange={(newValue) =>
               formik.setFieldValue(
                 "cashPaymentDate",
-                dayjs(newValue).format("YYYY-MM-DD")
+                dayjs(newValue).format("YYYY-MM-DD"),
               )
             }
-            renderInput={(params: any) => (
-              <TextField
-                {...params}
-                name="cashPaymentDate"
-                id="cashPaymentDate"
-              />
-            )}
+            slots={{
+              textField: (params) => (
+                <TextField
+                  {...params}
+                  name="cashPaymentDate"
+                  id="cashPaymentDate"
+                />
+              ),
+            }}
           />
         </LocalizationProvider>
       )}

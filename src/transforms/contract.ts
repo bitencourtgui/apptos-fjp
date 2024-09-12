@@ -1,3 +1,4 @@
+import { formatDate } from "@/utils/format-date";
 import { maskDocument } from "@/utils/mask-document";
 import { translateMaritalStatus } from "@/utils/translate";
 
@@ -112,12 +113,7 @@ const servicesMap = {
   "5": "Defesa Administrativa",
 };
 
-const formatDate = (date: Date): string => {
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
+
 
 export const transformContractPayload = (
   originalPayload: OriginalPayload,
@@ -184,11 +180,11 @@ export const transformContractPayload = (
       openingContract: service.openingContract ?? "",
       paymentDate: service.paymentDate ?? "",
       type: service.serviceType ?? "",
-      createdAt: service.createdAt ?? "",
+      createdAt: formatDate(service.createdAt) ?? "",
       accountingPayment: service.accountingPayment ?? "",
       accountingFee: service.accountingFee ?? "",
       billingRange: service.billingRange ?? "",
-      accountingDate: service.accountingDate ?? "",
+      accountingDate: formatDate(service.accountingDate) ?? "",
       paymentEntry: service.paymentEntry ?? false,
     })),
     createdAt: formatDate(new Date()),

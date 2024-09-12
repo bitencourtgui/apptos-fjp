@@ -12,6 +12,7 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import { numberInWords } from "@/utils/number-in-words";
+import { formatDate } from "@/utils/format-date";
 
 const font100 = { src: "../../assets/fonts/font-100.ttf", fontWeight: 100 };
 const font200 = { src: "../../assets/fonts/font-200.ttf", fontWeight: 200 };
@@ -256,8 +257,8 @@ export const AberturaDeEmpresa = ({ contract }: any) => {
     });
   }
 
-  const calculatePaymentDate = (createdAt: any, paymentDate: any) => {
-    const [day, month, year] = createdAt.split("/").map(Number);
+  const calculatePaymentDate = (created: any, paymentDate: any) => {
+    const [day, month, year] = created.split("/").map(Number);
     const createdDate = new Date(year, month - 1, day);
     const paymentDueDate = new Date(
       createdDate.getFullYear(),
@@ -362,7 +363,7 @@ export const AberturaDeEmpresa = ({ contract }: any) => {
                       <Text style={styles.boldText}>
                         {" "}
                         {calculatePaymentDate(
-                          service?.createdAt,
+                          formatDate(service?.createdAt),
                           parseInt(service?.paymentDate),
                         )}
                       </Text>
@@ -481,7 +482,7 @@ export const AberturaDeEmpresa = ({ contract }: any) => {
                       Com pagamento previsto para dia{" "}
                       <Text style={styles.boldText}>
                         {calculatePaymentDate(
-                          service?.createdAt,
+                          formatDate(service?.createdAt),
                           parseInt(service?.paymentDate),
                         )}
                       </Text>

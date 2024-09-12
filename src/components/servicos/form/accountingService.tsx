@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 // import { FormikProps } from "formik";
 import { NumericFormat } from "react-number-format";
@@ -19,9 +19,7 @@ import { FormControlLabel, Switch } from "@mui/material";
 //   accountingDate: Date;
 // }
 
-export const AccountingService = (
-  formik: any
-): JSX.Element => {
+export const AccountingService = (formik: any): JSX.Element => {
   return (
     <Box display="flex" flexDirection="column" gap={1}>
       <FormControlLabel
@@ -88,12 +86,18 @@ export const AccountingService = (
           onChange={(newValue) =>
             formik.setFieldValue(
               "accountingDate",
-              dayjs(newValue).format("YYYY-MM-DD")
+              dayjs(newValue).format("YYYY-MM-DD"),
             )
           }
-          renderInput={(params: any) => (
-            <TextField {...params} name="accountingDate" id="accountingDate" />
-          )}
+          slots={{
+            textField: (params) => (
+              <TextField
+                {...params}
+                name="accountingDate"
+                id="accountingDate"
+              />
+            ),
+          }}
         />
       </LocalizationProvider>
 

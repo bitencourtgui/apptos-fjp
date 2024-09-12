@@ -45,12 +45,7 @@ const PartnersModal = ({ formik, open, handleToggle }: PartnersModalProps) => {
           <FormPerson {...formik} pocket={true} />
         </CardContent>
         <CardActions sx={{ justifyContent: "flex-end", px: 3 }}>
-          <Button
-            fullWidth
-            type="submit"
-            variant="contained"
-            onClick={() => console.info(false)}
-          >
+          <Button fullWidth type="submit" variant="contained">
             Cadastrar
           </Button>
         </CardActions>

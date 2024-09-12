@@ -29,6 +29,7 @@ import { iAccountingService, iOpeningService } from "./form/inital";
 import { useContract } from "@/hooks/use-contracts";
 import { OpeningService } from "./form/openingService";
 import { AccountingService } from "./form/accountingService";
+import { formatDate } from "@/utils/format-date";
 
 interface ServicesModalProps {
   open: boolean;
@@ -53,7 +54,7 @@ const ServicesModal = ({
 
   const onSubmit = async (values: any, helpers: any) => {
     values.serviceType = service;
-    values.createdAt = dayjs().format("DD/MM/YYYY");
+    values.createdAt = formatDate(new Date());
     values.id = uuidv4();
 
     let updatedPayload = {
