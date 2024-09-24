@@ -15,7 +15,7 @@ export default function Page(): React.JSX.Element {
       <Container maxWidth={false}>
         <Stack spacing={4}>
           <Breadcrumbs />
-          <NovoProcesso customer={undefined} />
+          <NovoProcesso />
         </Stack>
       </Container>
     </Box>
