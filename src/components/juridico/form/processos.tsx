@@ -3,6 +3,7 @@ import {
   CardContent,
   CardHeader,
   FormControl,
+  FormHelperText,
   Unstable_Grid2 as Grid,
   InputLabel,
   MenuItem,
@@ -66,7 +67,10 @@ export const FormProcesses = (formik: any) => {
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={3}>
             <Grid xs={12} md={3}>
-              <FormControl fullWidth>
+              <FormControl
+                error={!!(formik.touched.status && formik.errors.status)}
+                fullWidth
+              >
                 <InputLabel id="status">Status</InputLabel>
                 <Select
                   labelId="status"
@@ -75,13 +79,14 @@ export const FormProcesses = (formik: any) => {
                   value={formik.values.status}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  error={!!(formik.touched.status && formik.errors.status)}
-                  helperText={formik.touched.status && formik.errors.status}
                 >
                   <MenuItem value="archived">Arquivado</MenuItem>
                   <MenuItem value="progress">Andamento</MenuItem>
                   <MenuItem value="suspended">Suspenso</MenuItem>
                 </Select>
+                {formik.touched.status && formik.errors.status && (
+                  <FormHelperText>{formik.errors.status}</FormHelperText>
+                )}
               </FormControl>
             </Grid>
             <Grid xs={12} md={3}>
