@@ -27,8 +27,6 @@ export const FormPerson = (formik: any) => {
 
         const data = await response.json();
 
-        console.log("data", data);
-
         formik.setFieldValue("address", {
           postalCode: data.cep,
           street: data.street,

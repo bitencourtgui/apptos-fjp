@@ -34,7 +34,6 @@ export const UserMenu = ({ user, ...props }: any) => {
     try {
       await sendPasswordResetEmail(firebaseAuth, user.user); // Usando a função sendPasswordResetEmail
       // Exibir mensagem de sucesso
-      console.log("Redefinição de senha solicitada");
     } catch (err) {
       console.error(err);
       // Exibir mensagem de erro

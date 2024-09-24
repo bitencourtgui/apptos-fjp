@@ -42,7 +42,7 @@ export default function Page({ searchParams }: PageProps): React.JSX.Element {
   return (
     <>
       <Box component="main" sx={{ flexGrow: 1, py: 6 }}>
-        <Container maxWidth={false}>
+        <Container maxWidth="xl">
           <Stack spacing={4}>
             <Breadcrumbs />
             <Stack direction="row" justifyContent="space-between" spacing={4}>

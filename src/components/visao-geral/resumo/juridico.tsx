@@ -12,8 +12,12 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
+import { useProcesses } from "@/hooks/use-processes";
 
 export const ResumoJuridico = () => {
+
+  const { processesCount } = useProcesses();
+
   return (
     <Card>
       <Stack
@@ -41,7 +45,7 @@ export const ResumoJuridico = () => {
             Juridico
           </Typography>
           <Typography color="text.primary" variant="h4">
-            {0}
+            {processesCount}
           </Typography>
         </Box>
       </Stack>
@@ -59,6 +63,7 @@ export const ResumoJuridico = () => {
         >
           Veja todos os processos
         </Button>
+        
       </CardActions>
     </Card>
   );

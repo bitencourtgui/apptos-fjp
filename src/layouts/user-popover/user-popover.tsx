@@ -21,7 +21,6 @@ import { AuthStrategy } from "@/lib/auth/strategy";
 import { FirebaseSignOut } from "./firebase-sign-out";
 import { useUser } from "@/hooks/use-user";
 
-
 const user = {
   id: "USR-000",
   name: "Sofia Rivers",
@@ -40,11 +39,7 @@ export function UserPopover({
   onClose,
   open,
 }: UserPopoverProps): React.JSX.Element {
-
-  const { user, error, isLoading } = useUser();
-
-  console.log('user', user)
-
+  const { user } = useUser();
 
   return (
     <Popover

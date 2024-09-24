@@ -2,8 +2,6 @@ import { Unstable_Grid2 as Grid } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
 const setBusinessField = (response: any, formik: any) => {
-  console.log("setBusinessField", response);
-
   formik.setFieldValue("business", {
     document: response.cnpj,
     corporateName: response.razao_social,
@@ -27,8 +25,6 @@ export const FormBusiness = (formik: any) => {
         const response = await fetch(
           `https://brasilapi.com.br/api/cnpj/v1/${document}`,
         );
-
-        console.log(response);
 
         if (!response.ok) {
           throw new Error("Falha ao buscar dados do CNPJ.");

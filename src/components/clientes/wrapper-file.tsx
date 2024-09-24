@@ -24,6 +24,7 @@ import React from "react";
 import NextLink from "next/link";
 import { BusinessInteraction } from "./business-interaction";
 import { SociosList } from "../socios/socios";
+import { JuridicoList } from "../juridico/juridico";
 
 const tabs = [
   { label: "Detalhes", value: "details" },
@@ -147,6 +148,7 @@ export const WrapperClient = () => {
       {currentTab === "partners" && isBusiness && (
         <SociosList getCustomer={reload} customers={customers} />
       )}
+       {currentTab === "legal" && <JuridicoList id={customers?.id} name={customerName} />}
       <BusinessInteraction
         open={open}
         handleToggle={handleToggle}

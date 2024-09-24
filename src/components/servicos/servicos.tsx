@@ -71,22 +71,16 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
       payload as OriginalPayload,
     );
 
-    console.log(transformedPayload)
-
     handleGenerateContract(transformedPayload);
     setIsGrouping(false);
   };
 
   const handleGenerateContract = async (payload: any) => {
- 
-
-   
-
     try {
       const response = await createContract(payload);
       if (response.status === 200) {
         toast.success("Contrato gerado e salvo com sucesso");
-        reload()
+        reload();
       } else {
         toast.error("Erro ao gerar o contrato");
       }
