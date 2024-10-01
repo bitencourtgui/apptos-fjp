@@ -1,5 +1,4 @@
 import type { NavItemConfig } from "@/types/nav";
-import { paths } from "@/paths";
 
 // NOTE: We did not use React Components for Icons, because
 //  you may one to get the config from the server.
@@ -31,7 +30,7 @@ export const layoutConfig = {
         {
           key: "clientes",
           title: "Clientes",
-          href: '/clientes',
+          href: "/clientes",
           icon: "users",
           matcher: { type: "startsWith", href: "/clientes" },
         },
@@ -39,7 +38,7 @@ export const layoutConfig = {
         {
           key: "lawyer",
           title: "Juridico",
-          href: '/juridico',
+          href: "/juridico",
           icon: "scales",
           matcher: { type: "startsWith", href: "/juridico" },
         },

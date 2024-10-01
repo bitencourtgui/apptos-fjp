@@ -34,6 +34,8 @@ export const ConfiguracoesGerais = () => {
     // }
   };
 
+  const isClient = user?.email?.includes("@cliente.fjp.br");
+
   return (
     <Stack spacing={4}>
       <Card>
@@ -140,25 +142,28 @@ export const ConfiguracoesGerais = () => {
           </Grid>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid xs={12} md={4}>
-              <Typography variant="h6">Deletar Conta</Typography>
+      {!isClient && (
+        <Card>
+          <CardContent>
+            <Grid container spacing={3}>
+              <Grid xs={12} md={4}>
+                <Typography variant="h6">Deletar Conta</Typography>
+              </Grid>
+              <Grid xs={12} md={8}>
+                <Stack alignItems="flex-start" spacing={3}>
+                  <Typography variant="subtitle1">
+                    Delete a sua conta e todos os seus dados. Isto é
+                    irreversível.
+                  </Typography>
+                  <Button color="error" variant="outlined">
+                    Deletar conta
+                  </Button>
+                </Stack>
+              </Grid>
             </Grid>
-            <Grid xs={12} md={8}>
-              <Stack alignItems="flex-start" spacing={3}>
-                <Typography variant="subtitle1">
-                  Delete a sua conta e todos os seus dados. Isto é irreversível.
-                </Typography>
-                <Button color="error" variant="outlined">
-                  Deletar conta
-                </Button>
-              </Stack>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </Stack>
   );
 };

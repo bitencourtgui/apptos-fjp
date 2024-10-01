@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState, useCallback } from "react";
 import {
@@ -27,6 +27,7 @@ import Image from "next/image";
 
 interface FileManagerProps {
   customerId: string;
+  isClient: boolean;
 }
 
 interface Document {
@@ -36,7 +37,7 @@ interface Document {
   time: string;
 }
 
-export const FileManager: React.FC<FileManagerProps> = ({ customerId }) => {
+export const FileManager: React.FC<FileManagerProps> = ({ customerId, isClient }) => {
   // const storage = getStorage(firebaseApp);
   const [docList, setDocList] = useState<Document[]>([]);
   const [open, setOpen] = useState(false);
@@ -115,14 +116,16 @@ export const FileManager: React.FC<FileManagerProps> = ({ customerId }) => {
     <Card>
       <div style={{ padding: "16px" }}>
         <Stack direction="row" justifyContent="flex-end" mb={2}>
-          <Button
-            startIcon={<UploadCloud01 />}
-            variant="contained"
-            onClick={() => handleToggle(true)}
-            size="small"
-          >
-            Enviar
-          </Button>
+          {!isClient && (
+            <Button
+              startIcon={<UploadCloud01 />}
+              variant="contained"
+              onClick={() => handleToggle(true)}
+              size="small"
+            >
+              Enviar
+            </Button>
+          )}
         </Stack>
 
         {filteredDocList.length === 0 ? (

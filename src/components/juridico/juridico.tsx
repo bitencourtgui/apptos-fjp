@@ -23,10 +23,11 @@ import { useProcessByCustomerId } from "@/hooks/use-processes";
 import { maskProcess } from "@/utils/mask-process";
 import { maskPhone } from "@/utils/mask-phone";
 
-export const JuridicoList: React.FC<{ id: string; name: string }> = ({
-  id,
-  name,
-}) => {
+export const JuridicoList: React.FC<{
+  id: string;
+  name: string;
+  isClient: boolean;
+}> = ({ id, name, isClient }) => {
   const router = useRouter();
 
   const { processes } = useProcessByCustomerId(String(id));
@@ -39,16 +40,18 @@ export const JuridicoList: React.FC<{ id: string; name: string }> = ({
 
   return (
     <>
-      <Stack direction="row" justifyContent="flex-end" mb={2} spacing={2}>
-        <Button
-          size="small"
-          startIcon={<Plus fontSize="small" />}
-          onClick={() => router.push(`/juridico/adicionar?customerId=${id}`)}
-          variant="contained"
-        >
-          Novo Processo
-        </Button>
-      </Stack>
+      {!isClient && (
+        <Stack direction="row" justifyContent="flex-end" mb={2} spacing={2}>
+          <Button
+            size="small"
+            startIcon={<Plus fontSize="small" />}
+            onClick={() => router.push(`/juridico/adicionar?customerId=${id}`)}
+            variant="contained"
+          >
+            Novo Processo
+          </Button>
+        </Stack>
+      )}
       <Card>
         <Table sx={{ minWidth: 600 }}>
           <TableBody>
@@ -237,27 +240,29 @@ export const JuridicoList: React.FC<{ id: string; name: string }> = ({
                           </Stack>
                           <Divider />
 
-                          <Stack
-                            direction="row"
-                            justifyContent="space-between"
-                            gap={2}
-                            mt={3}
-                          >
-                            <Button
-                              variant="contained"
-                              onClick={() =>
-                                router.push(`/juridico/editar?id=${props.id}`)
-                              }
+                          {!isClient && (
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                              gap={2}
+                              mt={3}
                             >
-                              Editar
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              // onClick={() => handleSubmit(props.id)}
-                            >
-                              Excluir
-                            </Button>
-                          </Stack>
+                              <Button
+                                variant="contained"
+                                onClick={() =>
+                                  router.push(`/juridico/editar?id=${props.id}`)
+                                }
+                              >
+                                Editar
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                // onClick={() => handleSubmit(props.id)}
+                              >
+                                Excluir
+                              </Button>
+                            </Stack>
+                          )}
                         </Stack>
                       </TableCell>
                     </TableRow>

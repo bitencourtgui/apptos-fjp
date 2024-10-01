@@ -9,13 +9,33 @@ import { useSettings } from '@/hooks/use-settings';
 import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
 import { layoutConfig } from '../config';
+import { useUser } from '@/hooks/use-user';
 
 export interface VerticalLayoutProps {
   children?: React.ReactNode;
 }
 
 export function VerticalLayout({ children }: VerticalLayoutProps): React.JSX.Element {
-  const { settings } = useSettings();
+  const { settings } = useSettings(); // Acessar o usuário do contexto
+  const { user } = useUser();
+
+  // Lógica para verificar o e-mail e filtrar os itens de navegação
+  const filteredNavItems = user?.email?.includes('@cliente.fjp.br')
+    ? [
+        {
+          key: 'area-cliente',
+          title: '',
+          items: [
+            {
+              key: 'area-cliente',
+              title: 'Área do Cliente',
+              href: '/area-cliente',
+              icon: 'house',
+            },
+          ],
+        },
+      ]
+    : layoutConfig.navItems; // Manter os itens originais caso não seja um cliente FJP
 
   return (
     <React.Fragment>
@@ -40,9 +60,9 @@ export function VerticalLayout({ children }: VerticalLayoutProps): React.JSX.Ele
           minHeight: '100%',
         }}
       >
-        <SideNav color={settings.navColor} items={layoutConfig.navItems} />
+        <SideNav color={settings.navColor} items={filteredNavItems} />
         <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
-          <MainNav items={layoutConfig.navItems} />
+          <MainNav items={filteredNavItems} />
           <Box
             component="main"
             sx={{

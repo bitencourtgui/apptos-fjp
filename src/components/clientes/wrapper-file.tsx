@@ -25,6 +25,8 @@ import NextLink from "next/link";
 import { BusinessInteraction } from "./business-interaction";
 import { SociosList } from "../socios/socios";
 import { JuridicoList } from "../juridico/juridico";
+import { useUser } from "@/hooks/use-user";
+import { useUserByEmail, useUser as useUsers } from "@/hooks/use-users";
 
 const tabs = [
   { label: "Detalhes", value: "details" },
@@ -36,7 +38,15 @@ const tabs = [
 
 export const WrapperClient = () => {
   const { customerId } = useParams();
-  const { customers, reload } = useCustomerById(String(customerId));
+
+  const { user } = useUser();
+  const { client } = useUserByEmail(String(user?.email));
+
+  const customerIdData = customerId ? String(customerId) : client?.id;
+
+  const isClient = customerId ? false : true;
+
+  const { customers, reload } = useCustomerById(customerIdData);
 
   const [open, setOpen] = React.useState(false);
   const [currentTab, setCurrentTab] = React.useState("details");
@@ -91,33 +101,35 @@ export const WrapperClient = () => {
             </Stack>
           </Stack>
         </Stack>
-        <Stack alignItems="center" direction="row" spacing={2}>
-          <Button
-            color="inherit"
-            size="small"
-            onClick={handleDelete}
-            endIcon={
-              <SvgIcon>
-                <ChevronDownIcon />
-              </SvgIcon>
-            }
-          >
-            Excluir
-          </Button>
-          <Button
-            endIcon={
-              <SvgIcon>
-                <Edit02Icon />
-              </SvgIcon>
-            }
-            size="small"
-            variant="contained"
-            component={NextLink}
-            href={`/clientes/${customers?.id}/editar`}
-          >
-            Editar
-          </Button>
-        </Stack>
+        {!isClient && (
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <Button
+              color="inherit"
+              size="small"
+              onClick={handleDelete}
+              endIcon={
+                <SvgIcon>
+                  <ChevronDownIcon />
+                </SvgIcon>
+              }
+            >
+              Excluir
+            </Button>
+            <Button
+              endIcon={
+                <SvgIcon>
+                  <Edit02Icon />
+                </SvgIcon>
+              }
+              size="small"
+              variant="contained"
+              component={NextLink}
+              href={`/clientes/${customers?.id}/editar`}
+            >
+              Editar
+            </Button>
+          </Stack>
+        )}
       </Stack>
       <BusinessAlert isBusiness={isBusiness} handleToggle={handleToggle} />
       <Tabs
@@ -138,17 +150,33 @@ export const WrapperClient = () => {
           <BasicDetails customer={customers} />
           <Grid xs={12} lg={8}>
             <Stack spacing={4}>
-              {customers && <FileManager customerId={customers.id} />}
+              {customers && (
+                <FileManager customerId={customers.id} isClient={isClient} />
+              )}
             </Stack>
           </Grid>
         </Grid>
       )}
-      {currentTab === "contracts" && <ContractList {...customers} />}
-      {currentTab === "services" && <ServicesList id={customers?.id} />}
-      {currentTab === "partners" && isBusiness && (
-        <SociosList getCustomer={reload} customers={customers} />
+      {currentTab === "contracts" && (
+        <ContractList {...customers} isClient={isClient} />
       )}
-       {currentTab === "legal" && <JuridicoList id={customers?.id} name={customerName} />}
+      {currentTab === "services" && (
+        <ServicesList id={customers?.id} isClient={isClient} />
+      )}
+      {currentTab === "partners" && isBusiness && (
+        <SociosList
+          getCustomer={reload}
+          customers={customers}
+          isClient={isClient}
+        />
+      )}
+      {currentTab === "legal" && (
+        <JuridicoList
+          id={customers?.id}
+          name={customerName}
+          isClient={isClient}
+        />
+      )}
       <BusinessInteraction
         open={open}
         handleToggle={handleToggle}

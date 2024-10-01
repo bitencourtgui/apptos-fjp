@@ -30,7 +30,10 @@ import { useContract } from "@/hooks/use-contracts";
 import ServicesModal from "./servicos-modal";
 import { updateCustomerAPI } from "@/api/customers";
 
-export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
+export const ServicesList: React.FC<{ id: string; isClient: boolean }> = ({
+  id,
+  isClient,
+}) => {
   const { customers, reload } = useCustomerById(id);
   const [open, setOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<number | false>(
@@ -158,28 +161,30 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <>
-      <Stack direction="row" justifyContent="flex-end" mb={2} spacing={2}>
-        <Button size="small" onClick={toggleGrouping} variant="outlined">
-          {isGrouping ? "Cancelar" : "Gerar Contrato"}
-        </Button>
-        {isGrouping && (
+      {!isClient && (
+        <Stack direction="row" justifyContent="flex-end" mb={2} spacing={2}>
+          <Button size="small" onClick={toggleGrouping} variant="outlined">
+            {isGrouping ? "Cancelar" : "Gerar Contrato"}
+          </Button>
+          {isGrouping && (
+            <Button
+              size="small"
+              onClick={groupSelectedServices}
+              variant="contained"
+            >
+              Confirmar
+            </Button>
+          )}
           <Button
             size="small"
-            onClick={groupSelectedServices}
+            startIcon={<Plus fontSize="small" />}
+            onClick={toggleModal}
             variant="contained"
           >
-            Confirmar
+            Novo
           </Button>
-        )}
-        <Button
-          size="small"
-          startIcon={<Plus fontSize="small" />}
-          onClick={toggleModal}
-          variant="contained"
-        >
-          Novo
-        </Button>
-      </Stack>
+        </Stack>
+      )}
       <Card>
         <Table sx={{ minWidth: 600 }}>
           <TableBody>
@@ -324,9 +329,11 @@ export const ServicesList: React.FC<{ id: string }> = ({ id }) => {
                         <TableCell></TableCell>
                       </TableRow>
                     ))}
-                    <Button onClick={() => deleteInstallments(id)}>
-                      Excluir movimentação
-                    </Button>
+                    {!isClient && (
+                      <Button onClick={() => deleteInstallments(id)}>
+                        Excluir movimentação
+                      </Button>
+                    )}
                   </>
                 )}
               </Fragment>

@@ -34,15 +34,10 @@ export const LoginForm = () => {
 
   const [firebaseAuth] = useState<Auth>(getFirebaseAuth());
 
-  // const isMounted = useMounted();
-  // const { signInWithEmailAndPassword } = useAuth();
-
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values, helpers) => {
-      console.info("values", values);
-
       try {
         await signInWithEmailAndPassword(
           firebaseAuth,
@@ -50,10 +45,13 @@ export const LoginForm = () => {
           values.password,
         );
 
-        const provisional = `/clientes`;
-
         if (isMounted()) {
-          router.push(returnTo || provisional);
+          if (values.email.includes("@cliente.fjp.br")) {
+            router.push("/area-cliente");
+          } else {
+            const provisional = `/clientes`;
+            router.push(returnTo || provisional);
+          }
         }
       } catch (err) {
         // setError('root', { type: 'server', message: (err as { message: string }).message });

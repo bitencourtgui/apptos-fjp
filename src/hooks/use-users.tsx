@@ -9,6 +9,8 @@ import {
   updateDoc,
   collection,
   getDocs,
+  query,
+  where,
 } from "firebase/firestore";
 import { getFirebaseStore } from "@/lib/auth/firebase/client";
 
@@ -208,4 +210,63 @@ export const useUser = (userId?: string) => {
     updateUser,
     deleteUser,
   };
+};
+
+export const useUserByEmail = (email: string): any => {
+  const isMounted = useMounted();
+  const db = getFirebaseStore();
+
+  const [state, setState] = useState<any>({
+    client: null,
+    error: null,
+    reload: () => {},
+  });
+
+  const fetchUserByEmail = useCallback(async () => {
+    try {
+      const usersCollection = collection(db, "users");
+      const q = query(usersCollection, where("user", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0]; // Assumindo que você quer o primeiro usuário encontrado
+        const userData = {
+          id: userDoc.id,
+          ...userDoc.data(),
+        };
+
+        if (isMounted()) {
+          setState({
+            client: userData,
+            error: null,
+            reload: fetchUserByEmail, // Função de recarregar
+          });
+        }
+      } else {
+        if (isMounted()) {
+          setState({
+            client: null,
+            error: "Usuário não encontrado",
+            reload: fetchUserByEmail,
+          });
+        }
+      }
+    } catch (err) {
+      if (isMounted()) {
+        setState({
+          client: null,
+          error: "Erro ao buscar o usuário",
+          reload: fetchUserByEmail,
+        });
+      }
+    }
+  }, [email, db, isMounted]);
+
+  useEffect(() => {
+    if (email) {
+      fetchUserByEmail();
+    }
+  }, [fetchUserByEmail]);
+
+  return state;
 };

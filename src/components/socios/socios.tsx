@@ -24,6 +24,7 @@ import { updateCustomerAPI } from "@/api/customers";
 interface CustomerPartnersProps {
   customers: any;
   getCustomer: () => void;
+  isClient: boolean
 }
 
 const ActionButton = ({ action }: { action: () => void }): JSX.Element => {
@@ -46,6 +47,7 @@ const ActionButton = ({ action }: { action: () => void }): JSX.Element => {
 export const SociosList = ({
   customers,
   getCustomer,
+  isClient
 }: CustomerPartnersProps) => {
   const [open, setOpen] = useState(false);
 
@@ -88,7 +90,7 @@ export const SociosList = ({
     <>
       <Card>
         <CardHeader
-          action={<ActionButton action={handleToggle} />}
+          action={!isClient && <ActionButton action={handleToggle} />}
           title="Quadro Societário"
         />
         <Table sx={{ minWidth: 600 }}>

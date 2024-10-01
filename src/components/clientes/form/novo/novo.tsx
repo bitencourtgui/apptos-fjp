@@ -22,6 +22,9 @@ import { useAddCustomer } from "@/hooks/use-customers";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "@/components/core/toaster";
 import { useRouter } from "next/navigation";
+import { Auth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirebaseAuth } from "@/lib/auth/firebase/client";
+import { useUser } from "@/hooks/use-users";
 
 export const NovoCliente = ({ customer }: any) => {
   const [IsLegalPerson, setLegalPerson] = useState(
@@ -31,15 +34,41 @@ export const NovoCliente = ({ customer }: any) => {
   const customerID = uuidv4();
   const router = useRouter();
   const [addCustomerState, addCustomer] = useAddCustomer(); // Usa o hook
+  const { createUser } = useUser(customerID);
+
+  const [firebaseAuth] = useState<Auth>(getFirebaseAuth());
 
   const onSubmit = async (values: any, helpers: any) => {
     try {
       // Chama a função `addCustomer` para adicionar o cliente
-     await addCustomer(customerID, values);
+      await addCustomer(customerID, values);
 
-        toast.success("Cliente cadastrado");
-        helpers.setStatus({ success: true });
-        router.push(`/clientes/${customerID}`);
+      const document = IsLegalPerson
+        ? values.business.document
+        : values.document;
+
+      // Cria o email e a senha para o Firebase
+      const email = `${document}@cliente.fjp.br`;
+      const senha = `${document.slice(0, 8)}${new Date().getFullYear()}`;
+      // Cria o usuário no Firebase
+      const { user } = await createUserWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        senha,
+      );
+
+      const userID = user.uid; // Pegando o UID gerado pelo Firebase
+
+      // Criação do usuário na sua API
+      const result = await createUser({
+        user: email,
+        role: "cliente",
+        uuid: userID, // Passando o UID como uuid
+      });
+
+      toast.success("Cliente cadastrado e usuário criado");
+      helpers.setStatus({ success: true });
+      router.push(`/clientes/${customerID}`);
     } catch (err) {
       console.error(err);
 

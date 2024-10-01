@@ -6,6 +6,7 @@ import Alert from "@mui/material/Alert";
 
 import { logger } from "@/lib/default-logger";
 import { useUser } from "@/hooks/use-user";
+import { useUser as useUsers } from "@/hooks/use-users";
 
 export default function Page(): JSX.Element | null {
   const router = useRouter();
@@ -29,8 +30,13 @@ export default function Page(): JSX.Element | null {
         return;
       }
 
-      logger.debug("[Page]: User is logged in, redirecting to /visao-geral");
-      router.replace("/visao-geral");
+      if (user?.email && user.email.includes("@cliente.fjp.br")) {
+        logger.debug("[Page]: cliente is logged in, redirecting to /cliente");
+        router.replace("/area-cliente/");
+      } else {
+        logger.debug("[Page]: User is logged in, redirecting to /visao-geral");
+        router.replace("/visao-geral");
+      }
     };
 
     checkPermissions().catch(() => {
