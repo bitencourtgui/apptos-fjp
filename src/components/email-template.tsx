@@ -27,7 +27,7 @@ export const FJPWelcomeEmail = ({
       <Container style={container}>
         <Section style={box}>
           <Img
-            src={`https://fjpconsultoria.goduck.com.br/_next/image?url=%2Fassets%2Flogos%2Flogo-fjp.png&w=384&q=75`}
+            src={`https://fjp.goduck.com.br/_next/image?url=%2Fassets%2Flogos%2Flogo-fjp.png&w=384&q=75`}
             width="100"
             height="50"
             alt="FJP Consultoria"
@@ -53,7 +53,7 @@ export const FJPWelcomeEmail = ({
           </Text>
           <Button
             style={button}
-            href="https://fjpconsultoria.goduck.com.br/auth"
+            href="https://fjp.goduck.com.br/auth"
           >
             Acessar a Plataforma
           </Button>

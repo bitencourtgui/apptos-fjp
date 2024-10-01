@@ -138,7 +138,7 @@ export const NovoCliente = ({ customer }: any) => {
     };
 
     try {
-      const response = await fetch("https://fjpconsultoria.goduck.com.br/api/send", {
+      const response = await fetch("https://fjp.goduck.com.br/api/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
