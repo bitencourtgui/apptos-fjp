@@ -55,8 +55,6 @@ export const NovoCliente = ({ customer }: any) => {
   const [addCustomerState, addCustomer] = useAddCustomer(); // Usa o hook
   const { createUser } = useUser(customerID);
 
-  const [firebaseAuth] = useState<Auth>(getFirebaseAuth());
-
   const onSubmit = async (values: FormValues, helpers: any) => {
     try {
       // Chama a função `addCustomer` para adicionar o cliente
@@ -71,24 +69,15 @@ export const NovoCliente = ({ customer }: any) => {
         ? values.business?.corporateName
         : values.name;
 
-      // Cria o email e a senha para o Firebase
+      // Criação do email (sem autenticação)
       const email = `${document}@cliente.fjp.br`;
       const senha = `${document?.slice(0, 8)}${new Date().getFullYear()}`;
-
-      // Cria o usuário no Firebase
-      const { user } = await createUserWithEmailAndPassword(
-        firebaseAuth,
-        email,
-        senha,
-      );
-
-      const userID = user.uid; // Pegando o UID gerado pelo Firebase
 
       // Criação do usuário na sua API
       const result = await createUser({
         user: email,
         role: "cliente",
-        uuid: userID, // Passando o UID como uuid
+        uuid: customerID, // Use o customerID aqui
       });
 
       // Envio do e-mail de boas-vindas
@@ -100,7 +89,7 @@ export const NovoCliente = ({ customer }: any) => {
         subject: "Bem-vindo à FJP Consultoria!",
       });
 
-      toast.success("Cliente cadastrado e usuário criado");
+      toast.success("Cliente cadastrado com sucesso");
       helpers.setStatus({ success: true });
       router.push(`/clientes/${customerID}`);
     } catch (err) {
