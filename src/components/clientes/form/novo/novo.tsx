@@ -26,6 +26,25 @@ import { Auth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/auth/firebase/client";
 import { useUser } from "@/hooks/use-users";
 
+interface FormValues {
+  name: string;
+  document: string;
+  email: string;
+  business: {
+    document: string;
+    email: string;
+    corporateName: string;
+  };
+}
+
+interface SendEmailPayload {
+  to: string;
+  firstName: string;
+  username: string;
+  password: string;
+  subject: string;
+}
+
 export const NovoCliente = ({ customer }: any) => {
   const [IsLegalPerson, setLegalPerson] = useState(
     customer?.business?.corporateName !== "",
@@ -38,18 +57,24 @@ export const NovoCliente = ({ customer }: any) => {
 
   const [firebaseAuth] = useState<Auth>(getFirebaseAuth());
 
-  const onSubmit = async (values: any, helpers: any) => {
+  const onSubmit = async (values: FormValues, helpers: any) => {
     try {
       // Chama a função `addCustomer` para adicionar o cliente
       await addCustomer(customerID, values);
 
       const document = IsLegalPerson
-        ? values.business.document
+        ? values.business?.document
         : values.document;
+
+      const userEmail = IsLegalPerson ? values.business?.email : values.email;
+      const userName = IsLegalPerson
+        ? values.business?.corporateName
+        : values.name;
 
       // Cria o email e a senha para o Firebase
       const email = `${document}@cliente.fjp.br`;
-      const senha = `${document.slice(0, 8)}${new Date().getFullYear()}`;
+      const senha = `${document?.slice(0, 8)}${new Date().getFullYear()}`;
+
       // Cria o usuário no Firebase
       const { user } = await createUserWithEmailAndPassword(
         firebaseAuth,
@@ -64,6 +89,15 @@ export const NovoCliente = ({ customer }: any) => {
         user: email,
         role: "cliente",
         uuid: userID, // Passando o UID como uuid
+      });
+
+      // Envio do e-mail de boas-vindas
+      await sendWelcomeEmail({
+        to: userEmail,
+        firstName: userName,
+        username: email,
+        password: senha,
+        subject: "Bem-vindo à FJP Consultoria!",
       });
 
       toast.success("Cliente cadastrado e usuário criado");
@@ -84,6 +118,42 @@ export const NovoCliente = ({ customer }: any) => {
     } finally {
       // Libera o estado de submissão do formulário
       helpers.setSubmitting(false);
+    }
+  };
+
+  // Função para enviar o e-mail
+  const sendWelcomeEmail = async ({
+    to,
+    firstName,
+    username,
+    password,
+    subject,
+  }: SendEmailPayload): Promise<void> => {
+    const payload: SendEmailPayload = {
+      to,
+      firstName,
+      username,
+      password,
+      subject,
+    };
+
+    try {
+      const response = await fetch("https://fjpconsultoria.goduck.com.br/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Email sent successfully:", data);
+    } catch (error) {
+      console.error("Failed to send email:", error);
     }
   };
 

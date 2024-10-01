@@ -54,34 +54,8 @@ export const LoginForm = () => {
           }
         }
       } catch (err) {
-        // setError('root', { type: 'server', message: (err as { message: string }).message });
         console.info("err", err);
-        // setIsPending(false);
       }
-      // try {
-      //   await signInWithEmailAndPassword(
-      //     values.email,
-      //     values.password,
-      //     values.tenant
-      //   );
-
-      //
-
-      // } catch (error) {
-      //   let errorMessage = "Ocorreu um erro desconhecido";
-
-      //   if (error instanceof Error) {
-      //     errorMessage = error.message;
-      //   }
-
-      //   console.error(errorMessage);
-
-      //   if (isMounted()) {
-      //     helpers.setStatus({ success: false });
-      //     helpers.setErrors({ submit: errorMessage });
-      //     helpers.setSubmitting(false);
-      //   }
-      // }
     },
   });
 
