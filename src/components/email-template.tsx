@@ -6,7 +6,6 @@ import {
   Hr,
   Html,
   Img,
-  Link,
   Preview,
   Section,
   Text,
@@ -28,8 +27,8 @@ export const FJPWelcomeEmail = ({
         <Section style={box}>
           <Img
             src={`https://fjp.goduck.com.br/_next/image?url=%2Fassets%2Flogos%2Flogo-fjp.png&w=384&q=75`}
-            width="100"
-            height="50"
+            width="384"
+            height="75"
             alt="FJP Consultoria"
           />
           <Hr style={hr} />
@@ -51,26 +50,15 @@ export const FJPWelcomeEmail = ({
             <br />
             <strong>Senha:</strong> {accessData.password}
           </Text>
-          <Button
-            style={button}
-            href="https://fjp.goduck.com.br/auth"
-          >
+          <Button style={button} href="https://fjp.goduck.com.br/auth">
             Acessar a Plataforma
           </Button>
           <Hr style={hr} />
-          <Text style={paragraph}>
-            Se precisar de ajuda com qualquer etapa, não hesite em nos contatar
-            através do nosso{" "}
-            <Link style={anchor} href="https://fjpconsultoria.com.br/contato">
-              site de suporte
-            </Link>
-            .
-          </Text>
+
           <Text style={paragraph}>— Equipe FJP Consultoria</Text>
           <Hr style={hr} />
           <Text style={footer}>
-            FJP Consultoria Tributária e Empresarial, Rua Exemplo, 123, São
-            Paulo, SP
+            FJP Consultoria Tributária e Empresarial - 50.675.326/0001-97
           </Text>
         </Section>
       </Container>
