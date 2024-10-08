@@ -18,7 +18,7 @@ import FileManager from "@/components/clientes/file-manager";
 import { ContractList } from "@/components/contratos/contratos";
 import { ServicesList } from "@/components/servicos/servicos";
 import { BusinessAlert } from "@/components/clientes/business-alert";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCustomerById } from "@/hooks/use-customers";
 import React from "react";
 import NextLink from "next/link";
@@ -27,6 +27,7 @@ import { SociosList } from "../socios/socios";
 import { JuridicoList } from "../juridico/juridico";
 import { useUser } from "@/hooks/use-user";
 import { useUserByEmail, useUser as useUsers } from "@/hooks/use-users";
+import { toast } from "@/components/core/toaster";
 
 const tabs = [
   { label: "Detalhes", value: "details" },
@@ -38,6 +39,7 @@ const tabs = [
 
 export const WrapperClient = () => {
   const { customerId } = useParams();
+  const router = useRouter();
 
   const { user } = useUser();
   const { client } = useUserByEmail(String(user?.email));
@@ -46,7 +48,7 @@ export const WrapperClient = () => {
 
   const isClient = customerId ? false : true;
 
-  const { customers, reload } = useCustomerById(customerIdData);
+  const { customers, deleteCustomer, reload } = useCustomerById(customerIdData);
 
   const [open, setOpen] = React.useState(false);
   const [currentTab, setCurrentTab] = React.useState("details");
@@ -56,16 +58,25 @@ export const WrapperClient = () => {
   const isBusiness = customers?.business?.corporateName.length > 1;
 
   const handleDelete = async () => {
-    // try {
-    //   const response = await customersApi.deleteCustomer(userId);
-    //   if (response.status === 200) {
-    //     toast.success("Cliente excluído");
-    //     router.push(`/clientes`);
-    //   }
-    // } catch (err) {
-    //   toast.error(`Erro: ${err}`);
-    // }
+    try {
+      const response = await deleteCustomer(); // Chama a função deleteCustomer
+      if (response.status === 200) {
+        toast.success("Cliente excluído com sucesso!");
+        router.push(`/clientes/`); // Redireciona para a página de clientes
+      } else {
+        throw new Error(response.message || "Erro desconhecido");
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(`Erro: ${err.message}`);
+        toast.error(`Erro ao deletar cliente: ${err.message}`);
+      } else {
+        console.error("Erro desconhecido");
+        toast.error("Erro desconhecido ao deletar cliente");
+      }
+    }
   };
+  
 
   const handleTabsChange = React.useCallback(
     (_: any, value: React.SetStateAction<string>) => {

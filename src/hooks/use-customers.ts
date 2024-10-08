@@ -7,7 +7,7 @@ import {
   updateCustomerAPI,
 } from "@/api/customers";
 import { useMounted } from "./use-mounted";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, deleteDoc } from "firebase/firestore"; // Import deleteDoc para deletar o customer
 import { getFirebaseStore } from "@/lib/auth/firebase/client";
 
 interface CustomerState {
@@ -46,12 +46,15 @@ export const useCustomers = (): CustomerState => {
   return state;
 };
 
-export const useCustomerById = (id: string): CustomerState => {
+export const useCustomerById = (id: string): any => {
   const isMounted = useMounted();
+  const db = getFirebaseStore();
 
   const [state, setState] = useState<any>({
     response: null,
     reload: () => {},
+    isDeleting: false, // Estado para deletar
+    deleteError: null,  // Armazenar erros de exclusão
   });
 
   const fetchCustomer = useCallback(async () => {
@@ -62,6 +65,8 @@ export const useCustomerById = (id: string): CustomerState => {
         setState({
           reload: fetchCustomer,
           customers: response.data,
+          isDeleting: false,
+          deleteError: null,
         });
       }
     } catch (err) {
@@ -69,11 +74,40 @@ export const useCustomerById = (id: string): CustomerState => {
     }
   }, [id]);
 
+  const deleteCustomer = useCallback(async () => {
+    setState((prevState: any) => ({
+      ...prevState,
+      isDeleting: true,
+      deleteError: null,
+    }));
+
+    try {
+      await deleteDoc(doc(db, "customers", id)); // Deleta o documento do Firebase
+
+      if (isMounted()) {
+        setState((prevState: any) => ({
+          ...prevState,
+          customers: null, // Reseta o cliente após a exclusão
+          isDeleting: false,
+          deleteError: null,
+        }));
+      }
+    } catch (error: any) {
+      if (isMounted()) {
+        setState((prevState: any) => ({
+          ...prevState,
+          isDeleting: false,
+          deleteError: error.message || "Erro ao deletar cliente",
+        }));
+      }
+    }
+  }, [id, isMounted]);
+
   useEffect(() => {
     fetchCustomer();
   }, [fetchCustomer]);
 
-  return state;
+  return { ...state, deleteCustomer }; // Retorna também a função de deletar
 };
 
 export const useUpdateCustomer = (): [
@@ -123,7 +157,6 @@ export const useUpdateCustomer = (): [
   return [state, updateCustomer];
 };
 
-
 export const useAddCustomer = (): [
   any,
   (customerId: string, values: any) => Promise<void>,
@@ -146,7 +179,6 @@ export const useAddCustomer = (): [
       }));
 
       try {
-
         await setDoc(doc(db, "customers", customerId), values);
 
         if (isMounted()) {
